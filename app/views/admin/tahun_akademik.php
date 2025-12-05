@@ -15,13 +15,13 @@
             </button>
         </div>
         <div class="card-datatable text-nowrap">
-            <table class="dt-complex-header table table-bordered table-responsive">
+            <table class="dt-complex-header table table-bordered">
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>Periode</th>
                         <th>Status Periode</th>
-                        <th class="w-25">Aksi</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

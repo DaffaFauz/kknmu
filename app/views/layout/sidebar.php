@@ -150,7 +150,7 @@
                 </li>
             </ul>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= $data['page'] && $data['page'] == 'Fakultas' ? 'active' : '' ?>">
             <a href="<?= BASE_URL ?>/Fakultas" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-school"></i>
                 <div data-i18n="Data Fakultas">Data Fakultas</div>
