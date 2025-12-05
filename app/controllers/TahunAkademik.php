@@ -7,9 +7,9 @@ class TahunAkademik extends Controller
         $tahunAkademik = $this->model('TahunAkademikModel')->getAll();
 
         // Load view
-        $this->view('layout/head', ['title' => 'Tahun Akademik']);
+        $this->view('layout/head', ['title' => 'Tahun Akademik', 'page' => 'Tahun Akademik']);
         $this->view('layout/sidebar', ['page' => 'Tahun Akademik']);
-        $this->view('layout/navbar', ['nama' => $_SESSION['nama']]);
+        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
         $this->view('admin/tahun_akademik', ['tahunAkademik' => $tahunAkademik]);
         $this->view('layout/footer');
     }

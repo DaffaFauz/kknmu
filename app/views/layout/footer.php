@@ -53,7 +53,9 @@
 <!-- endbuild -->
 
 <!-- Vendors JS -->
-<script src="<?= ASSETS_URL ?>vendor/libs/apex-charts/apexcharts.js"></script>
+<?php if ($data['page'] && $data['page'] == 'Dashboard'): ?>
+    <script src="<?= ASSETS_URL ?>vendor/libs/apex-charts/apexcharts.js"></script>
+<?php endif; ?>
 <script src="<?= ASSETS_URL ?>vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/moment/moment.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/flatpickr/flatpickr.js"></script>

@@ -41,16 +41,20 @@
 
     <!-- endbuild -->
 
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/apex-charts/apex-charts.css" />
+    <?php if ($data['page'] && $data['page'] == 'Dashboard'): ?>
+        <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/apex-charts/apex-charts.css" />
+    <?php endif; ?>
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css">
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/flatpickr/flatpickr.css" />
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css">
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/@form-validation/form-validation.css">
 
     <!-- Page CSS -->
-
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/css/pages/app-logistics-dashboard.css" />
+    <?php if ($data['page'] && $data['page'] == 'Dashboard'): ?>
+        <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/css/pages/app-logistics-dashboard.css" />
+    <?php endif; ?>
 
     <!-- Helpers -->
     <script src="<?= ASSETS_URL ?>vendor/js/helpers.js"></script>
