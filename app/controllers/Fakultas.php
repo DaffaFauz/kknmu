@@ -20,6 +20,7 @@ class Fakultas extends Controller
         // Validasi input
         if ($_POST['kode_fakultas'] == '' || $_POST['nama_fakultas'] == '') {
             redirectWithMsg(BASE_URL . '/Fakultas', 'Kode fakultas atau nama fakultas tidak boleh kosong', 'danger');
+            exit;
         }
 
         // Insert data
@@ -35,6 +36,7 @@ class Fakultas extends Controller
         // Validasi input
         if ($_POST['kode_fakultas'] == '' || $_POST['nama_fakultas'] == '') {
             redirectWithMsg(BASE_URL . '/Fakultas', 'Kode fakultas atau nama fakultas tidak boleh kosong', 'danger');
+            exit;
         }
 
         // Update data
