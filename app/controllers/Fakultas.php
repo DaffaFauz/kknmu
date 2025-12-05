@@ -47,13 +47,13 @@ class Fakultas extends Controller
         }
     }
 
-    public function delete($id)
-    {
-        // Delete data
-        if ($this->model('FakultasModel')->delete($id) > 0) {
-            redirectWithMsg(BASE_URL . '/Fakultas', 'Berhasil menghapus data fakultas.', 'success');
-        } else {
-            redirectWithMsg(BASE_URL . '/Fakultas', 'Gagal menghapus data fakultas.', 'danger');
-        }
-    }
+    // public function delete($id)
+    // {
+    //     // Delete data
+    //     if ($this->model('FakultasModel')->delete($id) > 0) {
+    //         redirectWithMsg(BASE_URL . '/Fakultas', 'Berhasil menghapus data fakultas.', 'success');
+    //     } else {
+    //         redirectWithMsg(BASE_URL . '/Fakultas', 'Gagal menghapus data fakultas.', 'danger');
+    //     }
+    // }
 }

@@ -156,13 +156,13 @@
                 <div data-i18n="Data Fakultas">Data Fakultas</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= $data['page'] && $data['page'] == 'Program Studi' ? 'active' : '' ?>">
             <a href="<?= BASE_URL ?>/Prodi" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-book"></i>
                 <div data-i18n="Data Prodi">Data Prodi</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item <?= $data['page'] && $data['page'] == 'Lokasi' ? 'active' : '' ?>">
             <a href="<?= BASE_URL ?>/Lokasi" class="menu-link">
                 <i class="menu-icon icon-base ti tabler-map-pin"></i>
                 <div data-i18n="Lokasi">Lokasi</div>

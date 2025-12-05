@@ -34,11 +34,11 @@ class FakultasModel
         return $this->pdo->rowCount();
     }
 
-    public function delete($id)
-    {
-        $this->pdo->query("DELETE FROM {$this->table} WHERE id_fakultas = :id");
-        $this->pdo->bind(':id', $id);
-        $this->pdo->execute();
-        return $this->pdo->rowCount();
-    }
+    // public function delete($id)
+    // {
+    //     $this->pdo->query("DELETE FROM {$this->table} WHERE id_fakultas = :id");
+    //     $this->pdo->bind(':id', $id);
+    //     $this->pdo->execute();
+    //     return $this->pdo->rowCount();
+    // }
 }
