@@ -127,23 +127,24 @@
                 <div data-i18n="Data Mahasiswa">Data Mahasiswa</div>
             </a>
         </li>
-        <li class="menu-item">
+        <li
+            class="menu-item <?= $data['page'] && $data['page'] == 'Dosen' || $data['page'] == 'Kaprodi' || $data['page'] == 'Pembimbing' ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-user-pentagon"></i>
                 <div data-i18n="Data Dosen">Data Dosen</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item <?= $data['page'] && $data['page'] == 'Dosen' ? 'active' : '' ?>">
                     <a href="<?= BASE_URL ?>/Dosen" class="menu-link">
                         <div data-i18n="Data Dosen">Data Dosen</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $data['page'] && $data['page'] == 'Kaprodi' ? 'active' : '' ?>">
                     <a href="<?= BASE_URL ?>/Kaprodi" class="menu-link">
                         <div data-i18n="Data Kaprodi">Data Kaprodi</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <?= $data['page'] && $data['page'] == 'Pembimbing' ? 'active' : '' ?>">
                     <a href="<?= BASE_URL ?>/Pembimbing" class="menu-link">
                         <div data-i18n="Data Pembimbing">Data Pembimbing</div>
                     </a>

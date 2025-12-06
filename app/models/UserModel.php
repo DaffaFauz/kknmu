@@ -68,7 +68,7 @@ class UserModel
         $this->pdo->beginTransaction();
 
         // Add to user table
-        $this->pdo->query("INSERT INTO user (name, username, password) VALUES (:name, :username, :password)");
+        $this->pdo->query("INSERT INTO users (name, username, password) VALUES (:name, :username, :password)");
         $this->pdo->bind("name", $data["nama"]);
         $this->pdo->bind("username", $data["nim"]);
         $this->pdo->bind("password", password_hash($data["nim"], PASSWORD_DEFAULT));
@@ -85,7 +85,33 @@ class UserModel
 
     public function create($data)
     {
-        // Validasi input
+        // Add to user table
+        $this->pdo->query("INSERT INTO users (name, username, password) VALUES (:name, :username, :password)");
+        $this->pdo->bind("name", $data["nama_dosen"]);
+        $this->pdo->bind("username", $data["nidn"]);
+        $this->pdo->bind("password", password_hash($data["nidn"], PASSWORD_DEFAULT));
+        $this->pdo->execute();
+        $newId = $this->pdo->lastInsertId();
+        return $newId;
+    }
+
+    public function update($id, $data)
+    {
+        $this->pdo->query("UPDATE users SET name = :name, username = :username, password = :password WHERE id_user = :id_user");
+        $this->pdo->bind("id_user", $id);
+        $this->pdo->bind("name", $data["nama"]);
+        $this->pdo->bind("username", $data["username"]);
+        $this->pdo->bind("password", password_hash($data["username"], PASSWORD_DEFAULT));
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
+    }
+
+    public function delete($id)
+    {
+        $this->pdo->query("DELETE FROM users WHERE id_user = :id_user");
+        $this->pdo->bind("id_user", $id);
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
     }
 
     public function logout()
