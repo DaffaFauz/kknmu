@@ -86,4 +86,10 @@ class Prodi extends Controller
         $this->view('admin/prodi', ['prodi' => $prodi, 'fakultas' => $fakultas, 'id_fakultas' => $id]);
         $this->view('layout/footer');
     }
+
+    public function getByFakultas($id)
+    {
+        $prodi = $this->model('ProdiModel')->filter($id);
+        echo json_encode($prodi);
+    }
 }

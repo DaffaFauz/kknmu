@@ -49,4 +49,10 @@ class TahunAkademikModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function GetTahunActive()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} WHERE status = 'Aktif'");
+        return $this->pdo->single();
+    }
 }

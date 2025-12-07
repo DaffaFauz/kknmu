@@ -9,7 +9,11 @@ class Login extends Controller
 
     public function register()
     {
-        $this->view('register');
+        // Get data fakultas
+        $fakultas = $this->model('FakultasModel')->getAll();
+
+        // Load View
+        $this->view('register', ['fakultas' => $fakultas]);
     }
 
     public function SelectJabatan()

@@ -67,12 +67,27 @@ class UserModel
     {
         $this->pdo->beginTransaction();
 
+        // Cek apakah username sudah ada
+        $this->pdo->query("SELECT * FROM users WHERE username = :username");
+        $this->pdo->bind('username', $data['username']);
+        $cekUsername = $this->pdo->single();
+
+        if ($cekUsername) {
+            $this->pdo->rollBack();
+            redirectWithMsg(BASE_URL . '/Login', 'Data Anda sudah terdaftar! Silahkan login untuk melanjutkan.', 'danger');
+            exit;
+        }
+
         // Add to user table
         $this->pdo->query("INSERT INTO users (name, username, password) VALUES (:name, :username, :password)");
         $this->pdo->bind("name", $data["nama"]);
-        $this->pdo->bind("username", $data["nim"]);
-        $this->pdo->bind("password", password_hash($data["nim"], PASSWORD_DEFAULT));
-        $this->pdo->execute();
+        $this->pdo->bind("username", $data["username"]);
+        $this->pdo->bind("password", password_hash($data["username"], PASSWORD_DEFAULT));
+        if (!$this->pdo->execute()) {
+            $this->pdo->rollBack();
+            redirectWithMsg(BASE_URL . '/Login/register', 'Data Anda sudah terdaftar! Silahkan login untuk melanjutkan.', 'danger');
+            exit;
+        }
         $newId = $this->pdo->lastInsertId();
 
         // Add to user_jabatan table

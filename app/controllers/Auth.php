@@ -41,7 +41,37 @@ class Auth extends Controller
 
     public function register()
     {
+        // Validasi input
+        if ($_POST['username'] == '' || $_POST['nama'] == '' || $_POST['alamat'] == '' || $_POST['jenis_kelamin'] == '' || $_POST['prodi'] == '' || $_POST['kelas'] == '') {
+            redirectWithMsg(BASE_URL . '/Login/register', 'Daftar gagal! Harap isi semua data!', 'danger');
+            exit;
+        }
 
+        // Insert data
+        $newId = $this->model("UserModel")->register($_POST);
+        if ($newId > 0) {
+            $_POST['id_user'] = $newId;
+            $idMahasiswa = $this->model('MahasiswaModel')->create($_POST);
+            if ($idMahasiswa) {
+                $_POST['id_mahasiswa'] = $idMahasiswa;
+                if ($this->model("PendaftaranModel")->create($_POST)) {
+                    redirectWithMsg(BASE_URL . '/Login', 'Daftar berhasil! Silahkan login.', 'success');
+                    exit;
+                } else {
+                    $this->model("MahasiswaModel")->delete($idMahasiswa);
+                    $this->model("UserModel")->delete($newId);
+                    redirectWithMsg(BASE_URL . '/Login/register', 'Gagal mendaftar! Coba lagi.', 'danger');
+                    exit;
+                }
+            } else {
+                $this->model("UserModel")->delete($newId);
+                redirectWithMsg(BASE_URL . '/Login/register', 'Gagal mendaftar! Coba lagi.', 'danger');
+                exit;
+            }
+        } else {
+            redirectWithMsg(BASE_URL . '/Login/register', 'Data Anda sudah terdaftar! Silahkan login untuk melanjutkan.', 'danger');
+            exit;
+        }
     }
 
     public function logout()

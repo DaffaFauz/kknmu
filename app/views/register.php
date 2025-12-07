@@ -71,6 +71,13 @@
   <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
       <div class="authentication-inner py-6">
+        <?php if (isset($_SESSION['msg'])): ?>
+          <div class="alert alert-<?= $_SESSION['msg_type'] ?> alert-dismissible" role="alert">
+            <i class="icon-base ti tabler-alert-circle"></i>
+            <strong><?= $_SESSION['msg'] ?></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <?php unset($_SESSION['msg']); endif; ?>
         <!-- Register Card -->
         <div class="card">
           <div class="card-body">
@@ -91,12 +98,12 @@
               <div class="row">
                 <div class="mb-6 form-control-validation col-lg-6 col-md-12">
                   <label for="username" class="form-label">NIM</label>
-                  <input type="text" class="form-control" id="username" name="nim" placeholder="Masukkan NIM"
+                  <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan NIM"
                     autofocus />
                 </div>
                 <div class="mb-6 form-control-validation col-lg-6 col-md-12">
-                  <label for="email" class="form-label">Nama</label>
-                  <input type="text" class="form-control" id="email" name="nama" placeholder="Masukkan Nama" />
+                  <label for="nama" class="form-label">Nama</label>
+                  <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan Nama" />
                 </div>
               </div>
               <div class="mb-6 form-control-validation">
@@ -108,8 +115,8 @@
                 <small class="form-text text-muted">*Contoh: Cipacing, Jatinangor, Sumedang</small>
               </div>
               <div class="mb-6 form-control-validation">
-                <label for="email" class="form-label">Jenis Kelamin</label>
-                <select class="form-select" id="email" name="jenis_kelamin">
+                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                <select class="form-select" id="jenis_kelamin" name="jenis_kelamin">
                   <option selected disabled value="">Pilih Jenis Kelamin</option>
                   <option value="Laki-laki">Laki-laki</option>
                   <option value="Perempuan">Perempuan</option>
@@ -117,25 +124,24 @@
               </div>
               <div class="row">
                 <div class="mb-6 form-control-validation col-lg-6 col-md-12">
-                  <label for="email" class="form-label">Fakultas</label>
-                  <select class="form-select" id="email" name="fakultas">
+                  <label for="fakultas" class="form-label">Fakultas</label>
+                  <select class="form-select" id="fakultas" name="fakultas">
                     <option selected disabled value="">Pilih Fakultas</option>
-                    <option value="Laki-laki">Laki-laki</option>
-                    <option value="Perempuan">Perempuan</option>
+                    <?php foreach ($data['fakultas'] as $row): ?>
+                      <option value="<?= $row['id_fakultas'] ?>"><?= $row['nama_fakultas'] ?></option>
+                    <?php endforeach; ?>
                   </select>
                 </div>
                 <div class="mb-6 form-control-validation col-lg-6 col-md-12">
-                  <label for="email" class="form-label">Prodi</label>
-                  <select class="form-select" id="email" name="prodi">
+                  <label for="prodi" class="form-label">Prodi</label>
+                  <select class="form-select" id="prodi" name="prodi">
                     <option selected disabled value="">Pilih Prodi</option>
-                    <option value="Laki-laki">Laki-laki</option>
-                    <option value="Perempuan">Perempuan</option>
                   </select>
                 </div>
               </div>
               <div class="mb-6 form-control-validation">
-                <label for="email" class="form-label">Kelas</label>
-                <select class="form-select" id="email" name="kelas">
+                <label for="kelas" class="form-label">Kelas</label>
+                <select class="form-select" id="kelas" name="kelas">
                   <option selected disabled value="">Pilih Kelas</option>
                   <option value="Reguler">Reguler</option>
                   <option value="Non Reguler">Non Reguler</option>
@@ -192,6 +198,43 @@
 
   <!-- Page JS -->
   <script src="<?= ASSETS_URL ?>js/pages-auth.js"></script>
+
+  <script>
+    // load option prodi
+    $(document).ready(function () {
+      $('#fakultas').on('change', function () {
+        // Mendapatkan input fakultas
+        var id_fakultas = $('#fakultas').val();
+        $('#prodi').html(`<option selected disabled value="">Pilih Prodi</option>`);
+
+        if (id_fakultas) {
+          $.ajax({
+            url: '<?= BASE_URL; ?>/Prodi/getByFakultas/' + id_fakultas,
+            type: 'POST',
+            data: { fakultas: id_fakultas },
+            dataType: 'json',
+            success: function (response) {
+              if (response.length > 0) {
+                $.each(response, function (index, item) {
+                  $('#prodi').append($('<option>', {
+                    value: item.id_prodi,
+                    text: item.nama_prodi
+                  }));
+                })
+              } else {
+                $('#prodi').append('<option disabled>Tidak ada Prodi</option>');
+              }
+            },
+            error: function (xhr, status, error) {
+              console.log("AJAX Error:" + error);
+              alert("Gagal memuat data")
+            }
+          })
+        }
+      })
+
+    })
+  </script>
 </body>
 
 </html>
