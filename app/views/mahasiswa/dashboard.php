@@ -29,6 +29,12 @@
                                     class="icon-base ti tabler-<?= ($data['pendaftaran']['status_pendaftaran'] == 'Pending' ? 'progress-help' : ($data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'progress-alert' : 'progress-check')) ?> icon-28px"></i></span>
                         </div>
                         <h4 class="mb-0"><?= htmlspecialchars($data['pendaftaran']['status_pendaftaran']) ?></h4>
+                        <?php if (htmlspecialchars($data['pendaftaran']['status_pendaftaran']) == 'Ditolak'): ?>
+                            <button type="button" class="btn btn-sm btn-outline-danger d-flex ms-auto"
+                                data-bs-toggle="modal" data-bs-target="#modalcatatanTolak"><i
+                                    class="icon-base ti tabler-eye me-2"></i>Lihat Detail
+                                Catatan</button>
+                        <?php endif; ?>
                     </div>
                     <p class="mb-1">Status Pendaftaran:
                         <?php
@@ -136,6 +142,25 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal untuk melihat catatan penolakan -->
+<div class="modal fade" id="modalcatatanTolak" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Catatan Penolakan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" readonly
+                    disabled><?= htmlspecialchars($data['pendaftaran']['catatan']) ?></textarea>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary mt-2" data-bs-dismiss="modal">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
