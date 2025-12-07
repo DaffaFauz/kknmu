@@ -31,7 +31,7 @@ class UserModel
             $_SESSION['nama'] = $user['name'];
 
             // Mendapatkan semua jabatan user
-            $this->pdo->query("SELECT * FROM user_jabatan WHERE id_user = :id_user");
+            $this->pdo->query("SELECT * FROM user_jabatan INNER JOIN jabatan ON user_jabatan.id_jabatan = jabatan.id_jabatan WHERE id_user = :id_user");
             $this->pdo->bind(':id_user', $user['id_user']);
             $jabatan = $this->pdo->resultSet();
 

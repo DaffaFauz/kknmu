@@ -20,7 +20,7 @@ function redirectWithMsg($url, $msg, $type)
 
 function checkLogin()
 {
-    if (!isset($_SESSION['user'])) {
+    if (!isset($_SESSION['id_user'])) {
         redirectWithMsg(BASE_URL . '/Login', 'Anda belum login', 'danger');
         exit;
     }

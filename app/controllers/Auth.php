@@ -8,7 +8,7 @@ class Auth extends Controller
             // Cek jumlah jabatan 
             $jumlah_jabatan = $_SESSION['jml_jabatan'] ?? 1;
             if ($jumlah_jabatan > 1) {
-                redirectWithMsg(BASE_URL . '/SelectJabatan', 'Anda berhasil login', 'success');
+                $this->view('endpoint');
                 exit;
             }
 
