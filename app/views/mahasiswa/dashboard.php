@@ -2,24 +2,53 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row mb-3">
         <div class="col d-flex justify-content-end">
-            <button class="btn btn-primary"><i class="icon-base ti tabler-cloud-upload icon-20px me-2"></i> Ajukan
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjukanPendaftaran"
+                <?= htmlspecialchars($data['pendaftaran']['status_pendaftaran']) == 'Diverifikasi Kaprodi' || htmlspecialchars($data['pendaftaran']['status_pendaftaran']) == 'Revisi' ? '' : 'disabled' ?>><i
+                    class="icon-base ti tabler-cloud-upload icon-20px me-2"></i> Ajukan
                 pendaftaran
                 KKN</button>
         </div>
     </div>
+    <?php if (isset($_SESSION['msg'])): ?>
+        <div class="alert alert-<?= $_SESSION['msg_type'] ?> alert-dismissible" role="alert">
+            <i class="icon-base ti tabler-alert-circle"></i>
+            <strong><?= $_SESSION['msg'] ?></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['msg']); endif; ?>
     <div class="row g-6">
         <!-- Card Border Shadow -->
         <div class="col-lg-6 col-sm-6">
-            <div class="card card-border-shadow-primary h-100">
+            <div
+                class="card card-border-shadow-<?= $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'danger' : ($data['pendaftaran']['status_pendaftaran'] == 'Pending' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' ? 'warning' : 'success') ?> h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2">
                         <div class="avatar me-4">
-                            <span class="avatar-initial rounded bg-label-primary"><i
-                                    class="fas fa-user-graduate"></i></span>
+                            <span
+                                class="avatar-initial rounded bg-label-<?= $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'danger' : ($data['pendaftaran']['status_pendaftaran'] == 'Pending' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' ? 'warning' : 'success') ?>"><i
+                                    class="icon-base ti tabler-<?= ($data['pendaftaran']['status_pendaftaran'] == 'Pending' ? 'progress-help' : ($data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'progress-alert' : 'progress-check')) ?> icon-28px"></i></span>
                         </div>
-                        <h4 class="mb-0">42</h4>
+                        <h4 class="mb-0"><?= htmlspecialchars($data['pendaftaran']['status_pendaftaran']) ?></h4>
                     </div>
-                    <p class="mb-1">Status Pendaftaran: Menunggu verifikasi dari Kaprodi</p>
+                    <p class="mb-1">Status Pendaftaran:
+                        <?php
+                        if ($data['pendaftaran']['status_pendaftaran'] == 'Pending') {
+                            echo 'Menunggu verifikasi dari Kaprodi';
+                        } elseif ($data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi') {
+                            if ($data['pendaftaran']['bukti_pembayaran'] != null) {
+                                echo 'Tunggu verifikasi dari Admin';
+                            } else {
+                                echo 'Diverifikasi oleh Kaprodi, Silahkan untuk melakukan pengajuan pendaftaran KKN.';
+                            }
+                        } elseif ($data['pendaftaran']['status_pendaftaran'] == 'Ditolak') {
+                            echo 'Pengajuan ditolak, Anda dapat mengajukan lagi tahun depan';
+                        } elseif ($data['pendaftaran']['status_pendaftaran'] == 'Revisi') {
+                            echo 'Bukti pembayaran tidak valid, Silahkan untuk melakukan pengajuan ulang.';
+                        } else {
+                            echo 'Diterima';
+                        }
+                        ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -31,9 +60,9 @@
                             <span class="avatar-initial rounded bg-label-warning"><i
                                     class="icon-base ti tabler-user icon-28px"></i></span>
                         </div>
-                        <h4 class="mb-0">8</h4>
+                        <h4 class="mb-0">-</h4>
                     </div>
-                    <p class="mb-1">Jumlah Dosen Pembimbing</p>
+                    <p class="mb-1">Dosen Pembimbing</p>
                 </div>
             </div>
         </div>
@@ -81,3 +110,33 @@
     </div>
 </div>
 <!-- / Content -->
+
+<!-- Modal untuk pengajuan pendaftaran KKN -->
+<div class="modal fade" id="modalAjukanPendaftaran" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajukan Pendaftaran KKN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form
+                    action="<?= BASE_URL . '/Pendaftaran/ajukan/' . htmlspecialchars($data['pendaftaran']['id_pendaftaran']) ?>"
+                    method="post" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label" for="nama">Upload bukti pembayaran</label>
+                            <input type="file" class="form-control" id="nama" name="bukti_pembayaran"
+                                value="<?= $_SESSION['nama'] ?>" readonly>
+                            <span class="form-text">Format file: .jpg, .jpeg, .png dan ukuran maksimal 5MB</span>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary me-2">Ajukan</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
