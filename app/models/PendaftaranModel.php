@@ -64,7 +64,7 @@ class PendaftaranModel
         }
 
         // Buat folder bukti_pembayaran jika folder belum ada
-        $folder = __DIR__ . '/../../assets/img/bukti_pembayaran';
+        $folder = __DIR__ . '/../../public/assets/img/bukti_pembayaran';
         if (!file_exists($folder)) {
             mkdir($folder, 0777, true);
         }
