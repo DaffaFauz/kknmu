@@ -20,6 +20,7 @@
         </div>
         <div class="card-body mt-4">
             <form action="<?= BASE_URL ?>/Plotting/store" method="POST">
+                <input type="hidden" name="id_tahun" value="<?= htmlspecialchars($data['tahun']['id_tahun']) ?>">
                 <div class="row g-3">
                     <!-- Nama Kelompok -->
                     <div class="col-md-12">
@@ -95,7 +96,8 @@
                                     <?php foreach ($data['mahasiswa'] as $mhs): ?>
                                         <tr>
                                             <td>
-                                                <input type="checkbox" name="mahasiswa[]" value="<?= $mhs['id_mahasiswa'] ?>" class="check-item">
+                                                <input type="checkbox" name="mahasiswa[]"
+                                                    value="<?= $mhs['id_mahasiswa'] ?>" class="check-item">
                                             </td>
                                             <td><?= $mhs['nim'] ?></td>
                                             <td><?= $mhs['nama_mahasiswa'] ?></td>

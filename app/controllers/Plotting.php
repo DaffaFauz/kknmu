@@ -17,17 +17,20 @@ class Plotting extends Controller
 
     public function create()
     {
+        // Get Active Year
+        $tahun_aktif = $this->model('TahunAkademikModel')->GetTahunActive();
+
         // Get data kelompok, pembimbing, mahasiswa yang sudah di verifikasi admin
-        $kelompok = $this->model('KelompokModel')->getAll();
-        $pembimbing = $this->model('PembimbingModel')->getAll();
-        $mahasiswa = $this->model('MahasiswaModel')->getVerifikasiMahasiswa();
+        $kelompok = $this->model('KelompokModel')->getForPlotting();
+        $pembimbing = $this->model('PembimbingModel')->getForPlotting($tahun_aktif);
+        $mahasiswa = $this->model('MahasiswaModel')->getMahasiswaForPlotting($tahun_aktif);
         $kabupaten = $this->model('LokasiModel')->getKabupaten();
 
         // Load view
         $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
         $this->view('layout/sidebar', ['title' => 'Plotting', 'page' => 'Plotting']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-        $this->view('admin/plotting_create', ['kelompok' => $kelompok, 'pembimbing' => $pembimbing, 'mahasiswa' => $mahasiswa, 'kabupaten' => $kabupaten]);
+        $this->view('admin/plotting_create', ['kelompok' => $kelompok, 'pembimbing' => $pembimbing, 'mahasiswa' => $mahasiswa, 'kabupaten' => $kabupaten, 'tahun' => $tahun_aktif]);
         $this->view('layout/footer', ['page' => 'Plotting']);
     }
 
@@ -39,25 +42,19 @@ class Plotting extends Controller
         $dosen2 = !empty($_POST['dosen2']) ? $_POST['dosen2'] : null;
         $mahasiswa_ids = $_POST['mahasiswa'] ?? [];
 
-        // Get Active Year
-        $tahun_aktif = $this->model('TahunAkademikModel')->GetTahunActive();
-        if (!$tahun_aktif) {
-            redirectWithMsg(BASE_URL . '/Plotting/create', 'Gagal! Tidak ada tahun akademik aktif.', 'danger');
-            return;
-        }
-        $id_tahun = $tahun_aktif['id_tahun'];
+        $tahun = $_POST['id_tahun'];
 
         // Check if group is already plotted for this year
-        $id_detail_kelompok = $this->model('PlottingModel')->getDetailKelompokId($id_kelompok, $id_tahun);
+        $id_detail_kelompok = $this->model('PlottingModel')->getDetailKelompokId($id_kelompok, $tahun);
 
         if (!$id_detail_kelompok) {
             // Create new plotting entry
-            $id_detail_kelompok = $this->model('PlottingModel')->createPlotting($id_kelompok, $id_lokasi, $dosen1, $dosen2, $id_tahun);
+            $id_detail_kelompok = $this->model('PlottingModel')->createPlotting($id_kelompok, $id_lokasi, $dosen1, $dosen2, $tahun);
         }
 
         // Validation: Max 17 students
         $current_count = $this->model('PlottingModel')->countStudents($id_detail_kelompok);
-        if (($current_count + count($mahasiswa_ids)) > 17) {
+        if ($current_count + count($mahasiswa_ids) > 17) {
             redirectWithMsg(BASE_URL . '/Plotting/create', 'Gagal! Maksimal 17 mahasiswa per kelompok.', 'danger');
             return;
         }

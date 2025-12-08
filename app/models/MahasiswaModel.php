@@ -45,9 +45,10 @@ class mahasiswaModel
         return $this->pdo->rowCount();
     }
 
-    public function getVerifikasiMahasiswa()
+    public function getMahasiswaForPlotting($tahun)
     {
-        $this->pdo->query("SELECT * FROM pendaftaran INNER JOIN {$this->table} ON pendaftaran.id_mahasiswa = {$this->table}.id_mahasiswa INNER JOIN prodi ON {$this->table}.id_prodi = prodi.id_prodi INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas WHERE pendaftaran.status_pendaftaran = 'Diverifikasi'");
+        $this->pdo->query("SELECT * FROM pendaftaran INNER JOIN {$this->table} ON pendaftaran.id_mahasiswa = {$this->table}.id_mahasiswa INNER JOIN prodi ON {$this->table}.id_prodi = prodi.id_prodi INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas INNER JOIN tahun_akademik ON pendaftaran.id_tahun = tahun_akademik.id_tahun WHERE pendaftaran.status_pendaftaran = 'Diverifikasi' AND {$this->table}.id_kelompok IS NULL AND tahun_akademik.id_tahun = :tahun");
+        $this->pdo->bind(':tahun', $tahun['id_tahun']);
         return $this->pdo->resultSet();
     }
 }

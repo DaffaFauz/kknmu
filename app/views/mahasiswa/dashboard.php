@@ -3,7 +3,7 @@
     <div class="row mb-3">
         <div class="col d-flex justify-content-end">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjukanPendaftaran"
-                <?= htmlspecialchars($data['pendaftaran']['status_pendaftaran']) == 'Diverifikasi Kaprodi' || htmlspecialchars($data['pendaftaran']['status_pendaftaran']) == 'Revisi' ? '' : 'disabled' ?>><i
+                <?= (isset($data['pendaftaran']['status_pendaftaran']) && ($data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi')) ? '' : 'disabled' ?>><i
                     class="icon-base ti tabler-cloud-upload icon-20px me-2"></i> Ajukan
                 pendaftaran
                 KKN</button>

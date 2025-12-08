@@ -40,4 +40,10 @@ class KelompokModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function getForPlotting()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok NOT IN (SELECT id_kelompok FROM detail_kelompok)");
+        return $this->pdo->resultSet();
+    }
 }

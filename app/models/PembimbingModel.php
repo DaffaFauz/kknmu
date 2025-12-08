@@ -38,4 +38,21 @@ class PembimbingModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function getForPlotting($id_tahun)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} 
+            INNER JOIN users ON {$this->table}.id_user = users.id_user 
+            INNER JOIN user_jabatan ON users.id_user = user_jabatan.id_user 
+            INNER JOIN jabatan ON user_jabatan.id_jabatan = jabatan.id_jabatan 
+            WHERE jabatan.nama_jabatan = 'Pembimbing' 
+            AND {$this->table}.id_dosen NOT IN (
+                SELECT id_dosen1 FROM detail_kelompok WHERE id_tahun = :id_tahun1 AND id_dosen1 IS NOT NULL
+                UNION
+                SELECT id_dosen2 FROM detail_kelompok WHERE id_tahun = :id_tahun2 AND id_dosen2 IS NOT NULL
+            )");
+        $this->pdo->bind(':id_tahun1', $id_tahun['id_tahun']);
+        $this->pdo->bind(':id_tahun2', $id_tahun['id_tahun']);
+        return $this->pdo->resultSet();
+    }
 }
