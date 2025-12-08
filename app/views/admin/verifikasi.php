@@ -1,19 +1,19 @@
 <!-- Content -->
 <div class="container-xxl flex-grow-1 container-p-y">
-    <!-- Card untuk filter mahasiswa berdasarkan prodi dan fakultas -->
+    <!-- Card untuk filter mahasiswa berdasarkan prodi, fakultas dan status pendaftaran -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row mb-4">
                 <div class="col-12 d-flex align-items-center">
                     <i class="ti tabler-filter me-1"></i>
-                    <h5 class="card-title mb-0">Filter Program Studi</h5>
+                    <h5 class="card-title mb-0">Filter Pendaftaran Mahasiswa</h5>
                 </div>
             </div>
-            <form action="<?= BASE_URL ?>/Verifikasi/filter/<?= $data['id_fakultas'] ?? '' ?>" method="post">
+            <form action="<?= BASE_URL ?>/Verifikasi/filter" method="post">
                 <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label" for="id_fakultas">Fakultas</label>
-                        <select name="id_fakultas" id="id_fakultas" class="form-select">
+                    <div class="col-md-3">
+                        <label class="form-label" for="fakultas">Fakultas</label>
+                        <select name="id_fakultas" id="fakultas" class="form-select">
                             <option value="">Pilih Fakultas</option>
                             <?php foreach ($data['fakultas'] as $row): ?>
                                 <option value="<?= $row['id_fakultas'] ?>" <?= !empty($_POST['id_fakultas']) && $row['id_fakultas'] == $_POST['id_fakultas'] ? 'selected' : '' ?>>
@@ -22,18 +22,33 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label" for="id_prodi">Prodi</label>
-                        <select name="id_prodi" id="id_prodi" class="form-select">
+                    <div class="col-md-3">
+                        <label class="form-label" for="prodi">Prodi</label>
+                        <select name="id_prodi" id="prodi" class="form-select">
                             <option value="">Pilih Prodi</option>
                             <?php foreach ($data['prodi'] as $row): ?>
-                                <option value="<?= $row['id_prodi'] ?>" <?= !empty($_POST['id_prodi']) && $row['id_prodi'] == $_POST['id_prodi'] ? 'selected' : '' ?>>
+                                <option value="<?= $row['id_prodi'] ?>" <?= !empty($_POST[' id_prodi']) && $row['id_prodi'] == $_POST['id_prodi'] ? 'selected' : '' ?>>
                                     <?= $row['nama_prodi'] ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-4 align-self-end d-flex">
+                    <div class="col-md-3">
+                        <label class="form-label" for="status_pendaftaran">Status Pendaftaran</label>
+                        <select name="status_pendaftaran" id="status_pendaftaran" class="form-select">
+                            <option value="">Pilih Status Pendaftaran</option>
+                            <option value="Diverifikasi Kaprodi" <?= !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Diverifikasi Kaprodi' ? 'selected' : '' ?>>
+                                Diverifikasi Kaprodi
+                            </option>
+                            <option value="Revisi" <?= !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Revisi' ? 'selected' : '' ?>>
+                                Revisi
+                            </option>
+                            <option value="Diverifikasi" <?= !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Diverifikasi' ? 'selected' : '' ?>>
+                                Diverifikasi
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 align-self-end d-flex">
                         <button type="submit" class="btn btn-primary me-2"><i
                                 class="ti tabler-filter me-1"></i>Filter</button>
                     </div>
@@ -131,6 +146,12 @@
                                 class="form-control" readonly disabled />
                         </div>
                         <div class="col-6">
+                            <label class="form-label" for="modalTambahProdi">Status Pendaftaran</label>
+                            <input type="text" id="modalTambahProdi"
+                                value="<?= htmlspecialchars($row['status_pendaftaran']) ?>" class="form-control" readonly
+                                disabled />
+                        </div>
+                        <div class="col-6">
                             <label class="form-label" for="modalTambahProdi">Bukti Pembayaran</label>
                             <a href="<?= BASE_URL ?>/assets/img/bukti_pembayaran/<?= htmlspecialchars($row['bukti_pembayaran']) ?>"
                                 target="_blank" class="btn btn-sm btn-info mt-2"><i class="ti tabler-eye me-1"></i>
@@ -139,7 +160,7 @@
                     </div>
                     <div class="col-12 text-end mt-4">
                         <form class="d-inline"
-                            action="<?= BASE_URL ?>/Pendaftaran/verifikasi/<?= htmlspecialchars($row['id_pendaftaran']) ?>"
+                            action="<?= BASE_URL ?>/Verifikasi/verifikasi/<?= htmlspecialchars($row['id_pendaftaran']) ?>"
                             method="post">
                             <button type="submit" class="btn btn-success"
                                 onClick="return confirm('Verifikasi Pendaftaran mahasiswa ini?')"><i

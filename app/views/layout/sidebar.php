@@ -224,7 +224,7 @@
         <!-- Verifikasi Mahasiswa -->
         <li class="menu-item <?= $data['page'] && $data['page'] == 'Verifikasi Mahasiswa' ? 'active' : '' ?>">
             <a href="<?= BASE_URL ?>/Verifikasi" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-smart-home"></i>
+                <i class="menu-icon icon-base ti tabler-user-check"></i>
                 <div data-i18n="Verifikasi Mahasiswa">Verifikasi Mahasiswa</div>
             </a>
         </li>

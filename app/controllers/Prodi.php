@@ -12,7 +12,7 @@ class Prodi extends Controller
         $this->view('layout/sidebar', ['page' => 'Program Studi']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
         $this->view('admin/prodi', ['prodi' => $prodi, 'fakultas' => $fakultas]);
-        $this->view('layout/footer');
+        $this->view('layout/footer', ['page' => 'Program Studi']);
     }
 
     public function create()
@@ -84,7 +84,7 @@ class Prodi extends Controller
         $this->view('layout/sidebar', ['page' => 'Program Studi']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
         $this->view('admin/prodi', ['prodi' => $prodi, 'fakultas' => $fakultas, 'id_fakultas' => $id]);
-        $this->view('layout/footer');
+        $this->view('layout/footer', ['page' => 'Program Studi']);
     }
 
     public function getByFakultas($id)

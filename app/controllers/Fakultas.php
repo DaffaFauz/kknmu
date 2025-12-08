@@ -12,7 +12,7 @@ class Fakultas extends Controller
         $this->view('layout/sidebar', ['page' => 'Fakultas']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
         $this->view('admin/fakultas', ['fakultas' => $fakultas]);
-        $this->view('layout/footer');
+        $this->view('layout/footer', ['page' => 'Fakultas']);
     }
 
     public function create()

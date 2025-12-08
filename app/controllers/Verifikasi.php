@@ -54,41 +54,39 @@ class Verifikasi extends Controller
         }
     }
 
-    public function filter($prodi = null)
+    public function filter()
     {
         if ($_SESSION['role'] == 'Admin') {
-            if ($prodi) {
+            if ($_POST['id_fakultas'] && $_POST['id_prodi']) {
                 // Get data filter
-                $mahasiswa = $this->model('VerifikasiModel')->filterForAdmin($prodi);
+                $mahasiswa = $this->model('VerifikasiModel')->filterForAdmin($_POST);
             } else {
                 // Get data filter
                 $mahasiswa = $this->model("VerifikasiModel")->getForAdmin();
             }
+            $fakultas = $this->model("FakultasModel")->getAll();
+
+            // Load view
+            $this->view('layout/head', ['title' => 'Verifikasi Mahasiswa', 'page' => 'Verifikasi Mahasiswa']);
+            $this->view('layout/sidebar', ['page' => 'Verifikasi Mahasiswa']);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('admin/verifikasi', ['mahasiswa' => $mahasiswa, 'fakultas' => $fakultas]);
+            $this->view('layout/footer', ['page' => 'Verifikasi Mahasiswa']);
         } else if ($_SESSION['role'] == 'Kaprodi') {
-            if ($prodi) {
+            if ($_POST['id_prodi']) {
                 // Get data filter
-                $mahasiswa = $this->model('VerifikasiModel')->filterForAdmin($prodi);
+                $mahasiswa = $this->model('VerifikasiModel')->filterForAdmin($_POST['id_prodi']);
             } else {
                 // Get data filter
                 $mahasiswa = $this->model("VerifikasiModel")->getForKaprodi($_SESSION['id_prodi']);
             }
+
+            // Load view
+            $this->view('layout/head', ['title' => 'Verifikasi Mahasiswa', 'page' => 'Verifikasi Mahasiswa']);
+            $this->view('layout/sidebar', ['page' => 'Verifikasi Mahasiswa']);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('kaprodi/verifikasi', ['mahasiswa' => $mahasiswa]);
+            $this->view('layout/footer', ['page' => 'Verifikasi Mahasiswa']);
         }
-
-        // Load view
-        $this->view('layout/head', ['title' => 'Verifikasi Mahasiswa', 'page' => 'Verifikasi Mahasiswa']);
-        $this->view('layout/sidebar', ['page' => 'Verifikasi Mahasiswa']);
-        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-        $this->view('kaprodi/verifikasi', ['mahasiswa' => $mahasiswa]);
-        $this->view('layout/footer', ['page' => 'Verifikasi Mahasiswa']);
-    }
-
-    public function lihat_bukti($id)
-    {
-        $data = $this->model("VerifikasiModel")->getById($id);
-        $this->view('layout/head', ['title' => 'Bukti Pembayaran', 'page' => 'Verifikasi Mahasiswa']);
-        $this->view('layout/sidebar', ['page' => 'Verifikasi Mahasiswa']);
-        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-        $this->view('admin/lihat_bukti', ['data' => $data]);
-        $this->view('layout/footer', ['page' => 'Verifikasi Mahasiswa']);
     }
 }

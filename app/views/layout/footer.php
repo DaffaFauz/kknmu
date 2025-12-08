@@ -69,6 +69,57 @@
 
 <script src="<?= ASSETS_URL ?>js/tables-datatables-basic.js"></script>
 
+<?php if ($data['page'] && $data['page'] == 'Verifikasi Mahasiswa'): ?>
+    <script>
+        // load option prodi
+        $(document).ready(function () {
+            function loadProdi(id_fakultas, selected_prodi = null) {
+                $('#prodi').html(`<option selected disabled value="">Pilih Prodi</option>`);
+
+                if (id_fakultas) {
+                    $.ajax({
+                        url: '<?= BASE_URL; ?>/Prodi/getByFakultas/' + id_fakultas,
+                        type: 'POST',
+                        data: { fakultas: id_fakultas },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.length > 0) {
+                                $.each(response, function (index, item) {
+                                    var isSelected = (selected_prodi && item.id_prodi == selected_prodi) ? true : false;
+                                    $('#prodi').append($('<option>', {
+                                        value: item.id_prodi,
+                                        text: item.nama_prodi,
+                                        selected: isSelected
+                                    }));
+                                })
+                            } else {
+                                $('#prodi').append('<option disabled>Tidak ada Prodi</option>');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("AJAX Error:" + error);
+                            alert("Gagal memuat data")
+                        }
+                    })
+                }
+            }
+
+            $('#fakultas').on('change', function () {
+                var id_fakultas = $(this).val();
+                loadProdi(id_fakultas);
+            });
+
+            // Load on init if value exists
+            var initial_fakultas = $('#fakultas').val();
+            var initial_prodi = '<?= $_POST['id_prodi'] ?? '' ?>';
+
+            if (initial_fakultas) {
+                loadProdi(initial_fakultas, initial_prodi);
+            }
+        })
+    </script>
+<?php endif; ?>
+
 </body>
 
 </html>
