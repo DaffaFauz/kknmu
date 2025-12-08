@@ -117,117 +117,121 @@
             </ul>
         </li> -->
 
-        <!-- Data Master -->
-        <li class="menu-header small">
-            <span class="menu-header-text" data-i18n="Data Master">Data Master</span>
-        </li>
-        <li class="menu-item">
-            <a href="<?= BASE_URL ?>/Mahasiswa" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-user"></i>
-                <div data-i18n="Data Mahasiswa">Data Mahasiswa</div>
-            </a>
-        </li>
-        <li
-            class="menu-item <?= $data['page'] && $data['page'] == 'Dosen' || $data['page'] == 'Kaprodi' || $data['page'] == 'Pembimbing' ? 'active' : '' ?>">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ti tabler-user-pentagon"></i>
-                <div data-i18n="Data Dosen">Data Dosen</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item <?= $data['page'] && $data['page'] == 'Dosen' ? 'active' : '' ?>">
-                    <a href="<?= BASE_URL ?>/Dosen" class="menu-link">
-                        <div data-i18n="Data Dosen">Data Dosen</div>
-                    </a>
-                </li>
-                <li class="menu-item <?= $data['page'] && $data['page'] == 'Kaprodi' ? 'active' : '' ?>">
-                    <a href="<?= BASE_URL ?>/Kaprodi" class="menu-link">
-                        <div data-i18n="Data Kaprodi">Data Kaprodi</div>
-                    </a>
-                </li>
-                <li class="menu-item <?= $data['page'] && $data['page'] == 'Pembimbing' ? 'active' : '' ?>">
-                    <a href="<?= BASE_URL ?>/Pembimbing" class="menu-link">
-                        <div data-i18n="Data Pembimbing">Data Pembimbing</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item <?= $data['page'] && $data['page'] == 'Fakultas' ? 'active' : '' ?>">
-            <a href="<?= BASE_URL ?>/Fakultas" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-school"></i>
-                <div data-i18n="Data Fakultas">Data Fakultas</div>
-            </a>
-        </li>
-        <li class="menu-item <?= $data['page'] && $data['page'] == 'Program Studi' ? 'active' : '' ?>">
-            <a href="<?= BASE_URL ?>/Prodi" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-book"></i>
-                <div data-i18n="Data Prodi">Data Prodi</div>
-            </a>
-        </li>
-        <li class="menu-item <?= $data['page'] && $data['page'] == 'Lokasi' ? 'active' : '' ?>">
-            <a href="<?= BASE_URL ?>/Lokasi" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-map-pin"></i>
-                <div data-i18n="Lokasi">Lokasi</div>
-            </a>
-        </li>
-        <li class="menu-item <?= $data['page'] && $data['page'] === 'Tahun Akademik' ? 'active' : '' ?>">
-            <a href="<?= BASE_URL ?>/TahunAkademik" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-calendar"></i>
-                <div data-i18n="Tahun Akademik">Tahun Akademik</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="<?= BASE_URL ?>/Kelompok" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-notes"></i>
-                <div data-i18n="Data Kelompok">Data Kelompok</div>
-            </a>
-        </li>
+        <?php if ($_SESSION['role'] == 'Admin'): ?>
+            <!-- Data Master -->
+            <li class="menu-header small">
+                <span class="menu-header-text" data-i18n="Data Master">Data Master</span>
+            </li>
+        <?php endif; ?>
+        <?php if ($_SESSION['role'] == 'Kaprodi'): ?>
+            <!-- Verifikasi Mahasiswa -->
+            <li class="menu-header small">
+                <span class="menu-header-text" data-i18n="Verifikasi Mahasiswa">Verifikasi Mahasiswa</span>
+            </li>
+        <?php endif; ?>
+        <?php if ($_SESSION['role'] == 'Admin' || $_SESSION['role'] == 'Kaprodi'): ?>
+            <li class="menu-item <?= $data['page'] && $data['page'] == 'Verifikasi Mahasiswa' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/Verifikasi" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-user-check"></i>
+                    <div data-i18n="Verifikasi Mahasiswa">Verifikasi Mahasiswa</div>
+                </a>
+            </li>
+        <?php endif; ?>
+        <?php if ($_SESSION['role'] == 'Admin'): ?>
+            <li
+                class="menu-item <?= $data['page'] && $data['page'] == 'Dosen' || $data['page'] == 'Kaprodi' || $data['page'] == 'Pembimbing' ? 'active' : '' ?>">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon icon-base ti tabler-user-pentagon"></i>
+                    <div data-i18n="Data Dosen">Data Dosen</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item <?= $data['page'] && $data['page'] == 'Dosen' ? 'active' : '' ?>">
+                        <a href="<?= BASE_URL ?>/Dosen" class="menu-link">
+                            <div data-i18n="Data Dosen">Data Dosen</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <?= $data['page'] && $data['page'] == 'Kaprodi' ? 'active' : '' ?>">
+                        <a href="<?= BASE_URL ?>/Kaprodi" class="menu-link">
+                            <div data-i18n="Data Kaprodi">Data Kaprodi</div>
+                        </a>
+                    </li>
+                    <li class="menu-item <?= $data['page'] && $data['page'] == 'Pembimbing' ? 'active' : '' ?>">
+                        <a href="<?= BASE_URL ?>/Pembimbing" class="menu-link">
+                            <div data-i18n="Data Pembimbing">Data Pembimbing</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item <?= $data['page'] && $data['page'] == 'Fakultas' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/Fakultas" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-school"></i>
+                    <div data-i18n="Data Fakultas">Data Fakultas</div>
+                </a>
+            </li>
+            <li class="menu-item <?= $data['page'] && $data['page'] == 'Program Studi' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/Prodi" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-book"></i>
+                    <div data-i18n="Data Prodi">Data Prodi</div>
+                </a>
+            </li>
+            <li class="menu-item <?= $data['page'] && $data['page'] == 'Lokasi' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/Lokasi" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-map-pin"></i>
+                    <div data-i18n="Lokasi">Lokasi</div>
+                </a>
+            </li>
+            <li class="menu-item <?= $data['page'] && $data['page'] === 'Tahun Akademik' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/TahunAkademik" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-calendar"></i>
+                    <div data-i18n="Tahun Akademik">Tahun Akademik</div>
+                </a>
+            </li>
+            <li class="menu-item <?= $data['page'] && $data['page'] == 'Kelompok' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/Kelompok" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-notes"></i>
+                    <div data-i18n="Data Kelompok">Data Kelompok</div>
+                </a>
+            </li>
 
-        <!-- Plotting Kelompok -->
-        <li class="menu-header small">
-            <span class="menu-header-text" data-i18n="Plotting Kelompok">Plotting Kelompok</span>
-        </li>
-        <li class="menu-item">
-            <a href="<?= BASE_URL ?>/PlottingKelompok" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-users-group"></i>
-                <div data-i18n="Plotting Kelompok">Plotting Kelompok</div>
-            </a>
-        </li>
+            <!-- Plotting Kelompok -->
+            <li class="menu-header small">
+                <span class="menu-header-text" data-i18n="Plotting Kelompok">Plotting Kelompok</span>
+            </li>
+            <li class="menu-item">
+                <a href="<?= BASE_URL ?>/PlottingKelompok" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-users-group"></i>
+                    <div data-i18n="Plotting Kelompok">Plotting Kelompok</div>
+                </a>
+            </li>
 
-        <!-- Laporan -->
-        <li class="menu-header small">
-            <span class="menu-header-text" data-i18n="Laporan">Laporan</span>
-        </li>
-        <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base ti tabler-file-description"></i>
-                <div data-i18n="Laporan">Laporan</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="app-academy-dashboard.html" class="menu-link">
-                        <div data-i18n="Harian">Harian</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-academy-course.html" class="menu-link">
-                        <div data-i18n="Akhir">Akhir</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-academy-course-details.html" class="menu-link">
-                        <div data-i18n="Nilai">Nilai</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <!-- Verifikasi Mahasiswa -->
-        <li class="menu-item <?= $data['page'] && $data['page'] == 'Verifikasi Mahasiswa' ? 'active' : '' ?>">
-            <a href="<?= BASE_URL ?>/Verifikasi" class="menu-link">
-                <i class="menu-icon icon-base ti tabler-user-check"></i>
-                <div data-i18n="Verifikasi Mahasiswa">Verifikasi Mahasiswa</div>
-            </a>
-        </li>
+            <!-- Laporan -->
+            <li class="menu-header small">
+                <span class="menu-header-text" data-i18n="Laporan">Laporan</span>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon icon-base ti tabler-file-description"></i>
+                    <div data-i18n="Laporan">Laporan</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item">
+                        <a href="app-academy-dashboard.html" class="menu-link">
+                            <div data-i18n="Harian">Harian</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="app-academy-course.html" class="menu-link">
+                            <div data-i18n="Akhir">Akhir</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="app-academy-course-details.html" class="menu-link">
+                            <div data-i18n="Nilai">Nilai</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php endif; ?>
     </ul>
 </aside>
 

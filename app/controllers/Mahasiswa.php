@@ -2,22 +2,6 @@
 
 class Mahasiswa extends Controller
 {
-    public function index()
-    {
-        // Ambil data mahasiswa yang sudah daftar
-        $mahasiswa = $this->model("PendaftaranModel")->getAllForAdmin();
-
-
-        // View
-        $this->view("layout/head", ['pageTitle' => 'Data Mahasiswa']);
-        $this->view("layout/sidebar");
-        $this->view("layout/header", ['nama' => $_SESSION['nama']]);
-        $this->view("admin/master/mahasiswa", ['mahasiswa' => $mahasiswa]);
-        $this->view("layout/footer");
-        $this->view("layout/script");
-
-    }
-
     public function create()
     {
         $newId = $this->model("UserModel")->register($_POST);
