@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/flatpickr/flatpickr.css" />
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css">
     <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/@form-validation/form-validation.css">
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/select2/select2.css" />
 
     <!-- Page CSS -->
     <?php if ($data['page'] && $data['page'] == 'Dashboard'): ?>

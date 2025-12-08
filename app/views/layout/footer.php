@@ -62,6 +62,7 @@
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/popular.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/bootstrap5.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/auto-focus.js"></script>
+<script src="<?= ASSETS_URL ?>vendor/libs/select2/select2.js"></script>
 
 <!-- Main JS -->
 
@@ -167,6 +168,94 @@
             if (initial_kabupaten) {
                 loadKecamatan(initial_kabupaten, initial_kecamatan);
             }
+        })
+    </script>
+<?php endif; ?>
+
+<?php if ($data['page'] && $data['page'] == 'Plotting'): ?>
+    <script>
+        $(document).ready(function () {
+            // Initialize Select2
+            $('.select2').select2();
+
+            // Cascading Dropdowns
+            function loadKecamatan(nama_kabupaten) {
+                $('#kecamatan').html(`<option selected disabled value="">Pilih Kecamatan</option>`);
+                $('#desa').html(`<option selected disabled value="">Pilih Desa</option>`);
+
+                if (nama_kabupaten) {
+                    $.ajax({
+                        url: '<?= BASE_URL; ?>/Plotting/getKecamatan/' + encodeURIComponent(nama_kabupaten),
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.length > 0) {
+                                $.each(response, function (index, item) {
+                                    $('#kecamatan').append($('<option>', {
+                                        value: item.nama_kecamatan,
+                                        text: item.nama_kecamatan
+                                    }));
+                                })
+                            } else {
+                                $('#kecamatan').append('<option disabled>Tidak ada Kecamatan</option>');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("AJAX Error:" + error);
+                        }
+                    })
+                }
+            }
+
+            function loadDesa(nama_kecamatan) {
+                $('#desa').html(`<option selected disabled value="">Pilih Desa</option>`);
+
+                if (nama_kecamatan) {
+                    $.ajax({
+                        url: '<?= BASE_URL; ?>/Plotting/getDesa/' + encodeURIComponent(nama_kecamatan),
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.length > 0) {
+                                $.each(response, function (index, item) {
+                                    $('#desa').append($('<option>', {
+                                        value: item.id_lokasi,
+                                        text: item.nama_desa
+                                    }));
+                                })
+                            } else {
+                                $('#desa').append('<option disabled>Tidak ada Desa</option>');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("AJAX Error:" + error);
+                        }
+                    })
+                }
+            }
+
+            $('#kabupaten').on('change', function () {
+                var nama_kabupaten = $(this).val();
+                loadKecamatan(nama_kabupaten);
+            });
+
+            $('#kecamatan').on('change', function () {
+                var nama_kecamatan = $(this).val();
+                loadDesa(nama_kecamatan);
+            });
+
+            // Checkbox Logic
+            $('#check-all').on('click', function () {
+                $('.check-item').prop('checked', this.checked);
+            });
+
+            $('.check-item').on('change', function () {
+                if ($('.check-item:checked').length == $('.check-item').length) {
+                    $('#check-all').prop('checked', true);
+                } else {
+                    $('#check-all').prop('checked', false);
+                }
+            });
         })
     </script>
 <?php endif; ?>

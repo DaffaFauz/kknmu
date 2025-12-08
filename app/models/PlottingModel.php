@@ -1,0 +1,69 @@
+<?php
+class PlottingModel
+{
+    private $pdo;
+    private $table = 'detail_kelompok';
+
+    public function __construct()
+    {
+        $this->pdo = new Db();
+    }
+
+    public function getAll()
+    {
+        $this->pdo->query("SELECT {$this->table}.*, kelompok.nama_kelompok, lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten 
+                           FROM {$this->table} 
+                           JOIN kelompok ON {$this->table}.id_kelompok = kelompok.id_kelompok
+                           JOIN lokasi ON {$this->table}.id_lokasi = lokasi.id_lokasi");
+        return $this->pdo->resultSet();
+    }
+
+    public function countStudents($id_kelompok)
+    {
+        $this->pdo->query("SELECT COUNT(*) as total FROM mahasiswa WHERE id_kelompok = :id_kelompok");
+        $this->pdo->bind(':id_kelompok', $id_kelompok);
+        $result = $this->pdo->single();
+        return $result['total'];
+    }
+
+    public function countStudentsByFakultas($id_kelompok)
+    {
+        $this->pdo->query("SELECT mahasiswa.id_prodi, prodi.id_fakultas, COUNT(*) as total 
+                           FROM mahasiswa 
+                           JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi 
+                           WHERE mahasiswa.id_kelompok = :id_kelompok 
+                           GROUP BY prodi.id_fakultas");
+        $this->pdo->bind(':id_kelompok', $id_kelompok);
+        return $this->pdo->resultSet();
+    }
+
+    public function createPlotting($id_kelompok, $id_lokasi, $dosen1, $dosen2, $id_tahun)
+    {
+        $this->pdo->query("INSERT INTO {$this->table} (id_kelompok, id_lokasi, id_dosen1, id_dosen2, id_tahun) VALUES (:id_kelompok, :id_lokasi, :dosen1, :dosen2, :id_tahun)");
+        $this->pdo->bind(':id_kelompok', $id_kelompok);
+        $this->pdo->bind(':id_lokasi', $id_lokasi);
+        $this->pdo->bind(':dosen1', $dosen1);
+        $this->pdo->bind(':dosen2', $dosen2);
+        $this->pdo->bind(':id_tahun', $id_tahun);
+        $this->pdo->execute();
+        return $this->pdo->lastInsertId();
+    }
+
+    public function getDetailKelompokId($id_kelompok, $id_tahun)
+    {
+        $this->pdo->query("SELECT id FROM {$this->table} WHERE id_kelompok = :id_kelompok AND id_tahun = :id_tahun");
+        $this->pdo->bind(':id_kelompok', $id_kelompok);
+        $this->pdo->bind(':id_tahun', $id_tahun);
+        $result = $this->pdo->single();
+        return $result ? $result['id'] : false;
+    }
+
+    public function updateMahasiswaKelompok($id_mahasiswa, $id_kelompok)
+    {
+        $this->pdo->query("UPDATE mahasiswa SET id_kelompok = :id_kelompok WHERE id_mahasiswa = :id_mahasiswa");
+        $this->pdo->bind(':id_kelompok', $id_kelompok);
+        $this->pdo->bind(':id_mahasiswa', $id_mahasiswa);
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
+    }
+}

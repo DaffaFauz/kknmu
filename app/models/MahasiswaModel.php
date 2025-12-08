@@ -44,4 +44,10 @@ class mahasiswaModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function getVerifikasiMahasiswa()
+    {
+        $this->pdo->query("SELECT * FROM pendaftaran INNER JOIN {$this->table} ON pendaftaran.id_mahasiswa = {$this->table}.id_mahasiswa INNER JOIN prodi ON {$this->table}.id_prodi = prodi.id_prodi INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas WHERE pendaftaran.status_pendaftaran = 'Diverifikasi'");
+        return $this->pdo->resultSet();
+    }
 }

@@ -66,6 +66,21 @@ class LokasiModel
         return $this->pdo->resultSet();
     }
 
+    public function getDesa($kecamatan = null)
+    {
+        $query = "SELECT id_lokasi, nama_desa FROM {$this->table}";
+        if ($kecamatan) {
+            $query .= " WHERE nama_kecamatan = :kecamatan";
+        }
+        $query .= " ORDER BY nama_desa ASC";
+
+        $this->pdo->query($query);
+        if ($kecamatan) {
+            $this->pdo->bind(':kecamatan', $kecamatan);
+        }
+        return $this->pdo->resultSet();
+    }
+
     public function filter($data)
     {
         $query = "SELECT * FROM {$this->table} WHERE 1=1";

@@ -197,8 +197,8 @@
             <li class="menu-header small">
                 <span class="menu-header-text" data-i18n="Plotting Kelompok">Plotting Kelompok</span>
             </li>
-            <li class="menu-item">
-                <a href="<?= BASE_URL ?>/PlottingKelompok" class="menu-link">
+            <li class="menu-item <?= $data['page'] && $data['page'] == 'Plotting' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/Plotting" class="menu-link">
                     <i class="menu-icon icon-base ti tabler-users-group"></i>
                     <div data-i18n="Plotting Kelompok">Plotting Kelompok</div>
                 </a>
