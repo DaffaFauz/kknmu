@@ -120,6 +120,57 @@
     </script>
 <?php endif; ?>
 
+<?php if ($data['page'] && $data['page'] == 'Lokasi'): ?>
+    <script>
+        // load option kecamatan
+        $(document).ready(function () {
+            function loadKecamatan(nama_kabupaten, selected_kecamatan = null) {
+                $('#kecamatan').html(`<option selected disabled value="">Pilih Kecamatan</option>`);
+
+                if (nama_kabupaten) {
+                    $.ajax({
+                        url: '<?= BASE_URL; ?>/Lokasi/getByKabupaten/' + encodeURIComponent(nama_kabupaten),
+                        type: 'POST',
+                        data: { kabupaten: nama_kabupaten },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.length > 0) {
+                                $.each(response, function (index, item) {
+                                    var isSelected = (selected_kecamatan && item.nama_kecamatan == selected_kecamatan) ? true : false;
+                                    $('#kecamatan').append($('<option>', {
+                                        value: item.nama_kecamatan,
+                                        text: item.nama_kecamatan,
+                                        selected: isSelected
+                                    }));
+                                })
+                            } else {
+                                $('#kecamatan').append('<option disabled>Tidak ada Kecamatan</option>');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.log("AJAX Error:" + error);
+                            alert("Gagal memuat data")
+                        }
+                    })
+                }
+            }
+
+            $('#kabupaten').on('change', function () {
+                var nama_kabupaten = $(this).val();
+                loadKecamatan(nama_kabupaten);
+            });
+
+            // Load on init if value exists
+            var initial_kabupaten = $('#kabupaten').val();
+            var initial_kecamatan = '<?= $_POST['kecamatan'] ?? '' ?>';
+
+            if (initial_kabupaten) {
+                loadKecamatan(initial_kabupaten, initial_kecamatan);
+            }
+        })
+    </script>
+<?php endif; ?>
+
 </body>
 
 </html>
