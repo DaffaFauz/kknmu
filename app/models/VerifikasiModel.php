@@ -46,11 +46,25 @@ class VerifikasiModel
         return $this->pdo->rowCount();
     }
 
-    public function filterForKaprodi($id, $kelas)
+    public function filterForKaprodi($id, $data)
     {
-        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi WHERE mahasiswa.id_prodi = :id_prodi AND {$this->table}.status_pendaftaran = 'Pending' AND mahasiswa.kelas = :kelas");
+        $query = "SELECT * FROM {$this->table} 
+                  INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa 
+                  INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi
+                  INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun 
+                  WHERE mahasiswa.id_prodi = :id_prodi AND {$this->table}.status_pendaftaran = 'Pending' AND tahun_akademik.status = 'Aktif'";
+
+        if (!empty($data['kelas'])) {
+            $query .= " AND mahasiswa.kelas = :kelas";
+        }
+
+        $this->pdo->query($query);
         $this->pdo->bind(':id_prodi', $id);
-        $this->pdo->bind(':kelas', $kelas);
+
+        if (!empty($data['kelas'])) {
+            $this->pdo->bind(':kelas', $data['kelas']);
+        }
+
         return $this->pdo->resultSet();
     }
 

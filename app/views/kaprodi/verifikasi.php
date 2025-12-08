@@ -1,6 +1,33 @@
 <!-- Content -->
 <div class="container-xxl flex-grow-1 container-p-y">
-
+    <!-- Card untuk filter mahasiswa berdasarkan kelas -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-12 d-flex align-items-center">
+                    <i class="ti tabler-filter me-1"></i>
+                    <h5 class="card-title mb-0">Filter Kelas Mahasiswa</h5>
+                </div>
+            </div>
+            <form action="<?= BASE_URL ?>/Verifikasi/filter" method="post">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label" for="kelas">Kelas</label>
+                        <select name="kelas" id="kelas" class="form-select">
+                            <option value="">Pilih Kelas</option>
+                            <option value="Reguler" <?= !empty($_POST['kelas']) && $_POST['kelas'] == 'Reguler' ? 'selected' : '' ?>>Reguler</option>
+                            <option value="Non Reguler" <?= !empty($_POST['kelas']) && $_POST['kelas'] == 'Non Reguler' ? 'selected' : '' ?>>Non
+                                Reguler</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 align-self-end d-flex">
+                        <button type="submit" class="btn btn-primary me-2"><i
+                                class="ti tabler-filter me-1"></i>Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <?php if (isset($_SESSION['msg'])): ?>
         <div class="alert alert-<?= $_SESSION['msg_type'] ?> alert-dismissible" role="alert">

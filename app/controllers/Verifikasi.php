@@ -73,9 +73,9 @@ class Verifikasi extends Controller
             $this->view('admin/verifikasi', ['mahasiswa' => $mahasiswa, 'fakultas' => $fakultas]);
             $this->view('layout/footer', ['page' => 'Verifikasi Mahasiswa']);
         } else if ($_SESSION['role'] == 'Kaprodi') {
-            if ($_POST['id_prodi']) {
+            if (isset($_POST['kelas'])) {
                 // Get data filter
-                $mahasiswa = $this->model('VerifikasiModel')->filterForAdmin($_POST['id_prodi']);
+                $mahasiswa = $this->model('VerifikasiModel')->filterForKaprodi($_SESSION['id_prodi'], $_POST);
             } else {
                 // Get data filter
                 $mahasiswa = $this->model("VerifikasiModel")->getForKaprodi($_SESSION['id_prodi']);
