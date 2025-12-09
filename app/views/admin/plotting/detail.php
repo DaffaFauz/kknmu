@@ -18,12 +18,12 @@
                             Dosen Pembimbing
                         </h4>
                     </div>
-                    <p class="mb-1">Dosen Pembimbing <?= isset($data['detail_kelompok']['dosen2']) ? '1' : '' ?>:
-                        <?= isset($data['detail_kelompok']['dosen1']) ? htmlspecialchars($data['detail_kelompok']['dosen1']) : '-' ?>
+                    <p class="mb-1">Dosen Pembimbing <?= isset($data['detail_kelompok']['id_dosen2']) ? '1' : '' ?>:
+                        <?= isset($data['detail_kelompok']['id_dosen1']) ? htmlspecialchars($data['detail_kelompok']['nama_dosen1']) : '-' ?>
                     </p>
-                    <?php if (isset($data['detail_kelompok']['dosen2'])): ?>
+                    <?php if (isset($data['detail_kelompok']['id_dosen2'])): ?>
                         <p class="mb-1">Dosen Pembimbing 2:
-                            <?= isset($data['detail_kelompok']['dosen2']) ? htmlspecialchars($data['detail_kelompok']['dosen2']) : '-' ?>
+                            <?= isset($data['detail_kelompok']['id_dosen2']) ? htmlspecialchars($data['detail_kelompok']['nama_dosen2']) : '-' ?>
                         </p>
                     <?php endif; ?>
                 </div>
@@ -86,7 +86,7 @@
                                 <td><?= $value['nim'] ?></td>
                                 <td><?= $value['nama_mahasiswa'] ?></td>
                                 <td><?= $value['jenis_kelamin'] ?></td>
-                                <td><?= $value['jurusan'] ?></td>
+                                <td><?= $value['nama_prodi'] ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

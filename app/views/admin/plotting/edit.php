@@ -16,21 +16,22 @@
 
     <div class="card">
         <div class="card-header border-bottom d-flex justify-content-between align-items-center my-0">
-            <h5 class="card-title mb-0">Form Plotting Kelompok</h5>
+            <h5 class="card-title mb-0">Form Edit Plotting Kelompok</h5>
         </div>
         <div class="card-body mt-4">
-            <form action="<?= BASE_URL ?>/Plotting/store" method="POST">
-                <input type="hidden" name="id_tahun" value="<?= htmlspecialchars($data['tahun']['id_tahun']) ?>">
+            <form action="<?= BASE_URL ?>/Plotting/update/<?= $data['detail_kelompok']['id'] ?>" method="POST">
+                <input type="hidden" name="id_tahun"
+                    value="<?= htmlspecialchars($data['detail_kelompok']['id_tahun']) ?>">
                 <div class="row g-3">
                     <!-- Nama Kelompok -->
                     <div class="col-md-12">
                         <label class="form-label" for="kelompok">Nama Kelompok</label>
-                        <select name="kelompok" id="kelompok" class="form-select select2" required>
-                            <option value="">Pilih Kelompok</option>
-                            <?php foreach ($data['kelompok'] as $row): ?>
-                                <option value="<?= $row['id_kelompok'] ?>"><?= $row['nama_kelompok'] ?></option>
-                            <?php endforeach; ?>
+                        <select id="kelompok" class="form-select select2" disabled>
+                            <option value="<?= $data['detail_kelompok']['id_kelompok'] ?>">
+                                <?= $data['detail_kelompok']['nama_kelompok'] ?>
+                            </option>
                         </select>
+                        <input type="hidden" name="kelompok" value="<?= $data['detail_kelompok']['id_kelompok'] ?>">
                     </div>
 
                     <!-- Lokasi -->
@@ -39,7 +40,10 @@
                         <select name="kabupaten" id="kabupaten" class="form-select select2" required>
                             <option value="">Pilih Kabupaten</option>
                             <?php foreach ($data['kabupaten'] as $row): ?>
-                                <option value="<?= $row['nama_kabupaten'] ?>"><?= $row['nama_kabupaten'] ?></option>
+                                <option value="<?= $row['nama_kabupaten'] ?>"
+                                    <?= $row['nama_kabupaten'] == $data['detail_kelompok']['nama_kabupaten'] ? 'selected' : '' ?>>
+                                    <?= $row['nama_kabupaten'] ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -47,12 +51,24 @@
                         <label class="form-label" for="kecamatan">Kecamatan</label>
                         <select name="kecamatan" id="kecamatan" class="form-select select2" required>
                             <option value="">Pilih Kecamatan</option>
+                            <?php foreach ($data['kecamatan'] as $row): ?>
+                                <option value="<?= $row['nama_kecamatan'] ?>"
+                                    <?= $row['nama_kecamatan'] == $data['detail_kelompok']['nama_kecamatan'] ? 'selected' : '' ?>>
+                                    <?= $row['nama_kecamatan'] ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label" for="desa">Desa</label>
                         <select name="desa" id="desa" class="form-select select2" required>
                             <option value="">Pilih Desa</option>
+                            <?php foreach ($data['desa'] as $row): ?>
+                                <option value="<?= $row['id_lokasi'] ?>"
+                                    <?= $row['id_lokasi'] == $data['detail_kelompok']['id_lokasi'] ? 'selected' : '' ?>>
+                                    <?= $row['nama_desa'] ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                         <small class="text-muted">Desa yang dipilih akan disimpan sebagai lokasi kelompok.</small>
                     </div>
@@ -63,7 +79,9 @@
                         <select name="dosen1" id="dosen1" class="form-select select2" required>
                             <option value="">Pilih Pembimbing 1</option>
                             <?php foreach ($data['pembimbing'] as $row): ?>
-                                <option value="<?= $row['id_dosen'] ?>"><?= $row['nama_dosen'] ?></option>
+                                <option value="<?= $row['id_dosen'] ?>"
+                                    <?= $row['id_dosen'] == $data['detail_kelompok']['id_dosen1'] ? 'selected' : '' ?>>
+                                    <?= $row['nama_dosen'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -72,7 +90,9 @@
                         <select name="dosen2" id="dosen2" class="form-select select2">
                             <option value="">Pilih Pembimbing 2</option>
                             <?php foreach ($data['pembimbing'] as $row): ?>
-                                <option value="<?= $row['id_dosen'] ?>"><?= $row['nama_dosen'] ?></option>
+                                <option value="<?= $row['id_dosen'] ?>"
+                                    <?= $row['id_dosen'] == $data['detail_kelompok']['id_dosen2'] ? 'selected' : '' ?>>
+                                    <?= $row['nama_dosen'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -97,7 +117,8 @@
                                         <tr>
                                             <td>
                                                 <input type="checkbox" name="mahasiswa[]"
-                                                    value="<?= $mhs['id_mahasiswa'] ?>" class="check-item">
+                                                    value="<?= $mhs['id_mahasiswa'] ?>" class="check-item"
+                                                    <?= in_array($mhs['id_mahasiswa'], $data['detail_kelompok']['mahasiswa_ids']) ? 'checked' : '' ?>>
                                             </td>
                                             <td><?= $mhs['nim'] ?></td>
                                             <td><?= $mhs['nama_mahasiswa'] ?></td>

@@ -55,4 +55,27 @@ class PembimbingModel
         $this->pdo->bind(':id_tahun2', $id_tahun['id_tahun']);
         return $this->pdo->resultSet();
     }
+
+    public function getForPlottingEdit($id_tahun, $current_dosen1, $current_dosen2)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} 
+            INNER JOIN users ON {$this->table}.id_user = users.id_user 
+            INNER JOIN user_jabatan ON users.id_user = user_jabatan.id_user 
+            INNER JOIN jabatan ON user_jabatan.id_jabatan = jabatan.id_jabatan 
+            WHERE jabatan.nama_jabatan = 'Pembimbing' 
+            AND (
+                {$this->table}.id_dosen NOT IN (
+                    SELECT id_dosen1 FROM detail_kelompok WHERE id_tahun = :id_tahun1 AND id_dosen1 IS NOT NULL
+                    UNION
+                    SELECT id_dosen2 FROM detail_kelompok WHERE id_tahun = :id_tahun2 AND id_dosen2 IS NOT NULL
+                )
+                OR {$this->table}.id_dosen = :current_dosen1
+                OR {$this->table}.id_dosen = :current_dosen2
+            )");
+        $this->pdo->bind(':id_tahun1', $id_tahun['id_tahun']);
+        $this->pdo->bind(':id_tahun2', $id_tahun['id_tahun']);
+        $this->pdo->bind(':current_dosen1', $current_dosen1);
+        $this->pdo->bind(':current_dosen2', $current_dosen2);
+        return $this->pdo->resultSet();
+    }
 }

@@ -127,12 +127,63 @@ class Plotting extends Controller
 
     public function edit($id)
     {
+        // Get data detail kelompok
+        $detail_kelompok = $this->model('PlottingModel')->getDetailKelompok($id);
+        $tahun_aktif = $this->model('TahunAkademikModel')->GetTahunActive();
 
+        // Get data for dropdowns (including current values)
+        $kelompok = $this->model('KelompokModel')->getForPlottingEdit($detail_kelompok['id_kelompok']);
+        $pembimbing = $this->model('PembimbingModel')->getAll();
+        $mahasiswa = $this->model('MahasiswaModel')->getMahasiswaForPlottingEdit($tahun_aktif, $detail_kelompok['id']);
+
+        $kabupaten = $this->model('LokasiModel')->getKabupaten();
+        $kecamatan = $this->model('LokasiModel')->getKecamatan($detail_kelompok['nama_kabupaten']);
+        $desa = $this->model('LokasiModel')->getDesa($detail_kelompok['nama_kecamatan']);
+
+        // Extract student IDs for checking checkboxes
+        $current_mahasiswa_ids = array_column($detail_kelompok['mahasiswa'], 'id_mahasiswa');
+        $detail_kelompok['mahasiswa_ids'] = $current_mahasiswa_ids;
+
+        // Load view
+        $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
+        $this->view('layout/sidebar', ['title' => 'Plotting', 'page' => 'Plotting']);
+        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+        $this->view('admin/plotting/edit', [
+            'detail_kelompok' => $detail_kelompok,
+            'kelompok' => $kelompok,
+            'pembimbing' => $pembimbing,
+            'mahasiswa' => $mahasiswa,
+            'kabupaten' => $kabupaten,
+            'kecamatan' => $kecamatan,
+            'desa' => $desa
+        ]);
+        $this->view('layout/footer', ['page' => 'Plotting']);
     }
 
     public function update($id)
     {
+        $data = [
+            'id_kelompok' => $_POST['kelompok'],
+            'id_lokasi' => $_POST['desa'],
+            'dosen1' => $_POST['dosen1'],
+            'dosen2' => !empty($_POST['dosen2']) ? $_POST['dosen2'] : null,
+            'id_tahun' => $_POST['id_tahun']
+        ];
 
+        $mahasiswa_ids = $_POST['mahasiswa'] ?? [];
+
+        // Validation: Max 17 students
+        if (count($mahasiswa_ids) > 17) {
+            redirectWithMsg(BASE_URL . '/Plotting/edit/' . $id, 'Gagal! Maksimal 17 mahasiswa per kelompok.', 'danger');
+            return;
+        }
+
+        // Update Full (Transactional)
+        if ($this->model('PlottingModel')->updateFull($id, $data, $mahasiswa_ids)) {
+            redirectWithMsg(BASE_URL . '/Plotting', 'Data plotting berhasil diperbarui.', 'success');
+        } else {
+            redirectWithMsg(BASE_URL . '/Plotting/edit/' . $id, 'Gagal memperbarui data plotting.', 'danger');
+        }
     }
 
     public function destroy($id)

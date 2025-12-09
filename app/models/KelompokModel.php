@@ -46,4 +46,11 @@ class KelompokModel
         $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok NOT IN (SELECT id_kelompok FROM detail_kelompok)");
         return $this->pdo->resultSet();
     }
+
+    public function getForPlottingEdit($current_id_kelompok)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok NOT IN (SELECT id_kelompok FROM detail_kelompok WHERE id_kelompok != :current_id)");
+        $this->pdo->bind(':current_id', $current_id_kelompok);
+        return $this->pdo->resultSet();
+    }
 }

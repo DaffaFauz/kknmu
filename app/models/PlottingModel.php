@@ -11,8 +11,7 @@ class PlottingModel
 
     public function getAll()
     {
-        $this->pdo->query("SELECT {$this->table}.*, kelompok.nama_kelompok, lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten 
-                           FROM {$this->table} 
+        $this->pdo->query("SELECT * FROM {$this->table} 
                            JOIN kelompok ON {$this->table}.id_kelompok = kelompok.id_kelompok
                            JOIN lokasi ON {$this->table}.id_lokasi = lokasi.id_lokasi");
         return $this->pdo->resultSet();
@@ -20,8 +19,7 @@ class PlottingModel
 
     public function getFiltered($filters)
     {
-        $query = "SELECT {$this->table}.*, kelompok.nama_kelompok, lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten 
-                  FROM {$this->table} 
+        $query = "SELECT * FROM {$this->table} 
                   JOIN kelompok ON {$this->table}.id_kelompok = kelompok.id_kelompok
                   JOIN lokasi ON {$this->table}.id_lokasi = lokasi.id_lokasi
                   WHERE 1=1";
@@ -102,21 +100,24 @@ class PlottingModel
 
     public function getDetailKelompok($id)
     {
-        $this->pdo->query("SELECT {$this->table}.*, kelompok.nama_kelompok, lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten, dosen1.nama_dosen as dosen1, dosen2.nama_dosen as dosen2
+        $this->pdo->query("SELECT {$this->table}.*, 
+                                  kelompok.nama_kelompok, 
+                                  lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten,
+                                  dosen1.nama_dosen as nama_dosen1,
+                                  dosen2.nama_dosen as nama_dosen2,
+                                  tahun_akademik.periode
                            FROM {$this->table}
                            JOIN kelompok ON {$this->table}.id_kelompok = kelompok.id_kelompok
                            JOIN lokasi ON {$this->table}.id_lokasi = lokasi.id_lokasi
                            JOIN dosen as dosen1 ON {$this->table}.id_dosen1 = dosen1.id_dosen
                            LEFT JOIN dosen as dosen2 ON {$this->table}.id_dosen2 = dosen2.id_dosen
+                           INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun
                            WHERE {$this->table}.id = :id");
         $this->pdo->bind(':id', $id);
         $data = $this->pdo->single();
 
         if ($data) {
-            $this->pdo->query("SELECT mahasiswa.*, prodi.nama_prodi as jurusan 
-                               FROM mahasiswa 
-                               LEFT JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi
-                               WHERE mahasiswa.id_kelompok = :id");
+            $this->pdo->query("SELECT * FROM mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas WHERE mahasiswa.id_kelompok = :id");
             $this->pdo->bind(':id', $id);
             $data['mahasiswa'] = $this->pdo->resultSet();
         }
@@ -140,5 +141,43 @@ class PlottingModel
         $this->pdo->commit();
 
         return $deleted;
+    }
+
+    public function updateFull($id, $data, $mahasiswa_ids)
+    {
+        try {
+            $this->pdo->beginTransaction();
+
+            // Update Plotting Data
+            $this->pdo->query("UPDATE {$this->table} SET id_kelompok = :id_kelompok, id_lokasi = :id_lokasi, id_dosen1 = :dosen1, id_dosen2 = :dosen2, id_tahun = :id_tahun WHERE id = :id");
+            $this->pdo->bind(':id_kelompok', $data['id_kelompok']);
+            $this->pdo->bind(':id_lokasi', $data['id_lokasi']);
+            $this->pdo->bind(':dosen1', $data['dosen1']);
+            $this->pdo->bind(':dosen2', $data['dosen2']);
+            $this->pdo->bind(':id_tahun', $data['id_tahun']);
+            $this->pdo->bind(':id', $id);
+            $this->pdo->execute();
+
+            // Reset Mahasiswa Assignment for this group
+            $this->pdo->query("UPDATE mahasiswa SET id_kelompok = NULL WHERE id_kelompok = :id_kelompok");
+            $this->pdo->bind(':id_kelompok', $id);
+            $this->pdo->execute();
+
+            // Assign Selected Mahasiswa
+            if (!empty($mahasiswa_ids)) {
+                foreach ($mahasiswa_ids as $id_mahasiswa) {
+                    $this->pdo->query("UPDATE mahasiswa SET id_kelompok = :id_kelompok WHERE id_mahasiswa = :id_mahasiswa");
+                    $this->pdo->bind(':id_kelompok', $id);
+                    $this->pdo->bind(':id_mahasiswa', $id_mahasiswa);
+                    $this->pdo->execute();
+                }
+            }
+
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            return false;
+        }
     }
 }
