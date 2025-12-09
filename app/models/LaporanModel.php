@@ -14,7 +14,7 @@ class LaporanModel
 
     public function getLaporanHarian()
     {
-        $this->pdo->query("SELECT * FROM {$this->table1}");
+        $this->pdo->query("SELECT * FROM {$this->table1} INNER JOIN detail_kelompok ON {$this->table1}.id_kelompok = detail_kelompok.id INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok INNER JOIN lokasi ON detail_kelompok.id_lokasi = lokasi.id_lokasi");
         return $this->pdo->resultSet();
     }
 

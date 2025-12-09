@@ -5,7 +5,7 @@ class Laporan extends Controller
 
     public function harian()
     {
-        if ($_SESSION['role'] == 'Mahasiswa') {
+        if ($_SESSION['role'] == 'Mahasiswa' || $_SESSION['role'] == 'Pembimbing') {
             // Get data
             $laporan = $this->model('LaporanModel')->getLaporanHarianForMahasiswaAndPembimbing($_SESSION['id_kelompok']);
 
@@ -15,15 +15,15 @@ class Laporan extends Controller
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
             $this->view('mahasiswa/laporan_harian', ['laporan' => $laporan]);
             $this->view("layout/footer", ['page' => 'Laporan']);
-        } else if ($_SESSION['role'] == 'Pembimbing') {
+        } else if ($_SESSION['role'] == 'Admin') {
             // Get data
-            $laporan = $this->model('LaporanModel')->getLaporanHarianForMahasiswaAndPembimbing($_SESSION['id_kelompok']);
+            $laporan = $this->model('LaporanModel')->getLaporanHarian();
 
             // Load view
             $this->view('layout/head', ['title' => "Laporan Harian", "page" => 'Laporan']);
             $this->view('layout/sidebar', ['page' => 'Laporan Harian', 'role' => $_SESSION['role']]);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-            $this->view('mahasiswa/laporan_harian', ['laporan' => $laporan]);
+            $this->view('admin/laporan_harian', ['laporan' => $laporan]);
             $this->view("layout/footer", ['page' => 'Laporan']);
         }
 
