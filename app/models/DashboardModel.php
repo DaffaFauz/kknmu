@@ -29,4 +29,18 @@ class DashboardModel
         $this->pdo->bind(':id_kelompok', $id_kelompok);
         return $this->pdo->single();
     }
+
+    public function getLaporanHarianTerbaru($tahun)
+    {
+        $this->pdo->query("SELECT laporan_harian.*, kelompok.nama_kelompok, lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten 
+                           FROM laporan_harian 
+                           INNER JOIN detail_kelompok ON laporan_harian.id_kelompok = detail_kelompok.id 
+                           INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok 
+                           INNER JOIN lokasi ON detail_kelompok.id_lokasi = lokasi.id_lokasi 
+                           WHERE detail_kelompok.id_tahun = :id 
+                           ORDER BY laporan_harian.tanggal DESC 
+                           LIMIT 10");
+        $this->pdo->bind(':id', $tahun);
+        return $this->pdo->resultset();
+    }
 }

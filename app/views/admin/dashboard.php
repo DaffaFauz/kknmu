@@ -81,18 +81,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2025-12-05</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>
-                                    <button class="btn btn-sm text-white btn-icon btn-primary">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <?php if ($data['laporan']):
+                                $no = 1;
+                                foreach ($data['laporan'] as $laporan): ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><?= htmlspecialchars(date('d-F-Y', strtotime($laporan['tanggal']))) ?></td>
+                                        <td><?= htmlspecialchars($laporan['nama_kelompok']) ?></td>
+                                        <td><?= htmlspecialchars($laporan['judul']) ?></td>
+                                        <td><?= htmlspecialchars($laporan['nama_desa']) . ', ' . htmlspecialchars($laporan['nama_kecamatan'] . ', ' . htmlspecialchars($laporan['nama_kabupaten'])) ?>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm text-white btn-icon btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#detailLaporan<?= htmlspecialchars($laporan['id_laporan']) ?>">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -100,5 +106,50 @@
         </div>
         <!--/ On route vehicles Table -->
     </div>
+
+    <!-- Modal detail laporan -->
+    <!-- Modal detail laporan harian nya -->
+    <?php foreach ($data['laporan'] as $row): ?>
+        <div class="modal fade" id="detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>" tabindex="-1"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-6">
+                            <h4 class="mb-2">Detail Laporan Harian</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="flatpickr-date-modal" class="form-label">Tanggal</label>
+                                <input type="text" class="form-control" placeholder="tgl bulan tahun"
+                                    id="flatpickr-date-modal" value="<?= htmlspecialchars($row['tanggal']) ?>" readonly
+                                    disabled />
+                            </div>
+                            <div class="col-8">
+                                <label for="judul" class="form-label">Judul</label>
+                                <input type="text" class="form-control" id="judul" name="judul"
+                                    value="<?= htmlspecialchars($row['judul']) ?>" readonly disabled />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="isi" class="form-label">Deskripsi</label>
+                            <div class="form-control h-auto" style="min-height: 100px; background-color: #f8f9fa;">
+                                <?= $row['isi_laporan'] ?>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label for="file" class="form-label">Dokumentasi</label>
+                            <img src="<?= ASSETS_URL ?>/img/dokumentasi/<?= htmlspecialchars($row['dokumentasi']) ?>"
+                                alt="<?= htmlspecialchars($row['dokumentasi']) ?>" class="w-50 d-block mt-2 mx-auto">
+                        </div>
+                        <div class="col-12 mt-4 justify-content-end d-flex">
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-label-secondary">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
 </div>
 <!-- / Content -->

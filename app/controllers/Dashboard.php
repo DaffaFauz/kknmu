@@ -5,10 +5,15 @@ class Dashboard extends Controller
     public function index()
     {
         if ($_SESSION['role'] == 'Admin') {
+            // Get data
+            $tahun = $this->model("TahunAkademikModel")->GetTahunActive();
+            $laporan = $this->model("DashboardModel")->getLaporanHarianTerbaru($tahun['id_tahun']);
+
+            // Load view
             $this->view("layout/head", ['title' => 'Dashboard Admin', 'page' => 'Dashboard']);
             $this->view("layout/sidebar", ['page' => 'Dashboard']);
             $this->view("layout/navbar", ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-            $this->view('admin/dashboard');
+            $this->view('admin/dashboard', ['laporan' => $laporan]);
             $this->view("layout/footer", ['page' => 'Dashboard']);
         } else if ($_SESSION['role'] == 'Mahasiswa') {
             // Get data from database
