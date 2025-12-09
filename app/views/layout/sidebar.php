@@ -219,16 +219,16 @@
         <?php endif; ?>
 
         <!-- Laporan -->
-        <?php if ($_SESSION['role'] == 'Admin' || $_SESSION['role'] == 'Pembimbing' || $_SESSION['role'] == 'Mahasiswa'): ?>
-            <li class="menu-header small">
-                <span class="menu-header-text" data-i18n="Laporan">Laporan</span>
-            </li>
-            <li class="menu-item">
-                <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    <i class="menu-icon icon-base ti tabler-file-description"></i>
-                    <div data-i18n="Laporan">Laporan</div>
-                </a>
-                <ul class="menu-sub">
+        <li class="menu-header small">
+            <span class="menu-header-text" data-i18n="Laporan">Laporan</span>
+        </li>
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon icon-base ti tabler-file-description"></i>
+                <div data-i18n="Laporan">Laporan</div>
+            </a>
+            <ul class="menu-sub">
+                <?php if ($_SESSION['role'] != 'Kaprodi'): ?>
                     <li class="menu-item">
                         <a href="app-academy-dashboard.html" class="menu-link">
                             <div data-i18n="Harian">Harian</div>
@@ -239,14 +239,14 @@
                             <div data-i18n="Akhir">Akhir</div>
                         </a>
                     </li>
-                    <li class="menu-item">
-                        <a href="app-academy-course-details.html" class="menu-link">
-                            <div data-i18n="Nilai">Nilai</div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        <?php endif; ?>
+                <?php endif; ?>
+                <li class="menu-item">
+                    <a href="app-academy-course-details.html" class="menu-link">
+                        <div data-i18n="Nilai">Nilai</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </aside>
 
