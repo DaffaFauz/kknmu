@@ -92,10 +92,12 @@
                             <td><?= htmlspecialchars($row['nama_kecamatan']); ?></td>
                             <td><?= htmlspecialchars($row['nama_kabupaten']); ?></td>
                             <td>
-                                <a href="<?= BASE_URL ?>/Plotting/edit/<?= htmlspecialchars($row['id_lokasi']) ?>"
+                                <a href="<?= BASE_URL ?>/Plotting/show/<?= htmlspecialchars($row['id']) ?>"
+                                    class="btn btn-info"><i class="ti tabler-eye me-1"></i> Detail</a>
+                                <a href="<?= BASE_URL ?>/Plotting/edit/<?= htmlspecialchars($row['id']) ?>"
                                     class="btn btn-warning"><i class="ti tabler-pencil me-1"></i> Edit</a>
                                 <form class="d-inline"
-                                    action="<?= BASE_URL ?>/Plotting/delete/<?= htmlspecialchars($row['id_lokasi']) ?>"
+                                    action="<?= BASE_URL ?>/Plotting/delete/<?= htmlspecialchars($row['id']) ?>"
                                     method="post">
                                     <button type="submit" class="btn btn-danger"
                                         onClick="return confirm('Yakin ingin menghapus Lokasi ini?')"><i

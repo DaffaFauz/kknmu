@@ -153,29 +153,33 @@
                         </div>
                         <div class="col-6">
                             <label class="form-label" for="modalTambahProdi">Bukti Pembayaran</label>
+                            <br>
                             <a href="<?= BASE_URL ?>/assets/img/bukti_pembayaran/<?= htmlspecialchars($row['bukti_pembayaran']) ?>"
                                 target="_blank" class="btn btn-sm btn-info mt-2"><i class="ti tabler-eye me-1"></i>
                                 Lihat</a>
                         </div>
                     </div>
                     <div class="col-12 text-end mt-4">
-                        <form class="d-inline"
-                            action="<?= BASE_URL ?>/Verifikasi/verifikasi/<?= htmlspecialchars($row['id_pendaftaran']) ?>"
-                            method="post">
-                            <button type="submit" class="btn btn-success"
-                                onClick="return confirm('Verifikasi Pendaftaran mahasiswa ini?')"><i
-                                    class="ti tabler-check me-1"></i>
-                                Verifikasi
-                            </button>
-                        </form>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                            data-bs-target="#revisiPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
-                                class="ti tabler-pencil me-1"></i> Revisi</button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#tolakPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
-                                class="ti tabler-x me-1"></i> Tolak</button>
+                        <?php if ($row['status_pendaftaran'] && $row['status_pendaftaran'] == 'Diverifikasi Kaprodi' || $row['status_pendaftaran'] && $row['status_pendaftaran'] == 'Revisi'): ?>
+                            <form class="d-inline"
+                                action="<?= BASE_URL ?>/Verifikasi/verifikasi/<?= htmlspecialchars($row['id_pendaftaran']) ?>"
+                                method="post">
+                                <button type="submit" class="btn btn-success"
+                                    onClick="return confirm('Verifikasi Pendaftaran mahasiswa ini?')"><i
+                                        class="ti tabler-check me-1"></i>
+                                    Verifikasi
+                                </button>
+                            </form>
+
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                data-bs-target="#revisiPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
+                                    class="ti tabler-pencil me-1"></i> Revisi</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#tolakPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
+                                    class="ti tabler-x me-1"></i> Tolak</button>
+                        <?php endif; ?>
                         <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
-                            Batal
+                            Tutup
                         </button>
                     </div>
                 </div>

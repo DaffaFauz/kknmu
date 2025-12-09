@@ -66,4 +66,28 @@ class PlottingModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function getDetailKelompok($id)
+    {
+        $this->pdo->query("SELECT {$this->table}.*, kelompok.nama_kelompok, lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten, dosen1.nama_dosen as dosen1, dosen2.nama_dosen as dosen2
+                           FROM {$this->table}
+                           JOIN kelompok ON {$this->table}.id_kelompok = kelompok.id_kelompok
+                           JOIN lokasi ON {$this->table}.id_lokasi = lokasi.id_lokasi
+                           JOIN dosen as dosen1 ON {$this->table}.id_dosen1 = dosen1.id_dosen
+                           LEFT JOIN dosen as dosen2 ON {$this->table}.id_dosen2 = dosen2.id_dosen
+                           WHERE {$this->table}.id = :id");
+        $this->pdo->bind(':id', $id);
+        $data = $this->pdo->single();
+
+        if ($data) {
+            $this->pdo->query("SELECT mahasiswa.*, prodi.nama_prodi as jurusan 
+                               FROM mahasiswa 
+                               LEFT JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi
+                               WHERE mahasiswa.id_kelompok = :id");
+            $this->pdo->bind(':id', $id);
+            $data['mahasiswa'] = $this->pdo->resultSet();
+        }
+
+        return $data;
+    }
 }

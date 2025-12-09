@@ -11,7 +11,7 @@ class Plotting extends Controller
         $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
         $this->view('layout/sidebar', ['title' => 'Plotting', 'page' => 'Plotting']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-        $this->view('admin/plotting', ['detail_kelompok' => $detail_kelompok, 'kabupaten' => $kabupaten]);
+        $this->view('admin/plotting/index', ['detail_kelompok' => $detail_kelompok, 'kabupaten' => $kabupaten]);
         $this->view('layout/footer', ['page' => 'Plotting']);
     }
 
@@ -30,7 +30,7 @@ class Plotting extends Controller
         $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
         $this->view('layout/sidebar', ['title' => 'Plotting', 'page' => 'Plotting']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-        $this->view('admin/plotting_create', ['kelompok' => $kelompok, 'pembimbing' => $pembimbing, 'mahasiswa' => $mahasiswa, 'kabupaten' => $kabupaten, 'tahun' => $tahun_aktif]);
+        $this->view('admin/plotting/create', ['kelompok' => $kelompok, 'pembimbing' => $pembimbing, 'mahasiswa' => $mahasiswa, 'kabupaten' => $kabupaten, 'tahun' => $tahun_aktif]);
         $this->view('layout/footer', ['page' => 'Plotting']);
     }
 
@@ -105,6 +105,14 @@ class Plotting extends Controller
 
     public function show($id)
     {
+        // Get data detail kelompok
+        $detail_kelompok = $this->model('PlottingModel')->getDetailKelompok($id);
 
+        // Load view
+        $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
+        $this->view('layout/sidebar', ['title' => 'Plotting', 'page' => 'Plotting']);
+        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+        $this->view('admin/plotting/detail', ['detail_kelompok' => $detail_kelompok]);
+        $this->view('layout/footer', ['page' => 'Plotting']);
     }
 }
