@@ -57,6 +57,16 @@ class UserModel
                 if ($dosen) {
                     $_SESSION['id_prodi'] = $dosen['id_prodi'];
                     $_SESSION['nidn'] = $dosen['nidn'];
+
+                    // Cek apakah dosen menjadi pembimbing 1 atau 2
+                    $this->pdo->query("SELECT id FROM detail_kelompok WHERE id_dosen1 = :dosen1 OR id_dosen2 = :dosen2");
+                    $this->pdo->bind(':dosen1', $dosen['id_dosen']);
+                    $this->pdo->bind(':dosen2', $dosen['id_dosen']);
+                    $plotting = $this->pdo->single();
+
+                    if ($plotting) {
+                        $_SESSION['id_kelompok'] = $plotting['id'];
+                    }
                 }
             }
             return true;

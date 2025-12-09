@@ -211,7 +211,8 @@
                 <span class="menu-header-text" data-i18n="Detail Kelompok">Detail Kelompok</span>
             </li>
             <li class="menu-item <?= $data['page'] && $data['page'] == 'Plotting' ? 'active' : '' ?>">
-                <a href="<?= BASE_URL ?>/Plotting/show/<?= $_SESSION['id_kelompok'] ?>" class="menu-link">
+                <a href="<?= isset($_SESSION['id_kelompok']) && $_SESSION['id_kelompok'] != null ? BASE_URL . '/Plotting/show/' . $_SESSION['id_kelompok'] : BASE_URL . '/Kelompok/noKelompok' ?>"
+                    class="menu-link">
                     <i class="menu-icon icon-base ti tabler-users-group"></i>
                     <div data-i18n="Detail Kelompok">Detail Kelompok</div>
                 </a>
@@ -222,25 +223,26 @@
         <li class="menu-header small">
             <span class="menu-header-text" data-i18n="Laporan">Laporan</span>
         </li>
-        <li class="menu-item">
+        <li
+            class="menu-item <?= $data['page'] && ($data['page'] == 'Laporan Harian' || $data['page'] == 'Laporan Akhir' || $data['page'] == 'Nilai') ? 'active' : '' ?>">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ti tabler-file-description"></i>
                 <div data-i18n="Laporan">Laporan</div>
             </a>
             <ul class="menu-sub">
                 <?php if ($_SESSION['role'] != 'Kaprodi'): ?>
-                    <li class="menu-item">
-                        <a href="app-academy-dashboard.html" class="menu-link">
+                    <li class="menu-item <?= $data['page'] && $data['page'] == 'Laporan Harian' ? 'active' : '' ?>">
+                        <a href="<?= BASE_URL . '/Laporan/harian' ?>" class="menu-link">
                             <div data-i18n="Harian">Harian</div>
                         </a>
                     </li>
-                    <li class="menu-item">
-                        <a href="app-academy-course.html" class="menu-link">
+                    <li class="menu-item <?= $data['page'] && $data['page'] == 'Laporan Akhir' ? 'active' : '' ?>">
+                        <a href="<?= BASE_URL . '/Laporan/akhir' ?>" class="menu-link">
                             <div data-i18n="Akhir">Akhir</div>
                         </a>
                     </li>
                 <?php endif; ?>
-                <li class="menu-item">
+                <li class="menu-item <?= $data['page'] && $data['page'] == 'Nilai' ? 'active' : '' ?>">
                     <a href="app-academy-course-details.html" class="menu-link">
                         <div data-i18n="Nilai">Nilai</div>
                     </a>

@@ -201,7 +201,11 @@ class Plotting extends Controller
         $detail_kelompok = $this->model('PlottingModel')->getDetailKelompok($id);
 
         // Load view
-        $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
+        if ($_SESSION['role'] == 'Admin') {
+            $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
+        } else if ($_SESSION['role'] == 'Mahasiswa' || $_SESSION['role'] == 'Pembimbing') {
+            $this->view('layout/head', ['title' => 'Detail Kelompok', 'page' => 'Plotting']);
+        }
         $this->view('layout/sidebar', ['title' => 'Plotting', 'page' => 'Plotting']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
         $this->view('admin/plotting/detail', ['detail_kelompok' => $detail_kelompok]);

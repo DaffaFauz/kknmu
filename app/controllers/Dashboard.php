@@ -28,6 +28,13 @@ class Dashboard extends Controller
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
             $this->view('kaprodi/dashboard');
             $this->view("layout/footer", ['page' => 'Dashboard']);
+        } else if ($_SESSION['role'] == 'Pembimbing') {
+            // Load view
+            $this->view('layout/head', ['title' => "Dashboard Pembimbing", "page" => 'Dashboard']);
+            $this->view('layout/sidebar', ['page' => 'Dashboard']);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('pembimbing/dashboard');
+            $this->view("layout/footer", ['page' => 'Dashboard']);
         }
     }
 }

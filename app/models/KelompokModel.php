@@ -53,4 +53,11 @@ class KelompokModel
         $this->pdo->bind(':current_id', $current_id_kelompok);
         return $this->pdo->resultSet();
     }
+
+    public function getById($id)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok = :id");
+        $this->pdo->bind(':id', $id);
+        return $this->pdo->single();
+    }
 }

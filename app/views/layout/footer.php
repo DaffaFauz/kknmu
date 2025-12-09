@@ -260,6 +260,24 @@
     </script>
 <?php endif; ?>
 
+<?php if ($data['page'] && $data['page'] == 'Laporan'): ?>
+    <script src="<?= ASSETS_URL; ?>vendor/libs/quill/katex.js"></script>
+    <script src="<?= ASSETS_URL; ?>vendor/libs/highlight/highlight.js"></script>
+    <script src="<?= ASSETS_URL; ?>vendor/libs/quill/quill.js"></script>
+    <script src="<?= ASSETS_URL; ?>js/forms-pickers.js"></script>
+    <script src="<?= ASSETS_URL; ?>js/forms-editors.js"></script>
+
+    <!-- <script>
+        $(document).ready(function () {
+            flatpickr("#flatpickr-date", {
+                enableTime: false,
+                dateFormat: "Y-m-d",
+                locale: "id",
+            });
+        });
+    </script> -->
+<?php endif; ?>
+
 </body>
 
 </html>

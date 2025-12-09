@@ -57,6 +57,13 @@
         <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/css/pages/app-logistics-dashboard.css" />
     <?php endif; ?>
 
+    <?php if ($data['page'] && $data['page'] == 'Laporan'): ?>
+        <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/quill/typography.css" />
+        <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/highlight/highlight.css" />
+        <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/quill/katex.css" />
+        <link rel="stylesheet" href="<?= ASSETS_URL ?>vendor/libs/quill/editor.css" />
+    <?php endif; ?>
+
     <!-- Helpers -->
     <script src="<?= ASSETS_URL ?>vendor/js/helpers.js"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->

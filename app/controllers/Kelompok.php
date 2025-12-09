@@ -41,4 +41,13 @@ class Kelompok extends Controller
             redirectWithMsg(BASE_URL . '/Kelompok', 'Gagal menghapus kelompok, coba lagi.', 'danger');
         }
     }
+
+    public function noKelompok()
+    {
+        $this->view('layout/head', ['title' => 'Kelompok Tidak Ditemukan', 'page' => 'Plotting']);
+        $this->view('layout/sidebar', ['page' => 'Plotting']);
+        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+        $this->view('no_kelompok');
+        $this->view('layout/footer', ['page' => 'Plotting']);
+    }
 }
