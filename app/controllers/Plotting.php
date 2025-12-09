@@ -15,6 +15,43 @@ class Plotting extends Controller
         $this->view('layout/footer', ['page' => 'Plotting']);
     }
 
+    public function filter()
+    {
+        $filters = [
+            'kabupaten' => $_POST['kabupaten'] ?? null,
+            'kecamatan' => $_POST['kecamatan'] ?? null,
+            'desa' => $_POST['desa'] ?? null
+        ];
+
+        // Get filtered data
+        $detail_kelompok = $this->model('PlottingModel')->getFiltered($filters);
+        $kabupaten = $this->model("LokasiModel")->getKabupaten();
+
+        // Also get kecamatan and desa options if selected, to repopulate the selects
+        $kecamatan = [];
+        $desa = [];
+
+        if (!empty($filters['kabupaten'])) {
+            $kecamatan = $this->model('LokasiModel')->getKecamatan($filters['kabupaten']);
+        }
+
+        if (!empty($filters['kecamatan'])) {
+            $desa = $this->model('LokasiModel')->getDesa($filters['kecamatan']);
+        }
+
+        // Load view
+        $this->view('layout/head', ['title' => 'Plotting', 'page' => 'Plotting']);
+        $this->view('layout/sidebar', ['title' => 'Plotting', 'page' => 'Plotting']);
+        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+        $this->view('admin/plotting/index', [
+            'detail_kelompok' => $detail_kelompok,
+            'kabupaten' => $kabupaten,
+            'kecamatan' => $kecamatan,
+            'desa' => $desa
+        ]);
+        $this->view('layout/footer', ['page' => 'Plotting']);
+    }
+
     public function create()
     {
         // Get Active Year
@@ -100,7 +137,11 @@ class Plotting extends Controller
 
     public function destroy($id)
     {
-
+        if ($this->model('PlottingModel')->destroy($id) > 0) {
+            redirectWithMsg(BASE_URL . '/Plotting', 'Data berhasil dihapus.', 'success');
+        } else {
+            redirectWithMsg(BASE_URL . '/Plotting', 'Gagal menghapus data.', 'danger');
+        }
     }
 
     public function show($id)

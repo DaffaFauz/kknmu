@@ -13,7 +13,7 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label" for="kabupaten">Kabupaten</label>
-                        <select name="kabupaten" id="kabupaten" class="form-select">
+                        <select name="kabupaten" id="kabupaten" class="form-select select2">
                             <option value="">Pilih Kabupaten</option>
                             <?php foreach ($data['kabupaten'] as $row): ?>
                                 <option value="<?= $row['nama_kabupaten'] ?>" <?= !empty($_POST['kabupaten']) && $row['nama_kabupaten'] == $_POST['kabupaten'] ? 'selected' : '' ?>>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label" for="kecamatan">Kecamatan</label>
-                        <select name="kecamatan" id="kecamatan" class="form-select">
+                        <select name="kecamatan" id="kecamatan" class="form-select select2">
                             <option value="">Pilih Kecamatan</option>
                             <?php foreach ($data['kecamatan'] as $row): ?>
                                 <option value="<?= $row['nama_kecamatan'] ?>" <?= !empty($_POST['kecamatan']) && $row['nama_kecamatan'] == $_POST['kecamatan'] ? 'selected' : '' ?>>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label" for="desa">Desa</label>
-                        <select name="desa" id="desa" class="form-select">
+                        <select name="desa" id="desa" class="form-select select2">
                             <option value="">Pilih Desa</option>
                             <?php foreach ($data['desa'] as $row): ?>
                                 <option value="<?= $row['nama_desa'] ?>" <?= !empty($_POST['desa']) && $row['nama_desa'] == $_POST['desa'] ? 'selected' : '' ?>>
@@ -97,7 +97,7 @@
                                 <a href="<?= BASE_URL ?>/Plotting/edit/<?= htmlspecialchars($row['id']) ?>"
                                     class="btn btn-warning"><i class="ti tabler-pencil me-1"></i> Edit</a>
                                 <form class="d-inline"
-                                    action="<?= BASE_URL ?>/Plotting/delete/<?= htmlspecialchars($row['id']) ?>"
+                                    action="<?= BASE_URL ?>/Plotting/destroy/<?= htmlspecialchars($row['id']) ?>"
                                     method="post">
                                     <button type="submit" class="btn btn-danger"
                                         onClick="return confirm('Yakin ingin menghapus Lokasi ini?')"><i

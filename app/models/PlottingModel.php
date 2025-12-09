@@ -18,6 +18,39 @@ class PlottingModel
         return $this->pdo->resultSet();
     }
 
+    public function getFiltered($filters)
+    {
+        $query = "SELECT {$this->table}.*, kelompok.nama_kelompok, lokasi.nama_desa, lokasi.nama_kecamatan, lokasi.nama_kabupaten 
+                  FROM {$this->table} 
+                  JOIN kelompok ON {$this->table}.id_kelompok = kelompok.id_kelompok
+                  JOIN lokasi ON {$this->table}.id_lokasi = lokasi.id_lokasi
+                  WHERE 1=1";
+
+        if (!empty($filters['kabupaten'])) {
+            $query .= " AND lokasi.nama_kabupaten = :kabupaten";
+        }
+        if (!empty($filters['kecamatan'])) {
+            $query .= " AND lokasi.nama_kecamatan = :kecamatan";
+        }
+        if (!empty($filters['desa'])) {
+            $query .= " AND lokasi.nama_desa = :desa";
+        }
+
+        $this->pdo->query($query);
+
+        if (!empty($filters['kabupaten'])) {
+            $this->pdo->bind(':kabupaten', $filters['kabupaten']);
+        }
+        if (!empty($filters['kecamatan'])) {
+            $this->pdo->bind(':kecamatan', $filters['kecamatan']);
+        }
+        if (!empty($filters['desa'])) {
+            $this->pdo->bind(':desa', $filters['desa']);
+        }
+
+        return $this->pdo->resultSet();
+    }
+
     public function countStudents($id_kelompok)
     {
         $this->pdo->query("SELECT COUNT(*) as total FROM mahasiswa WHERE id_kelompok = :id_kelompok");
@@ -89,5 +122,23 @@ class PlottingModel
         }
 
         return $data;
+    }
+
+    public function destroy($id)
+    {
+        $this->pdo->beginTransaction();
+        // Hapus detail kelompok terlebih dahulu
+        $this->pdo->query("DELETE FROM {$this->table} WHERE id = :id");
+        $this->pdo->bind(':id', $id);
+        $this->pdo->execute();
+        $deleted = $this->pdo->rowCount();
+
+        // Hapus id_kelompok dari mahasiswa
+        $this->pdo->query("UPDATE mahasiswa SET id_kelompok = NULL WHERE id_kelompok = :id");
+        $this->pdo->bind(':id', $id);
+        $this->pdo->execute();
+        $this->pdo->commit();
+
+        return $deleted;
     }
 }
