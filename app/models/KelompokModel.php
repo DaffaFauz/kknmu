@@ -56,7 +56,7 @@ class KelompokModel
 
     public function getById($id)
     {
-        $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok = :id");
+        $this->pdo->query("SELECT * FROM detail_kelompok WHERE id = :id");
         $this->pdo->bind(':id', $id);
         return $this->pdo->single();
     }

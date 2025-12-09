@@ -59,6 +59,7 @@
 <script src="<?= ASSETS_URL ?>vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/moment/moment.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/flatpickr/flatpickr.js"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/popular.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/bootstrap5.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/auto-focus.js"></script>
@@ -265,17 +266,6 @@
     <script src="<?= ASSETS_URL; ?>vendor/libs/highlight/highlight.js"></script>
     <script src="<?= ASSETS_URL; ?>vendor/libs/quill/quill.js"></script>
     <script src="<?= ASSETS_URL; ?>js/forms-pickers.js"></script>
-    <script src="<?= ASSETS_URL; ?>js/forms-editors.js"></script>
-
-    <!-- <script>
-        $(document).ready(function () {
-            flatpickr("#flatpickr-date", {
-                enableTime: false,
-                dateFormat: "Y-m-d",
-                locale: "id",
-            });
-        });
-    </script> -->
 <?php endif; ?>
 
 </body>

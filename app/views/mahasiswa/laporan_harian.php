@@ -9,12 +9,16 @@
                     <h5 class="card-title mb-0">Filter Laporan Harian</h5>
                 </div>
             </div>
-            <form action="<?= BASE_URL ?>/Laporan/filterHarian/<?= $data['id_laporan'] ?? '' ?>" method="post">
+            <form action="<?= BASE_URL ?>/Laporan/filterHarian" method="post">
                 <div class="row g-3">
+                    <!-- Human Friendly Date Picker-->
                     <div class="col-md-6 col-12 mb-6">
-                        <label for="flatpickr-date" class="form-label">Tanggal</label>
-                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="flatpickr-date" />
+                        <label for="flatpickr-human-friendly" class="form-label">Tanggal</label>
+                        <input type="text" class="form-control" placeholder="tgl bulan tahun"
+                            id="flatpickr-human-friendly" name="tanggal"
+                            value="<?= isset($_POST['tanggal']) ? $_POST['tanggal'] : '' ?>" />
                     </div>
+                    <!-- /Human Friendly Date Picker-->
                     <div class="col-md-6 align-self-center d-flex">
                         <button type="submit" class="btn btn-primary me-2"><i
                                 class="ti tabler-filter me-1"></i>Filter</button>
@@ -47,7 +51,7 @@
                         <th>No</th>
                         <th>Tanggal</th>
                         <th>Judul</th>
-                        <th>Aksi</th>
+                        <th class="w-25">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,9 +60,12 @@
                         ?>
                         <tr>
                             <td><?= $no++; ?></td>
-                            <td><?= htmlspecialchars($row['tanggal']); ?></td>
+                            <td><?= htmlspecialchars(date('d F Y', strtotime($row['tanggal']))); ?></td>
                             <td><?= htmlspecialchars($row['judul']); ?></td>
                             <td>
+                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
+                                        class="ti tabler-eye me-1"></i> Detail</button>
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                     data-bs-target="#ubahLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
                                         class="ti tabler-pencil me-1"></i> Edit</button>
@@ -81,6 +88,49 @@
     <!--/ Complex Headers -->
 </div>
 
+
+<!-- Modal detail laporan harian nya -->
+<?php foreach ($data['laporan'] as $row): ?>
+    <div class="modal fade" id="detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center mb-6">
+                        <h4 class="mb-2">Detail Laporan Harian</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="flatpickr-date-modal" class="form-label">Tanggal</label>
+                            <input type="text" class="form-control" placeholder="tgl bulan tahun" id="flatpickr-date-modal"
+                                value="<?= htmlspecialchars($row['tanggal']) ?>" readonly disabled />
+                        </div>
+                        <div class="col-8">
+                            <label for="judul" class="form-label">Judul</label>
+                            <input type="text" class="form-control" id="judul" name="judul"
+                                value="<?= htmlspecialchars($row['judul']) ?>" readonly disabled />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="isi" class="form-label">Deskripsi</label>
+                        <div class="form-control h-auto" style="min-height: 100px; background-color: #f8f9fa;">
+                            <?= $row['isi_laporan'] ?>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-2">
+                        <label for="file" class="form-label">Dokumentasi</label>
+                        <img src="<?= ASSETS_URL ?>/img/dokumentasi/<?= htmlspecialchars($row['dokumentasi']) ?>"
+                            alt="<?= htmlspecialchars($row['dokumentasi']) ?>" class="w-50 d-block mt-2 mx-auto">
+                    </div>
+                    <div class="col-12 mt-4 justify-content-end d-flex">
+                        <button type="button" data-bs-dismiss="modal" class="btn btn-label-secondary">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
+
 <!-- Modal tambah Laporan Harian -->
 <div class="modal fade" id="tambahLaporanHarian" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-simple modal-edit-user">
@@ -96,7 +146,7 @@
                         value="<?= isset($_SESSION['id_kelompok']) ? $_SESSION['id_kelompok'] : null ?>">
                     <div class="col-12">
                         <label for="flatpickr-date-modal" class="form-label">Tanggal</label>
-                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="flatpickr-date-modal"
+                        <input type="text" class="form-control" placeholder="tgl bulan tahun" id="flatpickr-date-modal"
                             name="tanggal" />
                     </div>
                     <div class="col-12">
@@ -130,51 +180,86 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Initialize Flatpickr
-        flatpickr("#flatpickr-date", {
-            enableTime: false,
+        flatpickr("#flatpickr-human-friendly", {
+            altInput: true,
+            altFormat: "j F Y",
             dateFormat: "Y-m-d",
             locale: "id",
         });
 
         flatpickr("#flatpickr-date-modal", {
-            enableTime: false,
+            altInput: true,
+            altFormat: "j F Y",
             dateFormat: "Y-m-d",
             locale: "id",
             static: true
         });
 
+        // Initialize Edit Date Pickers
+        const editDatePickers = document.querySelectorAll('[id^="flatpickr-date-edit-"]');
+        editDatePickers.forEach(picker => {
+            flatpickr(picker, {
+                altInput: true,
+                altFormat: "j F Y",
+                dateFormat: "Y-m-d",
+                locale: "id",
+                static: true
+            });
+        });
+
         // Initialize Quill editor
+
         const fullToolbar = [
             [
-                { font: [] },
-                { size: [] }
+                {
+                    font: []
+                },
+                {
+                    size: []
+                }
             ],
             ['bold', 'italic', 'underline', 'strike'],
             [
-                { color: [] },
-                { background: [] }
+                {
+                    color: []
+                },
+                {
+                    background: []
+                }
             ],
             [
-                { script: 'super' },
-                { script: 'sub' }
+                {
+                    script: 'super'
+                },
+                {
+                    script: 'sub'
+                }
             ],
             [
-                { header: '1' },
-                { header: '2' },
+                {
+                    header: '1'
+                },
+                {
+                    header: '2'
+                },
                 'blockquote',
                 'code-block'
             ],
             [
-                { list: 'ordered' },
-                { list: 'bullet' },
-                { indent: '-1' },
-                { indent: '+1' }
+                {
+                    list: 'ordered'
+                },
+                {
+                    indent: '-1'
+                },
+                {
+                    indent: '+1'
+                }
             ],
             [{ direction: 'rtl' }, { align: [] }],
             ['link', 'image', 'video', 'formula'],
             ['clean']
         ];
-
         const fullEditor = new Quill('#full-editor', {
             bounds: '#full-editor',
             placeholder: 'Tulis deskripsi laporan...',
@@ -192,13 +277,34 @@
             var editorContent = document.querySelector('#full-editor .ql-editor').innerHTML;
             document.getElementById('deskripsi').value = editorContent;
         });
+        // Initialize Edit Editors
+        const editEditors = document.querySelectorAll('[id^="full-editor-edit-"]');
+        editEditors.forEach(editor => {
+            const id = editor.id.replace('full-editor-edit-', '');
+            const quill = new Quill('#' + editor.id, {
+                bounds: '#' + editor.id,
+                placeholder: 'Tulis deskripsi laporan...',
+                modules: {
+                    syntax: true,
+                    toolbar: fullToolbar
+                },
+                theme: 'snow'
+            });
+
+            // Edit Form submission handler
+            const form = document.getElementById('ubahLaporanForm' + id);
+            form.addEventListener('submit', function (e) {
+                const editorContent = editor.querySelector('.ql-editor').innerHTML;
+                document.getElementById('deskripsi-edit-' + id).value = editorContent;
+            });
+        });
     });
 </script>
 
 <!-- Modal edit Laporan -->
 <?php foreach ($data['laporan'] as $row): ?>
     <div class="modal fade" id="ubahLaporan<?= $row['id_laporan'] ?>" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-md modal-simple modal-edit-user">
+        <div class="modal-dialog modal-lg modal-simple modal-edit-user">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -209,9 +315,9 @@
                         action="<?= BASE_URL ?>/Laporan/updateHarian/<?= $row['id_laporan'] ?>" method="post"
                         enctype="multipart/form-data">
                         <div class="col-12">
-                            <label class="form-label" for="modalUbahLaporan">Tanggal</label>
-                            <input type="text" id="modalUbahLaporan" name="tanggal" class="form-control"
-                                placeholder="Tanggal" value="<?= $row['tanggal'] ?>" />
+                            <label class="form-label" for="flatpickr-date-edit-<?= $row['id_laporan'] ?>">Tanggal</label>
+                            <input type="text" id="flatpickr-date-edit-<?= $row['id_laporan'] ?>" name="tanggal"
+                                class="form-control" placeholder="9 Desember 2025" value="<?= $row['tanggal'] ?>" />
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="modalUbahLaporan">Judul</label>
@@ -219,9 +325,11 @@
                                 value="<?= $row['judul'] ?>" />
                         </div>
                         <div class="col-12">
-                            <label class="form-label" for="modalUbahLaporan">Deskripsi</label>
-                            <textarea name="deskripsi" id="modalUbahLaporan" class="form-control"
-                                required><?= $row['deskripsi'] ?></textarea>
+                            <label class="form-label" for="modalTambahLaporanHarian">Deskripsi</label>
+                            <div id="full-editor-edit-<?= $row['id_laporan'] ?>" style="min-height: 150px;">
+                                <?= $row['isi_laporan'] ?>
+                            </div>
+                            <input type="hidden" name="deskripsi" id="deskripsi-edit-<?= $row['id_laporan'] ?>">
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="modalUbahLaporan">Dokumentasi</label>
