@@ -66,9 +66,17 @@
                             <span class="avatar-initial rounded bg-label-warning"><i
                                     class="icon-base ti tabler-user icon-28px"></i></span>
                         </div>
-                        <h4 class="mb-0">-</h4>
+                        <h4 class="mb-0">Dosen Pembimbing</h4>
                     </div>
-                    <p class="mb-1">Dosen Pembimbing</p>
+                    <p class="mb-1">
+                        <?= isset($data['plotting']['nama_dosen2']) ? '1. ' : '' ?>
+                        <?= isset($data['plotting']['nama_dosen1']) ? htmlspecialchars($data['plotting']['nama_dosen1']) : '-' ?>
+                    </p>
+                    <?php if (!empty($data['plotting']['nama_dosen2'])): ?>
+                        <p class="mb-1">
+                            2. <?= htmlspecialchars($data['plotting']['nama_dosen2']) ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

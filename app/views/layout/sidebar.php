@@ -203,8 +203,23 @@
                     <div data-i18n="Plotting Kelompok">Plotting Kelompok</div>
                 </a>
             </li>
+        <?php endif; ?>
 
-            <!-- Laporan -->
+        <!-- Detail Kelompok -->
+        <?php if ($_SESSION['role'] == 'Pembimbing' || $_SESSION['role'] == 'Mahasiswa'): ?>
+            <li class="menu-header small">
+                <span class="menu-header-text" data-i18n="Detail Kelompok">Detail Kelompok</span>
+            </li>
+            <li class="menu-item <?= $data['page'] && $data['page'] == 'Plotting' ? 'active' : '' ?>">
+                <a href="<?= BASE_URL ?>/Plotting/show/<?= $_SESSION['id_kelompok'] ?>" class="menu-link">
+                    <i class="menu-icon icon-base ti tabler-users-group"></i>
+                    <div data-i18n="Detail Kelompok">Detail Kelompok</div>
+                </a>
+            </li>
+        <?php endif; ?>
+
+        <!-- Laporan -->
+        <?php if ($_SESSION['role'] == 'Admin' || $_SESSION['role'] == 'Pembimbing' || $_SESSION['role'] == 'Mahasiswa'): ?>
             <li class="menu-header small">
                 <span class="menu-header-text" data-i18n="Laporan">Laporan</span>
             </li>

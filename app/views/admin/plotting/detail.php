@@ -1,9 +1,11 @@
 <!-- Content -->
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Tombol kembali -->
-    <a href="<?= BASE_URL ?>/Plotting" class="btn btn-secondary mb-4">
-        <i class="ti tabler-arrow-left me-1"></i> Kembali
-    </a>
+    <?php if ($_SESSION['role'] == 'Admin'): ?>
+        <a href="<?= BASE_URL ?>/Plotting" class="btn btn-secondary mb-4">
+            <i class="ti tabler-arrow-left me-1"></i> Kembali
+        </a>
+    <?php endif; ?>
     <div class="row g-6">
         <!-- Card Border Shadow -->
         <div class="col-lg-6 col-sm-6">

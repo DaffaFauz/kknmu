@@ -46,6 +46,7 @@ class UserModel
                 $mahasiswa = $this->pdo->single();
                 if ($mahasiswa) {
                     $_SESSION['id_mahasiswa'] = $mahasiswa['id_mahasiswa'];
+                    $_SESSION['id_kelompok'] = $mahasiswa['id_kelompok'];
                 }
             }
             // Jika bukan mahasiswa, ambil prodi untuk dosen

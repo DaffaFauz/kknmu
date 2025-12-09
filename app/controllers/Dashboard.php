@@ -13,12 +13,13 @@ class Dashboard extends Controller
         } else if ($_SESSION['role'] == 'Mahasiswa') {
             // Get data from database
             $pendaftaran = $this->model("DashboardModel")->getPendaftaranMahasiswa($_SESSION['id_mahasiswa']);
+            $plotting = $this->model("DashboardModel")->getPlottingKelompok($_SESSION['id_kelompok']);
 
             // Load view
             $this->view('layout/head', ['title' => "Dashboard Mahasiswa", "page" => 'Dashboard']);
             $this->view('layout/sidebar', ['page' => 'Dashboard']);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-            $this->view('mahasiswa/dashboard', ['pendaftaran' => $pendaftaran]);
+            $this->view('mahasiswa/dashboard', ['pendaftaran' => $pendaftaran, 'plotting' => $plotting]);
             $this->view("layout/footer", ['page' => 'Dashboard']);
         } else if ($_SESSION['role'] == 'Kaprodi') {
             // Load view
