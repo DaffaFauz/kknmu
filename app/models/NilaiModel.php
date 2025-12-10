@@ -146,4 +146,38 @@ class NilaiModel
 
         }
     }
+
+    public function isNilaiLengkap($data)
+    {
+        if (!$data) {
+            return false;
+        }
+
+        // List of all required grade components
+        $components = [
+            'n_lapangan',
+            'n_penulisan',
+            'n_sistematika_penulisan',
+            'n_penguasaan_materi',
+            'n_wawasan_umum',
+            'n_teknik_presentasi',
+            'n_penguasaan_jurnal',
+            'n_produk_unggulan'
+        ];
+
+        foreach ($components as $component) {
+            if (!isset($data[$component]) || $data[$component] === null || $data[$component] === '') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getNilaiMahasiswa($id)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa WHERE {$this->table}.id_mahasiswa = :id");
+        $this->pdo->bind('id', $id);
+        return $this->pdo->single();
+    }
 }

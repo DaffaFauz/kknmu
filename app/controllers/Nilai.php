@@ -9,7 +9,7 @@ class Nilai extends Controller
             $kabupaten = $this->model('LokasiModel')->getKabupaten();
 
             // Load view
-            $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
+            $this->view('layout/head', ['title' => 'Nilai Mahasiswa', 'page' => 'Nilai']);
             $this->view('layout/sidebar', ['page' => 'Nilai']);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
             $this->view('admin/nilai/index', ['kelompok' => $kelompok, 'kabupaten' => $kabupaten]);
@@ -26,7 +26,7 @@ class Nilai extends Controller
             $mahasiswa = $this->model("NilaiModel")->detail($_SESSION['id_kelompok']);
 
             // Load view
-            $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
+            $this->view('layout/head', ['title' => 'Nilai Mahasiswa', 'page' => 'Nilai']);
             $this->view('layout/sidebar', ['page' => 'Nilai']);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
             $this->view('pembimbing/nilai', ['mahasiswa' => $mahasiswa]);
@@ -37,14 +37,23 @@ class Nilai extends Controller
             $mahasiswa = $this->model("NilaiModel")->getNilaiMahasiswaForKaprodi($_SESSION['id_prodi']);
 
             // Load view
-            $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
+            $this->view('layout/head', ['title' => 'Nilai Mahasiswa', 'page' => 'Nilai']);
             $this->view('layout/sidebar', ['page' => 'Nilai']);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
             $this->view('kaprodi/nilai', ['mahasiswa' => $mahasiswa]);
             $this->view('layout/footer', ['page' => 'Nilai']);
 
         } else if ($_SESSION['role'] == 'Mahasiswa') {
+            // Get data
+            $nilai = $this->model("NilaiModel")->getNilaiMahasiswa($_SESSION['id_mahasiswa']);
+            $nilaiLengkap = $this->model("NilaiModel")->isNilaiLengkap($nilai);
 
+            // Load view
+            $this->view('layout/head', ['title' => 'Nilai Mahasiswa', 'page' => 'Nilai']);
+            $this->view('layout/sidebar', ['page' => 'Nilai']);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view("mahasiswa/nilai", ['nilai' => $nilai, 'nilai_lengkap' => $nilaiLengkap]);
+            $this->view('layout/footer', ['page' => 'Nilai']);
         }
     }
 
