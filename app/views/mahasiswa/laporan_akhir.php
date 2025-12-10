@@ -153,6 +153,20 @@
                         target="_blank"><i class="ti tabler-eye"></i> Lihat dokumentasi</a>
                 </div>
             </div>
+            <div class="row m-2">
+                <div class="col-lg-6 col-md-12">
+                    <label for="catatan" class="form-label">Status unggahan: </label>
+                    <br>
+                    <span
+                        class="text-<?= $data['laporan_akhir'][0]['status_verifikasi'] == 'Pending' || $data['laporan_akhir'][0]['status_verifikasi'] == 'Revisi' ? 'warning' : 'success' ?>">
+                        <?= $data['laporan_akhir'][0]['status_verifikasi'] ? htmlspecialchars($data['laporan_akhir'][0]['status_verifikasi']) : 'Belum ada catatan' ?>
+                    </span>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <label for="catatan" class="form-label">Catatan</label>
+                    <textarea class="form-control" id="catatan" name="catatan" <?= $_SESSION['role'] == 'Mahasiswa' || $_SESSION['role'] == 'Pembimbing' ? 'readonly disabled' : '' ?>><?= $data['laporan_akhir'][0]['catatan'] ? htmlspecialchars($data['laporan_akhir'][0]['catatan']) : 'Belum ada catatan' ?></textarea>
+                </div>
+            </div>
         <?php endif; ?>
     </div>
     <!--/ Complex Headers -->
