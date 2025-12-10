@@ -192,7 +192,187 @@ class Laporan extends Controller
 
     public function akhir()
     {
+        if ($_SESSION['role'] == 'Mahasiswa' || $_SESSION['role'] == 'Pembimbing') {
+            // Get data
+            $laporan = $this->model('LaporanModel')->getLaporanAkhirForMahasiswaAndPembimbing($_SESSION['id_kelompok']);
 
+            // Load view
+            $this->view('layout/head', ['title' => "Laporan Akhir", "page" => 'Laporan']);
+            $this->view('layout/sidebar', ['page' => 'Laporan Akhir', 'role' => $_SESSION['role']]);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('mahasiswa/laporan_akhir', ['laporan_akhir' => $laporan]);
+            $this->view("layout/footer", ['page' => 'Laporan']);
+        } else if ($_SESSION['role'] == 'Admin') {
+            // Get data
+            $laporan = $this->model('LaporanModel')->getLaporanAkhir();
+            $kabupaten = $this->model('LokasiModel')->getKabupaten();
+
+            // Load view
+            $this->view('layout/head', ['title' => "Laporan Akhir", "page" => 'Laporan']);
+            $this->view('layout/sidebar', ['page' => 'Laporan Akhir', 'role' => $_SESSION['role']]);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('admin/laporan_akhir', ['laporan' => $laporan, 'kabupaten' => $kabupaten]);
+            $this->view("layout/footer", ['page' => 'Laporan']);
+        }
+    }
+
+    public function createAkhir()
+    {
+        // Validasi apakah kelompok benar-benar ada di database
+        $kelompok = $this->model('KelompokModel')->getById($_SESSION['id_kelompok']);
+        if (!$kelompok) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Data kelompok tidak valid atau tidak ditemukan! Silahkan hubungi admin.', 'danger');
+            exit;
+        }
+
+        // Validasi input
+        $judul = $_POST['judul'];
+        $link = $_POST['link'];
+
+        if (empty($judul) || empty($link)) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Judul dan Link Video harus diisi!', 'danger');
+            exit;
+        }
+
+        // Validasi file
+        $laporan_akhir = $_FILES['laporan_akhir'];
+        $jurnal = $_FILES['jurnal'];
+        $produk_unggulan = $_FILES['produk_unggulan'];
+        $dokumentasi = $_FILES['dokumentasi'];
+
+        $errors = [];
+        $errors[] = $this->validateDokumen($laporan_akhir, ['docx'], 10000000, 'Laporan Akhir');
+        $errors[] = $this->validateDokumen($jurnal, ['docx'], 10000000, 'Jurnal');
+        $errors[] = $this->validateDokumen($produk_unggulan, ['jpg', 'jpeg', 'png'], 5000000, 'Produk Unggulan');
+        $errors[] = $this->validateDokumen($dokumentasi, ['jpg', 'jpeg', 'png'], 5000000, 'Dokumentasi');
+
+        $errors = array_filter($errors);
+        if (!empty($errors)) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', implode('<br>', $errors), 'danger');
+            exit;
+        }
+
+        $laporan_akhir_name = $this->uploadDokumen($laporan_akhir, 'assets/dokumen/laporanAkhir');
+        $jurnal_name = $this->uploadDokumen($jurnal, 'assets/dokumen/laporanAkhir');
+        $produk_unggulan_name = $this->uploadDokumen($produk_unggulan, 'assets/img/laporanAkhir');
+        $dokumentasi_name = $this->uploadDokumen($dokumentasi, 'assets/img/laporanAkhir');
+
+        // Simpan data ke database
+        $data = array(
+            'id_kelompok' => $_SESSION['id_kelompok'],
+            'judul' => $judul,
+            'link_video' => $link,
+            'laporan_akhir' => $laporan_akhir_name,
+            'jurnal' => $jurnal_name,
+            'produk_unggulan' => $produk_unggulan_name,
+            'dokumentasi' => $dokumentasi_name
+        );
+
+        if ($this->model('LaporanModel')->createAkhir($data)) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir berhasil dibuat!', 'success');
+        } else {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir gagal dibuat!', 'danger');
+        }
+    }
+
+    public function updateAkhir($id)
+    {
+        // Validasi input
+        $judul = $_POST['judul'];
+        $link = $_POST['link'];
+
+        if (empty($judul) || empty($link)) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Judul dan Link Video harus diisi!', 'danger');
+            exit;
+        }
+
+        // Validasi file
+        $laporan_akhir = $_FILES['laporan_akhir'];
+        $jurnal = $_FILES['jurnal'];
+        $produk_unggulan = $_FILES['produk_unggulan'];
+        $dokumentasi = $_FILES['dokumentasi'];
+
+        $errors = [];
+        $errors[] = $this->validateDokumenUpdate($laporan_akhir, ['docx'], 10000000, 'Laporan Akhir');
+        $errors[] = $this->validateDokumenUpdate($jurnal, ['docx'], 10000000, 'Jurnal');
+        $errors[] = $this->validateDokumenUpdate($produk_unggulan, ['jpg', 'jpeg', 'png'], 5000000, 'Produk Unggulan');
+        $errors[] = $this->validateDokumenUpdate($dokumentasi, ['jpg', 'jpeg', 'png'], 5000000, 'Dokumentasi');
+
+        $errors = array_filter($errors);
+        if (!empty($errors)) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', implode('<br>', $errors), 'danger');
+            exit;
+        }
+
+        $laporan_akhir_name = $this->uploadDokumenUpdate($laporan_akhir, 'assets/dokumen/laporanAkhir');
+        $jurnal_name = $this->uploadDokumenUpdate($jurnal, 'assets/dokumen/laporanAkhir');
+        $produk_unggulan_name = $this->uploadDokumenUpdate($produk_unggulan, 'assets/img/laporanAkhir');
+        $dokumentasi_name = $this->uploadDokumenUpdate($dokumentasi, 'assets/img/laporanAkhir');
+
+        // Simpan data ke database
+        $data = array(
+            'id_laporan' => $id,
+            'judul' => $judul,
+            'link_video' => $link,
+            'dokumen_laporan' => $laporan_akhir_name,
+            'dokumen_jurnal' => $jurnal_name,
+            'produk_unggulan' => $produk_unggulan_name,
+            'dokumentasi' => $dokumentasi_name
+        );
+
+        if ($this->model('LaporanModel')->updateAkhir($data) > 0) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir berhasil diubah!', 'success');
+        } else {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir gagal diubah!', 'danger');
+        }
+    }
+
+    private function validateDokumen($file, $allowed_exts, $max_size, $name)
+    {
+        if ($file['error'] === 4) {
+            return "File $name harus diupload!";
+        }
+        if ($file['size'] > $max_size) {
+            return "File $name tidak boleh lebih dari " . ($max_size / 1000000) . "MB!";
+        }
+        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+        if (!in_array(strtolower($ext), $allowed_exts)) {
+            return "File $name harus berekstensi " . implode(', ', $allowed_exts) . "!";
+        }
+        return null;
+    }
+
+    private function uploadDokumen($file, $destination)
+    {
+        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $new_name = uniqid('', true) . '.' . $ext;
+        move_uploaded_file($file['tmp_name'], $destination . '/' . $new_name);
+        return $new_name;
+    }
+
+    private function validateDokumenUpdate($file, $allowed_exts, $max_size, $name)
+    {
+        if ($file['error'] !== 4) {
+            if ($file['size'] > $max_size) {
+                return "File $name tidak boleh lebih dari " . ($max_size / 1000000) . "MB!";
+            }
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            if (!in_array(strtolower($ext), $allowed_exts)) {
+                return "File $name harus berekstensi " . implode(', ', $allowed_exts) . "!";
+            }
+        }
+        return null;
+    }
+
+    private function uploadDokumenUpdate($file, $destination)
+    {
+        if ($file['error'] !== 4) {
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $new_name = uniqid('', true) . '.' . $ext;
+            move_uploaded_file($file['tmp_name'], $destination . '/' . $new_name);
+            return $new_name;
+        }
+        return null;
     }
 
     public function nilai()

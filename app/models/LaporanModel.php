@@ -18,18 +18,6 @@ class LaporanModel
         return $this->pdo->resultSet();
     }
 
-    public function getLaporanAkhir()
-    {
-        $this->pdo->query("SELECT * FROM {$this->table2}");
-        return $this->pdo->resultSet();
-    }
-
-    public function getNilai()
-    {
-        $this->pdo->query("SELECT * FROM {$this->table3}");
-        return $this->pdo->resultSet();
-    }
-
     public function getLaporanHarianForMahasiswaAndPembimbing($id)
     {
         $this->pdo->query("SELECT * FROM {$this->table1} WHERE id_kelompok = :id");
@@ -88,5 +76,83 @@ class LaporanModel
         $this->pdo->bind(':id', $id);
         $this->pdo->bind(':tanggal', $tanggal);
         return $this->pdo->resultSet();
+    }
+
+
+    public function getLaporanAkhirForMahasiswaAndPembimbing($id)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table2} INNER JOIN detail_kelompok ON {$this->table2}.id_kelompok = detail_kelompok.id INNER JOIN tahun_akademik ON detail_kelompok.id_tahun = tahun_akademik.id_tahun WHERE {$this->table2}.id_kelompok = :id AND tahun_akademik.status = 'Aktif'");
+        $this->pdo->bind(':id', $id);
+        return $this->pdo->resultSet();
+    }
+
+    public function getLaporanAkhir()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table2} INNER JOIN detail_kelompok ON {$this->table2}.id_kelompok = detail_kelompok.id INNER JOIN tahun_akademik ON detail_kelompok.id_tahun = tahun_akademik.id_tahun INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok INNER JOIN lokasi ON detail_kelompok.id_lokasi = lokasi.id_lokasi WHERE tahun_akademik.status = 'Aktif'");
+        return $this->pdo->resultSet();
+    }
+
+    public function getNilai()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table3}");
+        return $this->pdo->resultSet();
+    }
+
+    public function createAkhir($data)
+    {
+        $this->pdo->query("INSERT INTO {$this->table2} (id_kelompok, judul, link_video, dokumen_laporan, dokumen_jurnal, produk_unggulan, dokumentasi, status_verifikasi) VALUES (:id_kelompok, :judul, :link_video, :dokumen_laporan, :dokumen_jurnal, :produk_unggulan, :dokumentasi, :status_verifikasi)");
+        $this->pdo->bind(':id_kelompok', $data['id_kelompok']);
+        $this->pdo->bind(':judul', $data['judul']);
+        $this->pdo->bind(':link_video', $data['link_video']);
+        $this->pdo->bind(':dokumen_laporan', $data['dokumen_laporan']);
+        $this->pdo->bind(':dokumen_jurnal', $data['dokumen_jurnal']);
+        $this->pdo->bind(':produk_unggulan', $data['produk_unggulan']);
+        $this->pdo->bind(':dokumentasi', $data['dokumentasi']);
+        $this->pdo->bind(':status_verifikasi', 'Pending');
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
+    }
+
+    public function updateAkhir($data)
+    {
+        $query = "UPDATE {$this->table2} SET judul = :judul, link_video = :link_video, status_verifikasi = :status_verifikasi";
+
+        if (!empty($data['dokumen_laporan'])) {
+            $query .= ", dokumen_laporan = :dokumen_laporan";
+        }
+        if (!empty($data['dokumen_jurnal'])) {
+            $query .= ", dokumen_jurnal = :dokumen_jurnal";
+        }
+        if (!empty($data['produk_unggulan'])) {
+            $query .= ", produk_unggulan = :produk_unggulan";
+        }
+        if (!empty($data['dokumentasi'])) {
+            $query .= ", dokumentasi = :dokumentasi";
+        }
+
+        $query .= " WHERE id_laporan = :id_laporan";
+
+        $this->pdo->query($query);
+
+        $this->pdo->bind(':id_laporan', $data['id_laporan']);
+        $this->pdo->bind(':judul', $data['judul']);
+        $this->pdo->bind(':link_video', $data['link_video']);
+        $this->pdo->bind(':status_verifikasi', 'Pending');
+
+        if (!empty($data['dokumen_laporan'])) {
+            $this->pdo->bind(':dokumen_laporan', $data['dokumen_laporan']);
+        }
+        if (!empty($data['dokumen_jurnal'])) {
+            $this->pdo->bind(':dokumen_jurnal', $data['dokumen_jurnal']);
+        }
+        if (!empty($data['produk_unggulan'])) {
+            $this->pdo->bind(':produk_unggulan', $data['produk_unggulan']);
+        }
+        if (!empty($data['dokumentasi'])) {
+            $this->pdo->bind(':dokumentasi', $data['dokumentasi']);
+        }
+
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
     }
 }
