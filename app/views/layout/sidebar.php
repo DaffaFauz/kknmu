@@ -243,7 +243,7 @@
                     </li>
                 <?php endif; ?>
                 <li class="menu-item <?= $data['page'] && $data['page'] == 'Nilai' ? 'active' : '' ?>">
-                    <a href="app-academy-course-details.html" class="menu-link">
+                    <a href="<?= BASE_URL . '/Nilai' ?>" class="menu-link">
                         <div data-i18n="Nilai">Nilai</div>
                     </a>
                 </li>

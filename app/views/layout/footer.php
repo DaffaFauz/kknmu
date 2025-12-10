@@ -173,7 +173,7 @@
     </script>
 <?php endif; ?>
 
-<?php if ($data['page'] && $data['page'] == 'Plotting' || $data['page'] == 'Laporan'): ?>
+<?php if ($data['page'] && $data['page'] == 'Plotting' || $data['page'] == 'Laporan' || $data['page'] == 'Nilai'): ?>
     <script>
         $(document).ready(function () {
             // Initialize Select2

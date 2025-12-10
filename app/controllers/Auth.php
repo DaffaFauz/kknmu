@@ -54,7 +54,7 @@ class Auth extends Controller
             $idMahasiswa = $this->model('MahasiswaModel')->create($_POST);
             if ($idMahasiswa) {
                 $_POST['id_mahasiswa'] = $idMahasiswa;
-                if ($this->model("PendaftaranModel")->create($_POST)) {
+                if ($this->model("PendaftaranModel")->create($_POST) && $this->model("NilaiModel")->create($_POST)) {
                     redirectWithMsg(BASE_URL . '/Login', 'Daftar berhasil! Silahkan login.', 'success');
                     exit;
                 } else {
