@@ -5,7 +5,6 @@ class LaporanModel
     private $pdo;
     private $table1 = 'laporan_harian';
     private $table2 = 'laporan_akhir';
-    private $table3 = 'nilai';
 
     public function __construct()
     {
@@ -89,12 +88,6 @@ class LaporanModel
     public function getLaporanAkhir()
     {
         $this->pdo->query("SELECT * FROM {$this->table2} INNER JOIN detail_kelompok ON {$this->table2}.id_kelompok = detail_kelompok.id INNER JOIN tahun_akademik ON detail_kelompok.id_tahun = tahun_akademik.id_tahun INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok INNER JOIN lokasi ON detail_kelompok.id_lokasi = lokasi.id_lokasi WHERE tahun_akademik.status = 'Aktif'");
-        return $this->pdo->resultSet();
-    }
-
-    public function getNilai()
-    {
-        $this->pdo->query("SELECT * FROM {$this->table3}");
         return $this->pdo->resultSet();
     }
 
