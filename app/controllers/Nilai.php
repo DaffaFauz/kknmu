@@ -47,12 +47,13 @@ class Nilai extends Controller
     {
         // Get data mahasiswa for selected kelompok
         $mahasiswa = $this->model('NilaiModel')->detail($id);
+        $token = $this->model('TokenModel')->getToken($id);
 
         // Load view
         $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
         $this->view('layout/sidebar', ['page' => 'Nilai']);
         $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-        $this->view('admin/nilai/detail', ['mahasiswa' => $mahasiswa]);
+        $this->view('admin/nilai/detail', ['mahasiswa' => $mahasiswa, 'token' => $token]);
         $this->view('layout/footer', ['page' => 'Nilai']);
     }
 }

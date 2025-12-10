@@ -51,10 +51,10 @@
                         </h4>
                     </div>
                     <p class="mb-1">Untuk Penguji 1:
-                        <?= isset($data['mahasiswa'][0]['id_dosen1']) ? htmlspecialchars($data['mahasiswa'][0]['nama_dosen1']) : '-' ?>
+                        <?= isset($data['token']['token1']) ? htmlspecialchars($data['token']['token1']) : '-' ?>
                     </p>
                     <p class="mb-1">Untuk Penguji 2:
-                        <?= isset($data['mahasiswa'][0]['id_dosen2']) ? htmlspecialchars($data['mahasiswa'][0]['nama_dosen2']) : '-' ?>
+                        <?= isset($data['token']['token2']) ? htmlspecialchars($data['token']['token2']) : '-' ?>
                     </p>
                 </div>
             </div>
