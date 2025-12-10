@@ -9,7 +9,7 @@
                     <h5 class="card-title mb-0">Filter Kelompok</h5>
                 </div>
             </div>
-            <form action="<?= BASE_URL ?>/Plotting/filter" method="POST">
+            <form action="<?= BASE_URL ?>/Laporan/filterAkhir" method="POST">
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label" for="kabupaten">Kabupaten</label>

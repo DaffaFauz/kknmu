@@ -216,6 +216,29 @@ class Laporan extends Controller
         }
     }
 
+    public function filterAkhir()
+    {
+        if ($_SESSION['role'] == 'Admin') {
+            $kabupaten = isset($_POST['kabupaten']) ? $_POST['kabupaten'] : null;
+            $kecamatan = isset($_POST['kecamatan']) ? $_POST['kecamatan'] : null;
+            $desa = isset($_POST['desa']) ? $_POST['desa'] : null;
+
+            $laporan = $this->model('LaporanModel')->filterLaporanAkhir($kabupaten, $kecamatan, $desa);
+            $data_kabupaten = $this->model('LokasiModel')->getKabupaten();
+            $data_kecamatan = $this->model('LokasiModel')->getKecamatan($kabupaten);
+            $data_desa = $this->model('LokasiModel')->getDesa($kecamatan);
+
+            // Load view
+            $this->view('layout/head', ['title' => "Laporan Akhir", "page" => 'Laporan']);
+            $this->view('layout/sidebar', ['page' => 'Laporan Akhir', 'role' => $_SESSION['role']]);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('admin/laporan_akhir', ['laporan' => $laporan, 'kabupaten' => $data_kabupaten, 'kecamatan' => $data_kecamatan, 'desa' => $data_desa]);
+            $this->view("layout/footer", ['page' => 'Laporan']);
+        } else {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Anda tidak memiliki akses!', 'danger');
+        }
+    }
+
     public function createAkhir()
     {
         // Validasi apakah kelompok benar-benar ada di database

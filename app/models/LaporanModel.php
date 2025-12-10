@@ -165,4 +165,33 @@ class LaporanModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function filterLaporanAkhir($kabupaten, $kecamatan = null, $desa = null)
+    {
+        $query = "SELECT * FROM {$this->table2} INNER JOIN detail_kelompok ON {$this->table2}.id_kelompok = detail_kelompok.id INNER JOIN tahun_akademik ON detail_kelompok.id_tahun = tahun_akademik.id_tahun INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok INNER JOIN lokasi ON detail_kelompok.id_lokasi = lokasi.id_lokasi WHERE tahun_akademik.status = 'Aktif'";
+
+        if (!empty($kabupaten)) {
+            $query .= " AND lokasi.nama_kabupaten = :kabupaten";
+        }
+        if (!empty($kecamatan)) {
+            $query .= " AND lokasi.nama_kecamatan = :kecamatan";
+        }
+        if (!empty($desa)) {
+            $query .= " AND lokasi.nama_desa = :desa";
+        }
+
+        $this->pdo->query($query);
+
+        if (!empty($kabupaten)) {
+            $this->pdo->bind(':kabupaten', $kabupaten);
+        }
+        if (!empty($kecamatan)) {
+            $this->pdo->bind(':kecamatan', $kecamatan);
+        }
+        if (!empty($desa)) {
+            $this->pdo->bind(':desa', $desa);
+        }
+
+        return $this->pdo->resultSet();
+    }
 }
