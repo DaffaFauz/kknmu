@@ -16,6 +16,11 @@ class Login extends Controller
         $this->view('register', ['fakultas' => $fakultas]);
     }
 
+    public function penguji()
+    {
+        $this->view('penguji');
+    }
+
     public function SelectJabatan()
     {
         $this->view('selectJabatan');

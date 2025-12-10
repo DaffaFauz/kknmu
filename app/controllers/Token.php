@@ -10,4 +10,14 @@ class Token extends Controller
             redirectWithMsg(BASE_URL . '/Nilai', 'Gagal menggenerate token', 'danger');
         }
     }
+
+    public function validate()
+    {
+        $token = $this->model('TokenModel')->getTokenLogin($_POST['token']);
+        if ($token) {
+            header("location:" . BASE_URL . '/Nilai');
+        } else {
+            redirectWithMsg(BASE_URL . '/Login/penguji', 'Token yang anda masukkan salah! Coba lagi.', 'danger');
+        }
+    }
 }

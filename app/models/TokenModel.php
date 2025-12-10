@@ -11,9 +11,31 @@ class TokenModel
 
     public function getToken($id)
     {
+        // Ambil data berdasarkan token
         $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok = :id");
         $this->pdo->bind(':id', $id);
-        return $this->pdo->single();
+        $data = $this->pdo->single();
+
+        return $data;
+    }
+
+    public function getTokenLogin($token)
+    {
+        // Ambil data berdasarkan token
+        $this->pdo->query("SELECT * FROM {$this->table} WHERE token1 = :token1 OR token2 = :token2");
+        $this->pdo->bind(':token1', $token);
+        $this->pdo->bind(':token2', $token);
+
+        // Periksa apakah data yang didapat berasal dari token1 atau token2
+        $data = $this->pdo->single();
+        if ($data['token1'] == $token) {
+            $_SESSION['role'] = 'Penguji 1';
+        } else {
+            $_SESSION['role'] = 'Penguji 2';
+        }
+        $_SESSION['id'] = $data['id_kelompok'];
+
+        return $data;
     }
 
     public function generate($id)

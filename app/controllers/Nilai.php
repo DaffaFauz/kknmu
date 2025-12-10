@@ -14,6 +14,13 @@ class Nilai extends Controller
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
             $this->view('admin/nilai/index', ['kelompok' => $kelompok, 'kabupaten' => $kabupaten]);
             $this->view('layout/footer', ['page' => 'Nilai']);
+        } else if ($_SESSION['role'] == 'Penguji 1' || $_SESSION['role'] == 'Penguji 2') {
+            // Get data Dosen untuk input nama penguji berdasarkan id
+            $dosen = $this->model('DosenModel')->getAll();
+
+            // Load view
+            $this->view('penguji/nilai', ['dosen' => $dosen, 'role' => $_SESSION['role']]);
+
         }
     }
 
@@ -50,10 +57,12 @@ class Nilai extends Controller
         $token = $this->model('TokenModel')->getToken($id);
 
         // Load view
-        $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
-        $this->view('layout/sidebar', ['page' => 'Nilai']);
-        $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-        $this->view('admin/nilai/detail', ['mahasiswa' => $mahasiswa, 'token' => $token]);
-        $this->view('layout/footer', ['page' => 'Nilai']);
+        if ($_SESSION['role'] == 'Admin') {
+            $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
+            $this->view('layout/sidebar', ['page' => 'Nilai']);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('admin/nilai/detail', ['mahasiswa' => $mahasiswa, 'token' => $token]);
+            $this->view('layout/footer', ['page' => 'Nilai']);
+        }
     }
 }

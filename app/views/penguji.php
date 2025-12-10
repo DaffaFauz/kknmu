@@ -86,21 +86,12 @@
                         </div>
                         <!-- /Logo -->
 
-                        <form id="formAuthentication" class="mb-4" action="<?= BASE_URL ?>/Auth/" method="POST">
+                        <form id="formAuthentication" class="mb-4" action="<?= BASE_URL ?>/Token/validate"
+                            method="POST">
                             <div class="mb-6 form-control-validation">
-                                <label for="email" class="form-label">NIM atau NIDN</label>
-                                <input type="text" class="form-control" id="email" name="username"
-                                    placeholder="Masukkan NIM atau NIDN" autofocus />
-                            </div>
-                            <div class="mb-6 form-password-toggle form-control-validation">
-                                <label class="form-label" for="password">Password</label>
-                                <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" name="password"
-                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        aria-describedby="password" />
-                                    <span class="input-group-text cursor-pointer"><i
-                                            class="icon-base ti tabler-eye-off"></i></span>
-                                </div>
+                                <label for="token" class="form-label">Token</label>
+                                <input type="text" class="form-control" id="token" name="token"
+                                    placeholder="Masukkan Token" autofocus />
                             </div>
                             <div class="mb-6">
                                 <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
@@ -108,18 +99,11 @@
                         </form>
 
                         <p class="text-center">
-                            <span>Masuk sebagai Penguji?</span>
-                            <a href="<?= BASE_URL ?>/Login/penguji">
-                                <span>Klik di sini</span>
+                            <span>Kembali ke Login?</span>
+                            <a href="<?= BASE_URL ?>/Login">
+                                <span>Kembali</span>
                             </a>
                         </p>
-                        <p class="text-center">
-                            <span>Belum Punya Akun?</span>
-                            <a href="<?= BASE_URL ?>/Login/register">
-                                <span>Buat Akun</span>
-                            </a>
-                        </p>
-
                         <!-- /Login -->
                     </div>
                 </div>
