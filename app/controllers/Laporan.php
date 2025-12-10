@@ -375,6 +375,24 @@ class Laporan extends Controller
         return null;
     }
 
+    public function verifikasiLaporanAkhir($id)
+    {
+        if ($this->model('LaporanModel')->verifikasiLaporanAkhir($id) > 0) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir berhasil diverifikasi!', 'success');
+        } else {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir gagal diverifikasi!', 'danger');
+        }
+    }
+
+    public function revisiLaporanAkhir($id)
+    {
+        if ($this->model('LaporanModel')->revisiLaporanAkhir($id, $_POST) > 0) {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir berhasil direvisi!', 'success');
+        } else {
+            redirectWithMsg(BASE_URL . '/Laporan/akhir', 'Laporan akhir gagal direvisi!', 'danger');
+        }
+    }
+
     public function nilai()
     {
 

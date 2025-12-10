@@ -155,4 +155,21 @@ class LaporanModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function verifikasiLaporanAkhir($id)
+    {
+        $this->pdo->query("UPDATE {$this->table2} SET status_verifikasi = 'Diterima' WHERE id_laporan = :id");
+        $this->pdo->bind(':id', $id);
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
+    }
+
+    public function revisiLaporanAkhir($id, $data)
+    {
+        $this->pdo->query("UPDATE {$this->table2} SET status_verifikasi = 'Revisi', catatan = :catatan WHERE id_laporan = :id");
+        $this->pdo->bind(':id', $id);
+        $this->pdo->bind(':catatan', $data['catatan']);
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
+    }
 }

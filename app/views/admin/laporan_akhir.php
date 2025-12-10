@@ -139,6 +139,20 @@
                         </div>
                     </div>
                     <div class="row m-2">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                            <label for="dokumen">Status Verifikasi :</label>
+                            <br>
+                            <span
+                                class="text-<?= $row['status_verifikasi'] == 'Pending' || $row['status_verifikasi'] == 'Revisi' ? 'warning' : 'success' ?>"><?= htmlspecialchars($row['status_verifikasi']) ?></span>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                            <label for="catatan">Catatan :</label>
+                            <br>
+                            <textarea class="form-control"
+                                disabled><?= $row['catatan'] ? htmlspecialchars($row['catatan']) : 'Tidak ada catatan' ?></textarea>
+                        </div>
+                    </div>
+                    <div class="row m-2">
                         <label for="dokumen">Dokumen:</label>
                         <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
                             <a href="<?= ASSETS_URL ?>dokumen/LaporanAkhir/<?= $row['dokumen_laporan'] ?>" download><i
@@ -157,15 +171,17 @@
                                     class="ti tabler-eye"></i> Lihat dokumentasi</a>
                         </div>
                     </div>
-                    <div class="col-12 justify-content-end d-flex">
-                        <form action="<?= BASE_URL . '/Laporan/verifikasiLaporanAkhir/' . $row['id_laporan'] ?>"
-                            method="post" class="me-2">
-                            <button type="submit" class="btn btn-label-success">Verifikasi</button>
-                        </form>
-                        <button type="button" data-bs-toggle="modal"
-                            data-bs-target="#revisiLaporan<?= htmlspecialchars($row['id_laporan']) ?>"
-                            class="btn btn-label-warning me-2">Revisi</button>
-                        <button type="button" data-bs-dismiss="modal" class="btn btn-label-secondary">Close</button>
+                    <div class="row mt-6">
+                        <div class="col-12 justify-content-end d-flex">
+                            <form action="<?= BASE_URL . '/Laporan/verifikasiLaporanAkhir/' . $row['id_laporan'] ?>"
+                                method="post" class="me-2">
+                                <button type="submit" class="btn btn-label-success">Verifikasi</button>
+                            </form>
+                            <button type="button" data-bs-toggle="modal"
+                                data-bs-target="#revisiLaporan<?= htmlspecialchars($row['id_laporan']) ?>"
+                                class="btn btn-label-warning me-2">Revisi</button>
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-label-secondary">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
