@@ -108,7 +108,38 @@ class NilaiModel
             $this->pdo->bind('indeks', $indeks);
             return $this->pdo->execute();
         } else if ($_SESSION['role'] == 'Pembimbing') {
+            // Mendapatkan nilai rata-rata dari semua input
+            $total_nilai = $data['n_lapangan'] + $data['n_penulisan'];
+            $rata_rata = $total_nilai / 2;
 
+            // Inisiasi indeks
+            $indeks = $data['indeks'];
+
+            if ($indeks == '') {
+                // Mengidentifikasi indeks berdasarkan rata-rata
+                if ($rata_rata >= 86) {
+                    $indeks = 'A';
+                } elseif ($rata_rata >= 76) {
+                    $indeks = 'B';
+                } elseif ($rata_rata >= 66) {
+                    $indeks = 'C';
+                } elseif ($rata_rata >= 61) {
+                    $indeks = 'D';
+                } elseif ($rata_rata >= 51) {
+                    $indeks = 'E';
+                } else {
+                    $indeks = 'T';
+                }
+            }
+
+            $this->pdo->query("UPDATE nilai SET n_lapangan = :n_lapangan, n_penulisan = :n_penulisan, n_rata_rata = :n_rata_rata, indeks = :indeks WHERE id_nilai = :id_nilai");
+            $this->pdo->bind('id_nilai', $id);
+            $this->pdo->bind('n_lapangan', $data['n_lapangan']);
+            $this->pdo->bind('n_penulisan', $data['n_penulisan']);
+            $this->pdo->bind('n_rata_rata', $rata_rata);
+            $this->pdo->bind('indeks', $indeks);
+            $this->pdo->execute();
+            return $this->pdo->rowCount();
         } else if ($_SESSION['role'] == 'Penguji 1') {
 
         } else if ($_SESSION['role'] == 'Penguji 2') {

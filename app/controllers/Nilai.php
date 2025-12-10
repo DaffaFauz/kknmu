@@ -23,7 +23,14 @@ class Nilai extends Controller
 
         } else if ($_SESSION['role'] == 'Pembimbing') {
             // Get data
-            $mahasiswa = $this->model("NilaiModel")->detail();
+            $mahasiswa = $this->model("NilaiModel")->detail($_SESSION['id_kelompok']);
+
+            // Load view
+            $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
+            $this->view('layout/sidebar', ['page' => 'Nilai']);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('pembimbing/nilai', ['mahasiswa' => $mahasiswa]);
+            $this->view('layout/footer', ['page' => 'Nilai']);
 
         } else if ($_SESSION['role'] == 'Kaprodi') {
             // Get data mahasiswa 
@@ -50,7 +57,23 @@ class Nilai extends Controller
                 redirectWithMsg(BASE_URL . '/Nilai/show/' . $_POST['id_kelompok'], 'Gagal mengubah nilai', 'danger');
             }
         } else if ($_SESSION['role'] == 'Pembimbing') {
-
+            if ($this->model('NilaiModel')->update($id, $_POST) > 0) {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Berhasil memasukkan nilai', 'success');
+            } else {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai', 'danger');
+            }
+        } else if ($_SESSION['role'] == 'Penguji 1') {
+            if ($this->model('NilaiModel')->update($id, $_POST) > 0) {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Berhasil memasukkan nilai', 'success');
+            } else {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai', 'danger');
+            }
+        } else if ($_SESSION['role'] == 'Penguji 2') {
+            if ($this->model('NilaiModel')->update($id, $_POST) > 0) {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Berhasil memasukkan nilai', 'success');
+            } else {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai', 'danger');
+            }
         }
     }
 
