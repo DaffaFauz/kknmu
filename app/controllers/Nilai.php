@@ -21,15 +21,36 @@ class Nilai extends Controller
             // Load view
             $this->view('penguji/nilai', ['dosen' => $dosen, 'role' => $_SESSION['role']]);
 
+        } else if ($_SESSION['role'] == 'Pembimbing') {
+            // Get data
+            $mahasiswa = $this->model("NilaiModel")->detail();
+
+        } else if ($_SESSION['role'] == 'Kaprodi') {
+            // Get data mahasiswa 
+            $mahasiswa = $this->model("NilaiModel")->getNilaiMahasiswaForKaprodi($_SESSION['id_prodi']);
+
+            // Load view
+            $this->view('layout/head', ['title' => 'Nilai', 'page' => 'Nilai']);
+            $this->view('layout/sidebar', ['page' => 'Nilai']);
+            $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
+            $this->view('kaprodi/nilai', ['mahasiswa' => $mahasiswa]);
+            $this->view('layout/footer', ['page' => 'Nilai']);
+
+        } else if ($_SESSION['role'] == 'Mahasiswa') {
+
         }
     }
 
     public function update($id)
     {
-        if ($this->model('NilaiModel')->update($id, $_POST) > 0) {
-            redirectWithMsg(BASE_URL . '/Nilai/show/' . $_POST['id_kelompok'], 'Berhasil mengubah nilai', 'success');
-        } else {
-            redirectWithMsg(BASE_URL . '/Nilai/show/' . $_POST['id_kelompok'], 'Gagal mengubah nilai', 'danger');
+        if ($_SESSION['role'] == 'Admin') {
+            if ($this->model('NilaiModel')->update($id, $_POST) > 0) {
+                redirectWithMsg(BASE_URL . '/Nilai/show/' . $_POST['id_kelompok'], 'Berhasil mengubah nilai', 'success');
+            } else {
+                redirectWithMsg(BASE_URL . '/Nilai/show/' . $_POST['id_kelompok'], 'Gagal mengubah nilai', 'danger');
+            }
+        } else if ($_SESSION['role'] == 'Pembimbing') {
+
         }
     }
 

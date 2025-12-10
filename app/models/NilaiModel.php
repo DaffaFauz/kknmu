@@ -24,6 +24,13 @@ class NilaiModel
         return $this->pdo->resultSet();
     }
 
+    public function getNilaiMahasiswaForKaprodi($id)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN detail_kelompok ON mahasiswa.id_kelompok = detail_kelompok.id INNER JOIN tahun_akademik ON detail_kelompok.id_tahun = tahun_akademik.id_tahun WHERE tahun_akademik.status = 'Aktif' AND mahasiswa.id_prodi = :id");
+        $this->pdo->bind(":id", $id);
+        return $this->pdo->resultSet();
+    }
+
     public function filter($kelompok, $kecamatan, $desa)
     {
         $query = "SELECT * FROM detail_kelompok INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok INNER JOIN mahasiswa ON detail_kelompok.id = mahasiswa.id_kelompok INNER JOIN tahun_akademik ON detail_kelompok.id_tahun = tahun_akademik.id_tahun INNER JOIN lokasi ON detail_kelompok.id_lokasi = lokasi.id_lokasi WHERE tahun_akademik.status = 'Aktif'";
@@ -62,42 +69,50 @@ class NilaiModel
 
     public function update($id, $data)
     {
-        // Mendapatkan nilai rata-rata dari semua input
-        $total_nilai = $data['n_lapangan'] + $data['n_penulisan'] + $data['n_penguasaan_materi'] + $data['n_wawasan_umum'] + $data['n_teknik_presentasi'] + $data['n_penguasaan_jurnal'] + $data['n_produk_unggulan'];
-        $rata_rata = $total_nilai / 7;
+        if ($_SESSION['role'] == 'Admin') {
+            // Mendapatkan nilai rata-rata dari semua input
+            $total_nilai = $data['n_lapangan'] + $data['n_penulisan'] + $data['n_penguasaan_materi'] + $data['n_wawasan_umum'] + $data['n_teknik_presentasi'] + $data['n_penguasaan_jurnal'] + $data['n_produk_unggulan'];
+            $rata_rata = $total_nilai / 7;
 
-        // Inisiasi indeks
-        $indeks = $data['indeks'];
+            // Inisiasi indeks
+            $indeks = $data['indeks'];
 
-        if ($indeks == '') {
-            // Mengidentifikasi indeks berdasarkan rata-rata
-            if ($rata_rata >= 86) {
-                $indeks = 'A';
-            } elseif ($rata_rata >= 76) {
-                $indeks = 'B';
-            } elseif ($rata_rata >= 66) {
-                $indeks = 'C';
-            } elseif ($rata_rata >= 61) {
-                $indeks = 'D';
-            } elseif ($rata_rata >= 51) {
-                $indeks = 'E';
-            } else {
-                $indeks = 'T';
+            if ($indeks == '') {
+                // Mengidentifikasi indeks berdasarkan rata-rata
+                if ($rata_rata >= 86) {
+                    $indeks = 'A';
+                } elseif ($rata_rata >= 76) {
+                    $indeks = 'B';
+                } elseif ($rata_rata >= 66) {
+                    $indeks = 'C';
+                } elseif ($rata_rata >= 61) {
+                    $indeks = 'D';
+                } elseif ($rata_rata >= 51) {
+                    $indeks = 'E';
+                } else {
+                    $indeks = 'T';
+                }
             }
-        }
 
-        $this->pdo->query("UPDATE nilai SET n_lapangan = :n_lapangan, n_penulisan = :n_penulisan, n_sistematika_penulisan = :n_sistematika_penulisan, n_penguasaan_materi = :n_penguasaan_materi, n_wawasan_umum = :n_wawasan_umum, n_teknik_presentasi = :n_teknik_presentasi, n_penguasaan_jurnal = :n_penguasaan_jurnal, n_produk_unggulan = :n_produk_unggulan, n_rata_rata = :n_rata_rata, indeks = :indeks WHERE id_nilai = :id_nilai");
-        $this->pdo->bind('id_nilai', $id);
-        $this->pdo->bind('n_lapangan', $data['n_lapangan']);
-        $this->pdo->bind('n_penulisan', $data['n_penulisan']);
-        $this->pdo->bind('n_sistematika_penulisan', $data['n_sistematika_penulisan']);
-        $this->pdo->bind('n_penguasaan_materi', $data['n_penguasaan_materi']);
-        $this->pdo->bind('n_wawasan_umum', $data['n_wawasan_umum']);
-        $this->pdo->bind('n_teknik_presentasi', $data['n_teknik_presentasi']);
-        $this->pdo->bind('n_penguasaan_jurnal', $data['n_penguasaan_jurnal']);
-        $this->pdo->bind('n_produk_unggulan', $data['n_produk_unggulan']);
-        $this->pdo->bind('n_rata_rata', $rata_rata);
-        $this->pdo->bind('indeks', $indeks);
-        return $this->pdo->execute();
+            $this->pdo->query("UPDATE nilai SET n_lapangan = :n_lapangan, n_penulisan = :n_penulisan, n_sistematika_penulisan = :n_sistematika_penulisan, n_penguasaan_materi = :n_penguasaan_materi, n_wawasan_umum = :n_wawasan_umum, n_teknik_presentasi = :n_teknik_presentasi, n_penguasaan_jurnal = :n_penguasaan_jurnal, n_produk_unggulan = :n_produk_unggulan, n_rata_rata = :n_rata_rata, indeks = :indeks WHERE id_nilai = :id_nilai");
+            $this->pdo->bind('id_nilai', $id);
+            $this->pdo->bind('n_lapangan', $data['n_lapangan']);
+            $this->pdo->bind('n_penulisan', $data['n_penulisan']);
+            $this->pdo->bind('n_sistematika_penulisan', $data['n_sistematika_penulisan']);
+            $this->pdo->bind('n_penguasaan_materi', $data['n_penguasaan_materi']);
+            $this->pdo->bind('n_wawasan_umum', $data['n_wawasan_umum']);
+            $this->pdo->bind('n_teknik_presentasi', $data['n_teknik_presentasi']);
+            $this->pdo->bind('n_penguasaan_jurnal', $data['n_penguasaan_jurnal']);
+            $this->pdo->bind('n_produk_unggulan', $data['n_produk_unggulan']);
+            $this->pdo->bind('n_rata_rata', $rata_rata);
+            $this->pdo->bind('indeks', $indeks);
+            return $this->pdo->execute();
+        } else if ($_SESSION['role'] == 'Pembimbing') {
+
+        } else if ($_SESSION['role'] == 'Penguji 1') {
+
+        } else if ($_SESSION['role'] == 'Penguji 2') {
+
+        }
     }
 }
