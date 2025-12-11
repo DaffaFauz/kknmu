@@ -107,8 +107,9 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <h4 class="mb-1">Masukkan Nilai Kelompok</h4>
-                                <p class="mb-6">Masukkan nilai mahasiswa</p>
+                                <h4 class="mb-1">Masukkan Nilai untuk Kelompok
+                                    <?= $data['nama_kelompok']['nama_kelompok'] ?>
+                                </h4>
 
                                 <div class="mb-6 form-control-validation">
                                     <label for="n_sistematika_penulisan" class="form-label">Sistematika
@@ -144,8 +145,9 @@
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <h4 class="mb-1">Masukkan Nilai Kelompok</h4>
-                                <p class="mb-6">Masukkan nilai mahasiswa</p>
+                                <h4 class="mb-1">Masukkan Nilai untuk Kelompok
+                                    <?= $data['nama_kelompok']['nama_kelompok'] ?>
+                                </h4>
 
                                 <div class="mb-6 form-control-validation">
                                     <label for="n_teknik_presentasi" class="form-label">Teknik

@@ -17,9 +17,10 @@ class Nilai extends Controller
         } else if ($_SESSION['role'] == 'Penguji 1' || $_SESSION['role'] == 'Penguji 2') {
             // Get data Dosen untuk input nama penguji berdasarkan id
             $dosen = $this->model('DosenModel')->getAll();
+            $nama_kelompok = $this->model("TokenModel")->getToken($_SESSION['id']);
 
             // Load view
-            $this->view('penguji/nilai', ['dosen' => $dosen, 'role' => $_SESSION['role']]);
+            $this->view('penguji/nilai', ['dosen' => $dosen, 'role' => $_SESSION['role'], 'nama_kelompok' => $nama_kelompok]);
 
         } else if ($_SESSION['role'] == 'Pembimbing') {
             // Get data
