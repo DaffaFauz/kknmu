@@ -17,7 +17,7 @@ class Nilai extends Controller
         } else if ($_SESSION['role'] == 'Penguji 1' || $_SESSION['role'] == 'Penguji 2') {
             // Get data Dosen untuk input nama penguji berdasarkan id
             $dosen = $this->model('DosenModel')->getAll();
-            $nama_kelompok = $this->model("TokenModel")->getToken($_SESSION['id']);
+            $nama_kelompok = $this->model("TokenModel")->getTokenForPenguji($_SESSION['id']);
 
             // Load view
             $this->view('penguji/nilai', ['dosen' => $dosen, 'role' => $_SESSION['role'], 'nama_kelompok' => $nama_kelompok]);
@@ -73,13 +73,31 @@ class Nilai extends Controller
                 redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai', 'danger');
             }
         } else if ($_SESSION['role'] == 'Penguji 1') {
-            if ($this->model('NilaiModel')->update($id, $_POST) > 0) {
+            // Validasi id_dosen
+            if (empty($_POST['nama_penguji'])) {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Masukkan nama anda terlebih dahulu!', 'danger');
+                exit;
+            }
+            if (empty($_POST['n_sistematika_penulisan']) || empty($_POST['n_penguasaan_materi']) || empty($_POST['n_wawasan_umum'])) {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai! Masukkan semua nilai terlebih dahulu!', 'danger');
+                exit;
+            }
+            if ($this->model('NilaiModel')->updateFromPenguji($id, $_POST) > 0) {
                 redirectWithMsg(BASE_URL . '/Nilai', 'Berhasil memasukkan nilai', 'success');
             } else {
                 redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai', 'danger');
             }
         } else if ($_SESSION['role'] == 'Penguji 2') {
-            if ($this->model('NilaiModel')->update($id, $_POST) > 0) {
+
+            if (empty($_POST['nama_penguji'])) {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Masukkan nama anda terlebih dahulu!', 'danger');
+                exit;
+            }
+            if (empty($_POST['n_teknik_presentasi']) || empty($_POST['n_penguasaan_jurnal']) || empty($_POST['n_produk_unggulan'])) {
+                redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai! Masukkan semua nilai terlebih dahulu!', 'danger');
+                exit;
+            }
+            if ($this->model('NilaiModel')->updateFromPenguji($id, $_POST) > 0) {
                 redirectWithMsg(BASE_URL . '/Nilai', 'Berhasil memasukkan nilai', 'success');
             } else {
                 redirectWithMsg(BASE_URL . '/Nilai', 'Gagal memasukkan nilai', 'danger');

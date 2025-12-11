@@ -100,7 +100,7 @@
 
                                 <div class="mb-6 form-control-validation">
                                     <label for="nama" class="form-label">Nama</label>
-                                    <select class="form-select select2" id="nama" name="nama">
+                                    <select class="form-select select2" id="nama" name="nama_penguji">
                                         <option selected disabled value="">Masukkan / Cari nama anda</option>
                                         <?php foreach ($data['dosen'] as $row): ?>
                                             <option value="<?= $row['id_dosen'] ?>"><?= $row['nama_dosen'] ?></option>
@@ -110,6 +110,7 @@
                                 <h4 class="mb-1">Masukkan Nilai untuk Kelompok
                                     <?= $data['nama_kelompok']['nama_kelompok'] ?>
                                 </h4>
+                                <p class="mb-6"><?= $_SESSION['role'] ?></p>
 
                                 <div class="mb-6 form-control-validation">
                                     <label for="n_sistematika_penulisan" class="form-label">Sistematika
@@ -138,7 +139,7 @@
 
                                 <div class="mb-6 form-control-validation">
                                     <label for="nama" class="form-label">Nama</label>
-                                    <select class="form-select select2" id="nama" name="nama">
+                                    <select class="form-select select2" id="nama" name="nama_penguji">
                                         <option selected disabled value="">Masukkan / Cari nama anda</option>
                                         <?php foreach ($data['dosen'] as $row): ?>
                                             <option value="<?= $row['id_dosen'] ?>"><?= $row['nama_dosen'] ?></option>
@@ -148,6 +149,7 @@
                                 <h4 class="mb-1">Masukkan Nilai untuk Kelompok
                                     <?= $data['nama_kelompok']['nama_kelompok'] ?>
                                 </h4>
+                                <p class="mb-6"><?= $_SESSION['role'] ?></p>
 
                                 <div class="mb-6 form-control-validation">
                                     <label for="n_teknik_presentasi" class="form-label">Teknik
@@ -162,10 +164,10 @@
                                         name="n_penguasaan_jurnal" placeholder="Masukkan Penguasaan Jurnal" />
                                 </div>
                                 <div class="mb-6 form-control-validation">
-                                    <label class="form-label" for="n_produksi_unggulan">Produk Unggulan</label>
+                                    <label class="form-label" for="n_produk_unggulan">Produk Unggulan</label>
                                     <div class="input-group input-group-merge">
-                                        <input type="number" id="n_produksi_unggulan" class="form-control"
-                                            name="n_produksi_unggulan" placeholder="Masukkan Produk Unggulan" />
+                                        <input type="number" id="n_produk_unggulan" class="form-control"
+                                            name="n_produk_unggulan" placeholder="Masukkan Produk Unggulan" />
                                     </div>
                                 </div>
                                 <button class="btn btn-primary d-grid w-100">Kirim</button>

@@ -15,11 +15,7 @@ class TokenModel
         $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok = :id");
         $this->pdo->bind(':id', $id);
         $data = $this->pdo->single();
-        if ($data) {
-            $this->pdo->query("SELECT * FROM detail_kelompok INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok WHERE detail_kelompok.id = :id");
-            $this->pdo->bind(':id', $data['id_kelompok']);
-            $data = $this->pdo->single();
-        }
+
 
         return $data;
     }
@@ -56,5 +52,19 @@ class TokenModel
         $this->pdo->bind(':token2', $token2);
         $this->pdo->execute();
         return $this->pdo->rowCount();
+    }
+
+    public function getTokenForPenguji($id)
+    {
+        // Ambil data berdasarkan token
+        $this->pdo->query("SELECT * FROM {$this->table} WHERE id_kelompok = :id");
+        $this->pdo->bind(':id', $id);
+        $data = $this->pdo->single();
+        if ($data) {
+            $this->pdo->query("SELECT * FROM detail_kelompok INNER JOIN kelompok ON detail_kelompok.id_kelompok = kelompok.id_kelompok WHERE detail_kelompok.id = :id");
+            $this->pdo->bind(':id', $data['id_kelompok']);
+            $data = $this->pdo->single();
+        }
+        return $data;
     }
 }

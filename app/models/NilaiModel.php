@@ -72,7 +72,7 @@ class NilaiModel
         if ($_SESSION['role'] == 'Admin') {
             // Mendapatkan nilai rata-rata dari semua input
             $total_nilai = $data['n_lapangan'] + $data['n_penulisan'] + $data['n_penguasaan_materi'] + $data['n_wawasan_umum'] + $data['n_teknik_presentasi'] + $data['n_penguasaan_jurnal'] + $data['n_produk_unggulan'];
-            $rata_rata = $total_nilai / 7;
+            $rata_rata = round($total_nilai / 7, 2);
 
             // Inisiasi indeks
             $indeks = $data['indeks'];
@@ -110,7 +110,7 @@ class NilaiModel
         } else if ($_SESSION['role'] == 'Pembimbing') {
             // Mendapatkan nilai rata-rata dari semua input
             $total_nilai = $data['n_lapangan'] + $data['n_penulisan'];
-            $rata_rata = $total_nilai / 2;
+            $rata_rata = round($total_nilai / 2, 2);
 
             // Inisiasi indeks
             $indeks = $data['indeks'];
@@ -140,10 +140,82 @@ class NilaiModel
             $this->pdo->bind('indeks', $indeks);
             $this->pdo->execute();
             return $this->pdo->rowCount();
-        } else if ($_SESSION['role'] == 'Penguji 1') {
+        }
+    }
 
+    public function updateFromPenguji($id, $data)
+    {
+        // Get data mahasiswa from id
+        $this->pdo->query("SELECT * FROM mahasiswa INNER JOIN nilai ON mahasiswa.id_mahasiswa = nilai.id_mahasiswa WHERE id_kelompok = :id_kelompok");
+        $this->pdo->bind(':id_kelompok', $id);
+        $mahasiswa = $this->pdo->resultSet();
+
+        if ($_SESSION['role'] == 'Penguji 1') {
+            // Foreach for input data
+            foreach ($mahasiswa as $mhs) {
+                // Calculate average using existing values + new values
+                $nilai_lapangan = $mhs['n_lapangan'] ?? 0;
+                $nilai_penulisan = $mhs['n_penulisan'] ?? 0;
+                // Penguji 1 inputs
+                $nilai_sistematika_penulisan = $data['n_sistematika_penulisan'];
+                $nilai_penguasaan_materi = $data['n_penguasaan_materi'];
+                $nilai_wawasan_umum = $data['n_wawasan_umum'];
+                // Penguji 2 inputs (existing)
+                $nilai_teknik_presentasi = $mhs['n_teknik_presentasi'] ?? 0;
+                $nilai_penguasaan_jurnal = $mhs['n_penguasaan_jurnal'] ?? 0;
+                $nilai_produk_unggulan = $mhs['n_produk_unggulan'] ?? 0;
+
+                $total = $nilai_lapangan + $nilai_penulisan + $nilai_sistematika_penulisan + $nilai_penguasaan_materi + $nilai_wawasan_umum + $nilai_teknik_presentasi + $nilai_penguasaan_jurnal + $nilai_produk_unggulan;
+                $rata_rata = round($total / 8, 2);
+
+                $this->pdo->query("UPDATE nilai SET n_sistematika_penulisan = :n_sistematika_penulisan, n_penguasaan_materi = :n_penguasaan_materi, n_wawasan_umum = :n_wawasan_umum, n_rata_rata = :n_rata_rata WHERE nilai.id_nilai = :id_nilai");
+                $this->pdo->bind('id_nilai', $mhs['id_nilai']);
+                $this->pdo->bind('n_sistematika_penulisan', $nilai_sistematika_penulisan);
+                $this->pdo->bind('n_penguasaan_materi', $nilai_penguasaan_materi);
+                $this->pdo->bind('n_wawasan_umum', $nilai_wawasan_umum);
+                $this->pdo->bind('n_rata_rata', $rata_rata);
+                $this->pdo->execute();
+
+                // Input data nilai_dosen
+                $this->pdo->query("INSERT INTO dosen_nilai (id_dosen, id_nilai) VALUES(:id_dosen, :id_nilai)");
+                $this->pdo->bind('id_dosen', $data['nama_penguji']);
+                $this->pdo->bind('id_nilai', $mhs['id_nilai']);
+                $this->pdo->execute();
+            }
+            return $this->pdo->rowCount();
         } else if ($_SESSION['role'] == 'Penguji 2') {
+            // Foreach for input data
+            foreach ($mahasiswa as $mhs) {
+                // Calculate average using existing values + new values
+                $nilai_lapangan = $mhs['n_lapangan'] ?? 0;
+                $nilai_penulisan = $mhs['n_penulisan'] ?? 0;
+                // Penguji 1 inputs (existing)
+                $nilai_sistematika_penulisan = $mhs['n_sistematika_penulisan'] ?? 0;
+                $nilai_penguasaan_materi = $mhs['n_penguasaan_materi'] ?? 0;
+                $nilai_wawasan_umum = $mhs['n_wawasan_umum'] ?? 0;
+                // Penguji 2 inputs
+                $nilai_teknik_presentasi = $data['n_teknik_presentasi'];
+                $nilai_penguasaan_jurnal = $data['n_penguasaan_jurnal'];
+                $nilai_produk_unggulan = $data['n_produk_unggulan'];
 
+                $total = $nilai_lapangan + $nilai_penulisan + $nilai_sistematika_penulisan + $nilai_penguasaan_materi + $nilai_wawasan_umum + $nilai_teknik_presentasi + $nilai_penguasaan_jurnal + $nilai_produk_unggulan;
+                $rata_rata = round($total / 8, 2);
+
+                $this->pdo->query("UPDATE nilai SET n_teknik_presentasi = :n_teknik_presentasi, n_penguasaan_jurnal = :n_penguasaan_jurnal, n_produk_unggulan = :n_produk_unggulan, n_rata_rata = :n_rata_rata WHERE nilai.id_nilai = :id_nilai");
+                $this->pdo->bind('id_nilai', $mhs['id_nilai']);
+                $this->pdo->bind('n_teknik_presentasi', $nilai_teknik_presentasi);
+                $this->pdo->bind('n_penguasaan_jurnal', $nilai_penguasaan_jurnal);
+                $this->pdo->bind('n_produk_unggulan', $nilai_produk_unggulan);
+                $this->pdo->bind('n_rata_rata', $rata_rata);
+                $this->pdo->execute();
+
+                // Input data nilai_dosen
+                $this->pdo->query("INSERT INTO dosen_nilai (id_dosen, id_nilai) VALUES(:id_dosen, :id_nilai)");
+                $this->pdo->bind('id_dosen', $data['nama_penguji']);
+                $this->pdo->bind('id_nilai', $mhs['id_nilai']);
+                $this->pdo->execute();
+            }
+            return $this->pdo->rowCount();
         }
     }
 
