@@ -52,6 +52,15 @@ class Laporan extends Controller
             exit;
         }
 
+        // Validasi deskripsi minimal 700 kata
+        $clean_deskripsi = strip_tags($deskripsi);
+        $word_count = str_word_count($clean_deskripsi);
+        if ($word_count < 700) {
+            redirectWithMsg(BASE_URL . '/Laporan/harian', 'Deskripsi harus berisi minimal 700 kata! Saat ini: ' . $word_count . ' kata.', 'danger');
+            exit;
+        }
+
+
         // Validasi file
         $file = $_FILES['file'];
         $file_name = $file['name'];
