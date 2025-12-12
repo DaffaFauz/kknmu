@@ -66,7 +66,7 @@
             <div class="card-header d-flex align-items-center justify-content-between">
                 <div class="card-title mb-0">
                     <h5 class="m-0 me-2">Anggota Kelompok
-                        <?= $data['detail_kelompok']['nama_kelompok'] ? htmlspecialchars($data['detail_kelompok']['nama_kelompok']) : '-' ?>
+                        <?= $data['detail_kelompok'] ? htmlspecialchars($data['detail_kelompok']['nama_kelompok']) : '-' ?>
                     </h5>
                 </div>
             </div>
@@ -82,15 +82,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($data['detail_kelompok']['mahasiswa'] as $key => $value): ?>
-                            <tr>
-                                <td><?= $key + 1 ?></td>
-                                <td><?= $value['nim'] ?></td>
-                                <td><?= $value['nama_mahasiswa'] ?></td>
-                                <td><?= $value['jenis_kelamin'] ?></td>
-                                <td><?= $value['nama_prodi'] ?></td>
-                            </tr>
-                        <?php endforeach; ?>
+                        <?php if (!empty($data['detail_kelompok']['mahasiswa'])):
+                            foreach ($data['detail_kelompok']['mahasiswa'] as $key => $value): ?>
+                                <tr>
+                                    <td><?= $key + 1 ?></td>
+                                    <td><?= $value['nim'] ?></td>
+                                    <td><?= $value['nama_mahasiswa'] ?></td>
+                                    <td><?= $value['jenis_kelamin'] ?></td>
+                                    <td><?= $value['nama_prodi'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

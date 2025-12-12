@@ -115,18 +115,34 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2025-12-05</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>
-                                    <button class="btn btn-sm text-white btn-icon btn-primary">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <?php $no = 1;
+                            foreach ($data['laporan'] as $row):
+                                ?>
+                                <tr>
+                                    <td><?= $no++; ?></td>
+                                    <td><?= htmlspecialchars(date('d F Y', strtotime($row['tanggal']))); ?></td>
+                                    <td><?= htmlspecialchars($row['judul']); ?></td>
+                                    <td>
+                                        <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                            data-bs-target="#detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
+                                                class="ti tabler-eye me-1"></i> Detail</button>
+                                        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'Mahasiswa'): ?>
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                                data-bs-target="#ubahLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
+                                                    class="ti tabler-pencil me-1"></i> Edit</button>
+                                            <form class="d-inline"
+                                                action="<?= BASE_URL ?>/Laporan/deleteHarian/<?= htmlspecialchars($row['id_laporan']) ?>"
+                                                method="post">
+                                                <button type="submit" class="btn btn-danger"
+                                                    onClick="return confirm('Yakin ingin menghapus Laporan ini?')"><i
+                                                        class="ti tabler-trash me-1"></i>
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
