@@ -93,6 +93,8 @@
             <!-- /Logo -->
             <h4 class="mb-1">DAFTAR</h4>
             <p class="mb-6">Buat akun SIM KKN</p>
+            <small class="text-danger">*Pastikan data yang diisi sudah benar dan sesuai dengan data diri anda sebelum
+              submit</small>
 
             <form id="formAuthentication" action="<?= BASE_URL ?>/Auth/register" method="POST">
               <div class="row">
