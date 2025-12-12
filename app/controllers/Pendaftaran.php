@@ -12,4 +12,15 @@ class Pendaftaran extends Controller
             exit;
         }
     }
+
+    public function daftar($id)
+    {
+        if ($this->model("PendaftaranModel")->daftar($id) > 0) {
+            redirectWithMsg(BASE_URL . '/Dashboard', 'Pengajuan untuk ikut serta KKN berhasil', 'success');
+            exit;
+        } else {
+            redirectWithMsg(BASE_URL . '/Dashboard', 'Pengajuan untuk ikut serta KKN gagal, coba lagi.', 'danger');
+            exit;
+        }
+    }
 }

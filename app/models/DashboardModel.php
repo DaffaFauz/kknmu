@@ -10,7 +10,7 @@ class DashboardModel
 
     public function getPendaftaranMahasiswa($id_mahasiswa)
     {
-        $this->pdo->query("SELECT * FROM pendaftaran JOIN tahun_akademik ON pendaftaran.id_tahun = tahun_akademik.id_tahun WHERE id_mahasiswa = :id_mahasiswa AND status_pendaftaran = 'Diverifikasi'");
+        $this->pdo->query("SELECT * FROM pendaftaran JOIN tahun_akademik ON pendaftaran.id_tahun = tahun_akademik.id_tahun WHERE id_mahasiswa = :id_mahasiswa AND tahun_akademik.status = 'Aktif'");
         $this->pdo->bind(':id_mahasiswa', $id_mahasiswa);
         return $this->pdo->single();
     }

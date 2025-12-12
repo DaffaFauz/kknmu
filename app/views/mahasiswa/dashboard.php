@@ -2,6 +2,14 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row mb-3">
         <div class="col d-flex justify-content-end">
+            <?php if (empty($data['pendaftaran'])): ?>
+                <form action="<?= BASE_URL . '/Pendaftaran/daftar/' . $_SESSION['id_mahasiswa'] ?>" method="post"
+                    class="me-2">
+                    <button class="btn btn-primary"><i class="icon-base ti tabler-cloud-upload icon-20px me-2"></i> Ajukan
+                        ijin ikut serta
+                        KKN</button>
+                </form>
+            <?php endif; ?>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAjukanPendaftaran"
                 <?= (isset($data['pendaftaran']['status_pendaftaran']) && ($data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi')) ? '' : 'disabled' ?>><i
                     class="icon-base ti tabler-cloud-upload icon-20px me-2"></i> Ajukan
@@ -20,16 +28,18 @@
         <!-- Card Border Shadow -->
         <div class="col-lg-6 col-sm-6">
             <div
-                class="card card-border-shadow-<?= $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'danger' : ($data['pendaftaran']['status_pendaftaran'] == 'Pending' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' ? 'warning' : 'success') ?> h-100">
+                class="card card-border-shadow-<?= !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'danger' : (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Pending' || !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || empty($data['pendaftaran']) ? 'warning' : 'success') ?> h-100">
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2">
                         <div class="avatar me-4">
                             <span
-                                class="avatar-initial rounded bg-label-<?= $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'danger' : ($data['pendaftaran']['status_pendaftaran'] == 'Pending' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' ? 'warning' : 'success') ?>"><i
-                                    class="icon-base ti tabler-<?= ($data['pendaftaran']['status_pendaftaran'] == 'Pending' ? 'progress-help' : ($data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'progress-alert' : 'progress-check')) ?> icon-28px"></i></span>
+                                class="avatar-initial rounded bg-label-<?= !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' ? 'danger' : (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Pending' || !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || empty($data['pendaftaran']) ? 'warning' : 'success') ?>"><i
+                                    class="icon-base ti tabler-<?= (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Pending' ? 'progress-help' : (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi' || !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Revisi' || !empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Ditolak' || empty($data['pendaftaran']) ? 'progress-alert' : 'progress-check')) ?> icon-28px"></i></span>
                         </div>
-                        <h4 class="mb-0"><?= htmlspecialchars($data['pendaftaran']['status_pendaftaran']) ?></h4>
-                        <?php if (htmlspecialchars($data['pendaftaran']['status_pendaftaran']) == 'Ditolak'): ?>
+                        <h4 class="mb-0">
+                            <?= !empty($data['pendaftaran']) ? htmlspecialchars($data['pendaftaran']['status_pendaftaran']) : 'Belum ada pendaftaran' ?>
+                        </h4>
+                        <?php if (!empty($data['pendaftaran']) && htmlspecialchars($data['pendaftaran']['status_pendaftaran']) == 'Ditolak'): ?>
                             <button type="button" class="btn btn-sm btn-outline-danger d-flex ms-auto"
                                 data-bs-toggle="modal" data-bs-target="#modalcatatanTolak"><i
                                     class="icon-base ti tabler-eye me-2"></i>Lihat Detail
@@ -38,20 +48,22 @@
                     </div>
                     <p class="mb-1">Status Pendaftaran:
                         <?php
-                        if ($data['pendaftaran']['status_pendaftaran'] == 'Pending') {
+                        if (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Pending') {
                             echo 'Menunggu verifikasi dari Kaprodi';
-                        } elseif ($data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi') {
+                        } elseif (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi Kaprodi') {
                             if ($data['pendaftaran']['bukti_pembayaran'] != null) {
                                 echo 'Tunggu verifikasi dari Admin';
                             } else {
                                 echo 'Diverifikasi oleh Kaprodi, Silahkan untuk melakukan pengajuan pendaftaran KKN.';
                             }
-                        } elseif ($data['pendaftaran']['status_pendaftaran'] == 'Ditolak') {
+                        } elseif (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Ditolak') {
                             echo 'Pengajuan ditolak, Anda dapat mengajukan lagi tahun depan';
-                        } elseif ($data['pendaftaran']['status_pendaftaran'] == 'Revisi') {
+                        } elseif (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Revisi') {
                             echo 'Bukti pembayaran tidak valid, Silahkan untuk melakukan pengajuan ulang.';
-                        } else {
+                        } elseif (!empty($data['pendaftaran']) && $data['pendaftaran']['status_pendaftaran'] == 'Diverifikasi') {
                             echo 'Diterima';
+                        } else {
+                            echo 'Anda belum daftar';
                         }
                         ?>
                     </p>

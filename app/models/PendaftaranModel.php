@@ -84,4 +84,16 @@ class PendaftaranModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function daftar($id)
+    {
+        $tahun = $this->pdo->query("SELECT * FROM tahun_akademik WHERE status = 'Aktif'")->single();
+
+        $this->pdo->query("INSERT INTO {$this->table} (id_mahasiswa, status_pendaftaran, id_tahun) VALUES (:id_mahasiswa, :status_pendaftaran, :id_tahun)");
+        $this->pdo->bind(':id_mahasiswa', $id);
+        $this->pdo->bind(':status_pendaftaran', 'Pending');
+        $this->pdo->bind(':id_tahun', $tahun['id_tahun']);
+        $this->pdo->execute();
+        return $this->pdo->rowCount();
+    }
 }
