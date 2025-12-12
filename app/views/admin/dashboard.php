@@ -10,7 +10,7 @@
                             <span class="avatar-initial rounded bg-label-primary"><i
                                     class="fas fa-user-graduate"></i></span>
                         </div>
-                        <h4 class="mb-0">42</h4>
+                        <h4 class="mb-0"><?= htmlspecialchars($data['mahasiswa']) ?></h4>
                     </div>
                     <p class="mb-1">Jumlah Mahasiswa</p>
                 </div>
@@ -24,7 +24,7 @@
                             <span class="avatar-initial rounded bg-label-warning"><i
                                     class="icon-base ti tabler-user icon-28px"></i></span>
                         </div>
-                        <h4 class="mb-0">8</h4>
+                        <h4 class="mb-0"><?= htmlspecialchars($data['pembimbing']) ?></h4>
                     </div>
                     <p class="mb-1">Jumlah Dosen Pembimbing</p>
                 </div>
@@ -38,7 +38,7 @@
                             <span class="avatar-initial rounded bg-label-success"><i
                                     class="icon-base ti tabler-users-group icon-28px"></i></span>
                         </div>
-                        <h4 class="mb-0">27</h4>
+                        <h4 class="mb-0"><?= htmlspecialchars($data['kelompok']) ?></h4>
                     </div>
                     <p class="mb-1">Jumlah Kelompok</p>
                 </div>
@@ -52,7 +52,7 @@
                             <span class="avatar-initial rounded bg-label-info"><i
                                     class="icon-base ti tabler-map icon-28px"></i></span>
                         </div>
-                        <h4 class="mb-0">13</h4>
+                        <h4 class="mb-0"><?= htmlspecialchars($data['lokasi']) ?></h4>
                     </div>
                     <p class="mb-1">Jumlah Lokasi</p>
                 </div>

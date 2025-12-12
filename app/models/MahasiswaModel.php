@@ -11,7 +11,7 @@ class mahasiswaModel
 
     public function getAll()
     {
-        $this->pdo->query("SELECT * FROM {$this->table}");
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN pendaftaran ON {$this->table}.id_mahasiswa = pendaftaran.id_mahasiswa INNER JOIN tahun_akademik ON pendaftaran.id_tahun = tahun_akademik.id_tahun WHERE tahun_akademik.status = 'Aktif'");
         return $this->pdo->resultSet();
     }
 
