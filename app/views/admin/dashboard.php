@@ -69,38 +69,41 @@
                     </div>
                 </div>
                 <div class="card-datatable border-top">
-                    <table class="dt-route-vehicles table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Kelompok</th>
-                                <th>Kegiatan</th>
-                                <th>Lokasi</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if ($data['laporan']):
-                                $no = 1;
-                                foreach ($data['laporan'] as $laporan): ?>
-                                    <tr>
-                                        <td><?= $no++ ?></td>
-                                        <td><?= htmlspecialchars(date('d-F-Y', strtotime($laporan['tanggal']))) ?></td>
-                                        <td><?= htmlspecialchars($laporan['nama_kelompok']) ?></td>
-                                        <td><?= htmlspecialchars($laporan['judul']) ?></td>
-                                        <td><?= htmlspecialchars($laporan['nama_desa']) . ', ' . htmlspecialchars($laporan['nama_kecamatan'] . ', ' . htmlspecialchars($laporan['nama_kabupaten'])) ?>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-sm text-white btn-icon btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#detailLaporan<?= htmlspecialchars($laporan['id_laporan']) ?>">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; endif; ?>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="dt-route-vehicles table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Kelompok</th>
+                                    <th>Kegiatan</th>
+                                    <th>Lokasi</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if ($data['laporan']):
+                                    $no = 1;
+                                    foreach ($data['laporan'] as $laporan): ?>
+                                        <tr>
+                                            <td><?= $no++ ?></td>
+                                            <td><?= htmlspecialchars(date('d-F-Y', strtotime($laporan['tanggal']))) ?></td>
+                                            <td><?= htmlspecialchars($laporan['nama_kelompok']) ?></td>
+                                            <td><?= htmlspecialchars($laporan['judul']) ?></td>
+                                            <td><?= htmlspecialchars($laporan['nama_desa']) . ', ' . htmlspecialchars($laporan['nama_kecamatan'] . ', ' . htmlspecialchars($laporan['nama_kabupaten'])) ?>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm text-white btn-icon btn-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#detailLaporan<?= htmlspecialchars($laporan['id_laporan']) ?>">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
