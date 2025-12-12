@@ -47,36 +47,38 @@
             <?php endif; ?>
         </div>
         <div class="card-datatable text-nowrap">
-            <table class="dt-complex-header table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Nama Kelompok</th>
-                        <th>Desa</th>
-                        <th>Judul</th>
-                        <th class="w-25">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $no = 1;
-                    foreach ($data['laporan'] as $row):
-                        ?>
+            <div class="table-responsive">
+                <table class="dt-complex-header table table-bordered">
+                    <thead>
                         <tr>
-                            <td><?= $no++; ?></td>
-                            <td><?= htmlspecialchars(date('d F Y', strtotime($row['tanggal']))); ?></td>
-                            <td><?= htmlspecialchars($row['nama_kelompok']); ?></td>
-                            <td><?= htmlspecialchars($row['nama_desa']); ?></td>
-                            <td><?= htmlspecialchars($row['judul']); ?></td>
-                            <td>
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                                    data-bs-target="#detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
-                                        class="ti tabler-eye me-1"></i> Detail</button>
-                            </td>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Nama Kelompok</th>
+                            <th>Desa</th>
+                            <th>Judul</th>
+                            <th class="w-25">Aksi</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php $no = 1;
+                        foreach ($data['laporan'] as $row):
+                            ?>
+                            <tr>
+                                <td><?= $no++; ?></td>
+                                <td><?= htmlspecialchars(date('d F Y', strtotime($row['tanggal']))); ?></td>
+                                <td><?= htmlspecialchars($row['nama_kelompok']); ?></td>
+                                <td><?= htmlspecialchars($row['nama_desa']); ?></td>
+                                <td><?= htmlspecialchars($row['judul']); ?></td>
+                                <td>
+                                    <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
+                                            class="ti tabler-eye me-1"></i> Detail</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <!--/ Complex Headers -->

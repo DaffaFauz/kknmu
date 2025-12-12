@@ -47,46 +47,48 @@
             <?php endif; ?>
         </div>
         <div class="card-datatable text-nowrap">
-            <table class="dt-complex-header table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Judul</th>
-                        <th class="w-25">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $no = 1;
-                    foreach ($data['laporan'] as $row):
-                        ?>
+            <div class="table-responsive">
+                <table class="dt-complex-header table table-bordered">
+                    <thead>
                         <tr>
-                            <td><?= $no++; ?></td>
-                            <td><?= htmlspecialchars(date('d F Y', strtotime($row['tanggal']))); ?></td>
-                            <td><?= htmlspecialchars($row['judul']); ?></td>
-                            <td>
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                                    data-bs-target="#detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
-                                        class="ti tabler-eye me-1"></i> Detail</button>
-                                <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'Mahasiswa'): ?>
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#ubahLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
-                                            class="ti tabler-pencil me-1"></i> Edit</button>
-                                    <form class="d-inline"
-                                        action="<?= BASE_URL ?>/Laporan/deleteHarian/<?= htmlspecialchars($row['id_laporan']) ?>"
-                                        method="post">
-                                        <button type="submit" class="btn btn-danger"
-                                            onClick="return confirm('Yakin ingin menghapus Laporan ini?')"><i
-                                                class="ti tabler-trash me-1"></i>
-                                            Hapus
-                                        </button>
-                                    </form>
-                                <?php endif; ?>
-                            </td>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Judul</th>
+                            <th class="w-25">Aksi</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php $no = 1;
+                        foreach ($data['laporan'] as $row):
+                            ?>
+                            <tr>
+                                <td><?= $no++; ?></td>
+                                <td><?= htmlspecialchars(date('d F Y', strtotime($row['tanggal']))); ?></td>
+                                <td><?= htmlspecialchars($row['judul']); ?></td>
+                                <td>
+                                    <button type="button" class="btn btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#detailLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
+                                            class="ti tabler-eye me-1"></i> Detail</button>
+                                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'Mahasiswa'): ?>
+                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#ubahLaporan<?= htmlspecialchars($row['id_laporan']) ?>"><i
+                                                class="ti tabler-pencil me-1"></i> Edit</button>
+                                        <form class="d-inline"
+                                            action="<?= BASE_URL ?>/Laporan/deleteHarian/<?= htmlspecialchars($row['id_laporan']) ?>"
+                                            method="post">
+                                            <button type="submit" class="btn btn-danger"
+                                                onClick="return confirm('Yakin ingin menghapus Laporan ini?')"><i
+                                                    class="ti tabler-trash me-1"></i>
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <!--/ Complex Headers -->
@@ -162,6 +164,7 @@
                         <label class="form-label" for="modalTambahLaporanHarian">Deskripsi</label>
                         <div id="full-editor" style="min-height: 150px;"></div>
                         <input type="hidden" name="deskripsi" id="deskripsi">
+                        <small>Harus berisi minimal 700 kata</small>
                     </div>
                     <div class="col-12">
                         <label class="form-label" for="modalTambahLaporanHarian">Dokumentasi</label>
@@ -280,7 +283,20 @@
             // Get content from Quill editor
             var editorContent = document.querySelector('#full-editor .ql-editor').innerHTML;
             document.getElementById('deskripsi').value = editorContent;
+
+            // Validation for word count
+            var textContent = document.querySelector('#full-editor .ql-editor').innerText;
+            var wordCount = textContent.trim().split(/\s+/).length;
+            if (textContent.trim().length === 0) {
+                wordCount = 0;
+            }
+            if (wordCount < 700) {
+                e.preventDefault();
+                alert('Deskripsi harus berisi minimal 700 kata! Saat ini: ' + wordCount + ' kata.');
+                return false;
+            }
         });
+
         // Initialize Edit Editors
         const editEditors = document.querySelectorAll('[id^="full-editor-edit-"]');
         editEditors.forEach(editor => {
@@ -300,6 +316,18 @@
             form.addEventListener('submit', function (e) {
                 const editorContent = editor.querySelector('.ql-editor').innerHTML;
                 document.getElementById('deskripsi-edit-' + id).value = editorContent;
+
+                // Validation for word count
+                var textContent = editor.querySelector('.ql-editor').innerText;
+                var wordCount = textContent.trim().split(/\s+/).length;
+                if (textContent.trim().length === 0) {
+                    wordCount = 0;
+                }
+                if (wordCount < 700) {
+                    e.preventDefault();
+                    alert('Deskripsi harus berisi minimal 700 kata! Saat ini: ' + wordCount + ' kata.');
+                    return false;
+                }
             });
         });
     });
@@ -334,6 +362,7 @@
                                 <?= $row['isi_laporan'] ?>
                             </div>
                             <input type="hidden" name="deskripsi" id="deskripsi-edit-<?= $row['id_laporan'] ?>">
+                            <small>Harus berisi minimal 700 kata</small>
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="modalUbahLaporan">Dokumentasi</label>
