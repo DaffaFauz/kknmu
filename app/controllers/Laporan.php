@@ -7,7 +7,11 @@ class Laporan extends Controller
     {
         if ($_SESSION['role'] == 'Mahasiswa' || $_SESSION['role'] == 'Pembimbing') {
             // Get data
-            $laporan = $this->model('LaporanModel')->getLaporanHarianForMahasiswaAndPembimbing($_SESSION['id_kelompok']);
+            if (!empty($_SESSION['id_kelompok'])) {
+                $laporan = $this->model('LaporanModel')->getLaporanHarianForMahasiswaAndPembimbing($_SESSION['id_kelompok']);
+            } else {
+                $laporan = [];
+            }
 
             // Load view
             $this->view('layout/head', ['title' => "Laporan Harian", "page" => 'Laporan']);
@@ -203,7 +207,11 @@ class Laporan extends Controller
     {
         if ($_SESSION['role'] == 'Mahasiswa' || $_SESSION['role'] == 'Pembimbing') {
             // Get data
-            $laporan = $this->model('LaporanModel')->getLaporanAkhirForMahasiswaAndPembimbing($_SESSION['id_kelompok']);
+            if (!empty($_SESSION['id_kelompok'])) {
+                $laporan = $this->model('LaporanModel')->getLaporanAkhirForMahasiswaAndPembimbing($_SESSION['id_kelompok']);
+            } else {
+                $laporan = [];
+            }
 
             // Load view
             $this->view('layout/head', ['title' => "Laporan Akhir", "page" => 'Laporan']);

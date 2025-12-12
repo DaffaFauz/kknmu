@@ -113,4 +113,12 @@ class VerifikasiModel
 
         return $this->pdo->resultSet();
     }
+
+    public function getVerifMahasiswaProdi($id)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Diverifikasi Kaprodi' OR {$this->table}.status_pendaftaran = 'Diverifikasi' AND prodi.id_prodi = :id AND tahun_akademik.status = 'Aktif'");
+        $this->pdo->bind(':id', $id);
+        $this->pdo->execute();
+        return $this->pdo->resultset();
+    }
 }

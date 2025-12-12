@@ -14,7 +14,7 @@
             <div class="card-header d-flex align-items-center justify-content-between">
                 <div class="card-title mb-0">
                     <h5 class="m-0 me-2">Nilai Anggota Kelompok
-                        <?= $data['mahasiswa'][0]['nama_kelompok'] ? htmlspecialchars($data['mahasiswa'][0]['nama_kelompok']) : '-' ?>
+                        <?= !empty($data['mahasiswa']) && $data['mahasiswa'][0]['nama_kelompok'] ? htmlspecialchars($data['mahasiswa'][0]['nama_kelompok']) : '-' ?>
                     </h5>
                 </div>
             </div>
@@ -32,17 +32,23 @@
                     </thead>
                     <tbody>
                         <?php $no = 1;
-                        foreach ($data['mahasiswa'] as $row): ?>
+                        if (!empty($data['mahasiswa'])) {
+                            foreach ($data['mahasiswa'] as $row): ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td><?= $row['nim'] ?></td>
+                                    <td><?= $row['nama_mahasiswa'] ?></td>
+                                    <td><?= $row['jenis_kelamin'] ?></td>
+                                    <td><?= $row['nama_prodi'] ?></td>
+                                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#nilaiModal<?= $row['id_mahasiswa'] ?>">Detail Nilai</button></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php } else { ?>
                             <tr>
-                                <td><?= $no++ ?></td>
-                                <td><?= $row['nim'] ?></td>
-                                <td><?= $row['nama_mahasiswa'] ?></td>
-                                <td><?= $row['jenis_kelamin'] ?></td>
-                                <td><?= $row['nama_prodi'] ?></td>
-                                <td><button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#nilaiModal<?= $row['id_mahasiswa'] ?>">Detail Nilai</button></td>
+                                <td colspan="6" class="text-center">Tidak ada data</td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>

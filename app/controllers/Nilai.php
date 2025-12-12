@@ -24,7 +24,11 @@ class Nilai extends Controller
 
         } else if ($_SESSION['role'] == 'Pembimbing') {
             // Get data
-            $mahasiswa = $this->model("NilaiModel")->detail($_SESSION['id_kelompok']);
+            if (!empty($_SESSION['id_kelompok'])) {
+                $mahasiswa = $this->model("NilaiModel")->detail($_SESSION['id_kelompok']);
+            } else {
+                $mahasiswa = [];
+            }
 
             // Load view
             $this->view('layout/head', ['title' => 'Nilai Mahasiswa', 'page' => 'Nilai']);
