@@ -68,7 +68,7 @@
                     <li>
                         <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a class="dropdown-item" href="pages-profile-user.html">
                             <i class="icon-base ti tabler-user me-3 icon-md"></i><span class="align-middle">My
                                 Profile</span>
@@ -79,7 +79,7 @@
                             <i class="icon-base ti tabler-settings me-3 icon-md"></i><span
                                 class="align-middle">Settings</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                         <div class="d-grid px-2 pt-2 pb-1">
                             <a class="btn btn-sm btn-danger d-flex" href="<?= BASE_URL ?>/Auth/logout">
