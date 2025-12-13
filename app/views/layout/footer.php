@@ -59,7 +59,7 @@
 <script src="<?= ASSETS_URL ?>vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/moment/moment.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/flatpickr/flatpickr.js"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
+<script src="<?= ASSETS_URL ?>vendor/libs/flatpickr/id.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/popular.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/bootstrap5.js"></script>
 <script src="<?= ASSETS_URL ?>vendor/libs/@form-validation/auto-focus.js"></script>
@@ -69,7 +69,7 @@
 
 <script src="<?= ASSETS_URL ?>js/main.js"></script>
 
-<script src="<?= ASSETS_URL ?>js/tables-datatables-basic.js"></script>
+<script src="<?= ASSETS_URL ?>js/tables-datatables-basic.js?v=<?= time() ?>"></script>
 
 <?php if ($data['page'] && $data['page'] == 'Verifikasi Mahasiswa'): ?>
     <script>

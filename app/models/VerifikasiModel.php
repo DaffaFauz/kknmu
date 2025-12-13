@@ -11,7 +11,7 @@ class VerifikasiModel
 
     public function getForAdmin()
     {
-        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Diverifikasi Kaprodi' OR {$this->table}.status_pendaftaran = 'Revisi' OR {$this->table}.status_pendaftaran = 'Diverifikasi' AND tahun_akademik.status = 'Aktif'");
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE tahun_akademik.status = 'Aktif'");
         return $this->pdo->resultSet();
     }
 
@@ -93,9 +93,9 @@ class VerifikasiModel
         if (!empty($data['id_prodi'])) {
             $query .= ' AND prodi.id_prodi = :prodi';
         }
-        if (!empty($data['status_pendaftaran'])) {
-            $query .= " AND {$this->table}.status_pendaftaran = :status_pendaftaran";
-        }
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $query .= " AND {$this->table}.status_pendaftaran = :status_pendaftaran";
+        // }
 
         $this->pdo->query($query);
 
@@ -107,18 +107,192 @@ class VerifikasiModel
             $this->pdo->bind(':prodi', $data['id_prodi']);
         }
 
-        if (!empty($data['status_pendaftaran'])) {
-            $this->pdo->bind(':status_pendaftaran', $data['status_pendaftaran']);
-        }
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $this->pdo->bind(':status_pendaftaran', $data['status_pendaftaran']);
+        // }
 
         return $this->pdo->resultSet();
     }
 
+    // For Dashboard Kaprodi
     public function getVerifMahasiswaProdi($id)
     {
         $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Diverifikasi Kaprodi' OR {$this->table}.status_pendaftaran = 'Diverifikasi' AND prodi.id_prodi = :id AND tahun_akademik.status = 'Aktif'");
         $this->pdo->bind(':id', $id);
         $this->pdo->execute();
         return $this->pdo->resultset();
+    }
+
+    // For verifikasi mahasiswa in Admin page
+    public function verifKaprodi()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Diverifikasi Kaprodi' OR {$this->table}.status_pendaftaran = 'Diverifikasi' AND tahun_akademik.status = 'Aktif'");
+        return $this->pdo->resultSet();
+    }
+
+    public function verif()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Diverifikasi' AND tahun_akademik.status = 'Aktif'");
+        return $this->pdo->resultSet();
+    }
+
+    public function getrevisi()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Revisi' AND tahun_akademik.status = 'Aktif'");
+        return $this->pdo->resultSet();
+    }
+
+    public function getDitolak()
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Ditolak' AND tahun_akademik.status = 'Aktif'");
+        return $this->pdo->resultSet();
+    }
+
+    public function filterVerifKaprodi($data)
+    {
+        $query = "SELECT * FROM {$this->table} 
+                  INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa 
+                  INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi 
+                  INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas 
+                  INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun 
+                  WHERE tahun_akademik.status = 'Aktif'";
+
+        if (!empty($data['id_fakultas'])) {
+            $query .= ' AND fakultas.id_fakultas = :fakultas';
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $query .= ' AND prodi.id_prodi = :prodi';
+        }
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $query .= " AND {$this->table}.status_pendaftaran = :status_pendaftaran";
+        // }
+
+        $this->pdo->query($query);
+
+        if (!empty($data['id_fakultas'])) {
+            $this->pdo->bind(':fakultas', $data['id_fakultas']);
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $this->pdo->bind(':prodi', $data['id_prodi']);
+        }
+
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $this->pdo->bind(':status_pendaftaran', $data['status_pendaftaran']);
+        // }
+
+        return $this->pdo->resultSet();
+    }
+
+    public function filterVerif($data)
+    {
+        $query = "SELECT * FROM {$this->table} 
+                  INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa 
+                  INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi 
+                  INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas 
+                  INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun 
+                  WHERE tahun_akademik.status = 'Aktif'";
+
+        if (!empty($data['id_fakultas'])) {
+            $query .= ' AND fakultas.id_fakultas = :fakultas';
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $query .= ' AND prodi.id_prodi = :prodi';
+        }
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $query .= " AND {$this->table}.status_pendaftaran = :status_pendaftaran";
+        // }
+
+        $this->pdo->query($query);
+
+        if (!empty($data['id_fakultas'])) {
+            $this->pdo->bind(':fakultas', $data['id_fakultas']);
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $this->pdo->bind(':prodi', $data['id_prodi']);
+        }
+
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $this->pdo->bind(':status_pendaftaran', $data['status_pendaftaran']);
+        // }
+
+        return $this->pdo->resultSet();
+    }
+
+    public function filterRevisi($data)
+    {
+        $query = "SELECT * FROM {$this->table} 
+                  INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa 
+                  INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi 
+                  INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas 
+                  INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun 
+                  WHERE tahun_akademik.status = 'Aktif'";
+
+        if (!empty($data['id_fakultas'])) {
+            $query .= ' AND fakultas.id_fakultas = :fakultas';
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $query .= ' AND prodi.id_prodi = :prodi';
+        }
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $query .= " AND {$this->table}.status_pendaftaran = :status_pendaftaran";
+        // }
+
+        $this->pdo->query($query);
+
+        if (!empty($data['id_fakultas'])) {
+            $this->pdo->bind(':fakultas', $data['id_fakultas']);
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $this->pdo->bind(':prodi', $data['id_prodi']);
+        }
+
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $this->pdo->bind(':status_pendaftaran', $data['status_pendaftaran']);
+        // }
+
+        return $this->pdo->resultSet();
+    }
+
+    public function filterDitolak($data)
+    {
+        $query = "SELECT * FROM {$this->table} 
+                  INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa 
+                  INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi 
+                  INNER JOIN fakultas ON prodi.id_fakultas = fakultas.id_fakultas 
+                  INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun 
+                  WHERE tahun_akademik.status = 'Aktif'";
+
+        if (!empty($data['id_fakultas'])) {
+            $query .= ' AND fakultas.id_fakultas = :fakultas';
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $query .= ' AND prodi.id_prodi = :prodi';
+        }
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $query .= " AND {$this->table}.status_pendaftaran = :status_pendaftaran";
+        // }
+
+        $this->pdo->query($query);
+
+        if (!empty($data['id_fakultas'])) {
+            $this->pdo->bind(':fakultas', $data['id_fakultas']);
+        }
+
+        if (!empty($data['id_prodi'])) {
+            $this->pdo->bind(':prodi', $data['id_prodi']);
+        }
+
+        // if (!empty($data['status_pendaftaran'])) {
+        //     $this->pdo->bind(':status_pendaftaran', $data['status_pendaftaran']);
+        // }
+
+        return $this->pdo->resultSet();
     }
 }

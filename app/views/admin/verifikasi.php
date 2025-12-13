@@ -33,21 +33,21 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <label class="form-label" for="status_pendaftaran">Status Pendaftaran</label>
                         <select name="status_pendaftaran" id="status_pendaftaran" class="form-select">
                             <option value="">Pilih Status Pendaftaran</option>
-                            <option value="Diverifikasi Kaprodi" <?= !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Diverifikasi Kaprodi' ? 'selected' : '' ?>>
+                            <option value="Diverifikasi Kaprodi" <?php // !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Diverifikasi Kaprodi' ? 'selected' : '' ?>
                                 Diverifikasi Kaprodi
                             </option>
-                            <option value="Revisi" <?= !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Revisi' ? 'selected' : '' ?>>
+                            <option value="Revisi" <?php // !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Revisi' ? 'selected' : '' ?>>
                                 Revisi
                             </option>
-                            <option value="Diverifikasi" <?= !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Diverifikasi' ? 'selected' : '' ?>>
+                            <option value="Diverifikasi" <?php // !empty($_POST['status_pendaftaran']) && $_POST['status_pendaftaran'] == 'Diverifikasi' ? 'selected' : '' ?>>
                                 Diverifikasi
                             </option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="col-md-3 align-self-end d-flex">
                         <button type="submit" class="btn btn-primary me-2"><i
                                 class="ti tabler-filter me-1"></i>Filter</button>
@@ -69,35 +69,197 @@
         <div class="card-header border-bottom d-flex justify-content-between align-items-center my-0">
             <h5 class="card-title mb-0">Verifikasi Mahasiswa</h5>
         </div>
-        <div class="card-datatable text-nowrap">
-            <table class="dt-complex-header table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>NIM</th>
-                        <th>Nama Mahasiswa</th>
-                        <th>Prodi</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $no = 1;
-                    foreach ($data['mahasiswa'] as $row):
-                        ?>
-                        <tr>
-                            <td><?= $no++; ?></td>
-                            <td><?= htmlspecialchars($row['nim']); ?></td>
-                            <td><?= htmlspecialchars($row['nama_mahasiswa']); ?></td>
-                            <td><?= htmlspecialchars($row['nama_prodi']); ?></td>
-                            <td>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#lihatPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
-                                        class="ti tabler-eye me-1"></i> Lihat Detail</button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+        <div class="nav-align-top nav-tabs-shadow">
+            <ul class="nav nav-tabs nav-fill" role="tablist">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-verifikasiKaprodi"
+                        aria-controls="navs-justified-verifikasiKaprodi" aria-selected="true">
+                        <span class="d-none d-sm-inline-flex align-items-center">
+                            <i class="icon-base ti tabler-user icon-sm me-1_5"></i>Diverifikasi Kaprodi
+                            <span
+                                class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-info ms-1_5"><?= count($data['jml_verifKaprodi']) ?></span>
+                        </span>
+                        <i class="icon-base ti tabler-user icon-sm d-sm-none"></i>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-verifikasi" aria-controls="navs-justified-verifikasi"
+                        aria-selected="false">
+                        <span class="d-none d-sm-inline-flex align-items-center"><i
+                                class="icon-base ti tabler-check icon-sm me-1_5"></i>Diverifikasi</span>
+                        <span
+                            class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-success ms-1_5"><?= count($data['jml_verif']) ?></span>
+                        <i class="icon-base ti tabler-check icon-sm d-sm-none"></i>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-revisi" aria-controls="navs-justified-revisi"
+                        aria-selected="false">
+                        <span class="d-none d-sm-inline-flex align-items-center"><i
+                                class="icon-base ti tabler-message-dots icon-sm me-1_5"></i>Revisi</span>
+                        <span
+                            class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-warning ms-1_5"><?= count($data['jml_revisi']) ?></span>
+                        <i class="icon-base ti tabler-message-dots icon-sm d-sm-none"></i>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                        data-bs-target="#navs-justified-ditolak" aria-controls="navs-justified-ditolak"
+                        aria-selected="false">
+                        <span class="d-none d-sm-inline-flex align-items-center"><i
+                                class="icon-base ti tabler-ban icon-sm me-1_5"></i>Ditolak</span>
+                        <span
+                            class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger ms-1_5"><?= count($data['jml_ditolak']) ?></span>
+                        <i class="icon-base ti tabler-ban icon-sm d-sm-none"></i>
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="navs-justified-verifikasiKaprodi" role="tabpanel">
+                    <div class="card-datatable text-nowrap">
+                        <div class="table-responsive">
+                            <table id="table-verifikasi-kaprodi" class="dt-complex-header table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>NIM</th>
+                                        <th>Nama Mahasiswa</th>
+                                        <th>Prodi</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $no = 1;
+                                    foreach ($data['mahasiswa'] as $row):
+                                        if ($row['status_pendaftaran'] == 'Diverifikasi Kaprodi'):
+                                            ?>
+                                            <tr>
+                                                <td><?= $no++; ?></td>
+                                                <td><?= htmlspecialchars($row['nim']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_mahasiswa']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_prodi']); ?></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#lihatPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
+                                                            class="ti tabler-eye me-1"></i> Lihat Detail</button>
+                                                </td>
+                                            </tr>
+                                        <?php endif; endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="navs-justified-verifikasi" role="tabpanel">
+                    <div class="card-datatable text-nowrap">
+                        <div class="table-responsive">
+                            <table id="table-diverifikasi" class="dt-complex-header table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>NIM</th>
+                                        <th>Nama Mahasiswa</th>
+                                        <th>Prodi</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $no = 1;
+                                    foreach ($data['mahasiswa'] as $row):
+                                        if ($row['status_pendaftaran'] == 'Diverifikasi'):
+                                            ?>
+                                            <tr>
+                                                <td><?= $no++; ?></td>
+                                                <td><?= htmlspecialchars($row['nim']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_mahasiswa']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_prodi']); ?></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#lihatPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
+                                                            class="ti tabler-eye me-1"></i> Lihat Detail</button>
+                                                </td>
+                                            </tr>
+                                        <?php endif; endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="navs-justified-revisi" role="tabpanel">
+                    <div class="card-datatable text-nowrap">
+                        <div class="table-responsive">
+                            <table id="table-revisi" class="dt-complex-header table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>NIM</th>
+                                        <th>Nama Mahasiswa</th>
+                                        <th>Prodi</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $no = 1;
+                                    foreach ($data['mahasiswa'] as $row):
+                                        if ($row['status_pendaftaran'] == 'Revisi'):
+                                            ?>
+                                            <tr>
+                                                <td><?= $no++; ?></td>
+                                                <td><?= htmlspecialchars($row['nim']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_mahasiswa']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_prodi']); ?></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#lihatPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
+                                                            class="ti tabler-eye me-1"></i> Lihat Detail</button>
+                                                </td>
+                                            </tr>
+                                        <?php endif; endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="navs-justified-ditolak" role="tabpanel">
+
+                    <div class="card-datatable text-nowrap">
+                        <div class="table-responsive">
+                            <table id="table-ditolak" class="dt-complex-header table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>NIM</th>
+                                        <th>Nama Mahasiswa</th>
+                                        <th>Prodi</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $no = 1;
+                                    foreach ($data['mahasiswa'] as $row):
+                                        if ($row['status_pendaftaran'] == 'Ditolak'):
+                                            ?>
+                                            <tr>
+                                                <td><?= $no++; ?></td>
+                                                <td><?= htmlspecialchars($row['nim']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_mahasiswa']); ?></td>
+                                                <td><?= htmlspecialchars($row['nama_prodi']); ?></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#lihatPendaftaran<?= htmlspecialchars($row['id_pendaftaran']) ?>"><i
+                                                            class="ti tabler-eye me-1"></i> Lihat Detail</button>
+                                                </td>
+                                            </tr>
+                                        <?php endif; endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!--/ Complex Headers -->
