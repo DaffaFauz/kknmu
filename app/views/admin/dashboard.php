@@ -12,7 +12,7 @@
                         </div>
                         <h4 class="mb-0"><?= htmlspecialchars($data['mahasiswa']) ?></h4>
                     </div>
-                    <p class="mb-1">Jumlah Mahasiswa</p>
+                    <p class="mb-1">Jumlah Mahasiswa yang sudah diverifikasi</p>
                 </div>
             </div>
         </div>

@@ -10,7 +10,7 @@ class Dashboard extends Controller
             $laporan = $this->model("DashboardModel")->getLaporanHarianTerbaru($tahun['id_tahun']);
             $pembimbing = count($this->model("PembimbingModel")->getAll());
             $kelompok = count($this->model("PlottingModel")->getAll());
-            $mahasiswa = count($this->model("MahasiswaModel")->getAll());
+            $mahasiswa = count($this->model("DashboardModel")->getAllMahasiswa());
             $lokasi = count($this->model("LokasiModel")->getAll());
 
             // Load view

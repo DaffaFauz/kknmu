@@ -8,6 +8,7 @@ class DashboardModel
         $this->pdo = new Db();
     }
 
+    // For Mahasiswa
     public function getPendaftaranMahasiswa($id_mahasiswa)
     {
         $this->pdo->query("SELECT * FROM pendaftaran JOIN tahun_akademik ON pendaftaran.id_tahun = tahun_akademik.id_tahun WHERE id_mahasiswa = :id_mahasiswa AND tahun_akademik.status = 'Aktif'");
@@ -42,5 +43,13 @@ class DashboardModel
                            LIMIT 10");
         $this->pdo->bind(':id', $tahun);
         return $this->pdo->resultset();
+    }
+
+
+    // For Admin
+    public function getAllMahasiswa()
+    {
+        $this->pdo->query("SELECT * FROM mahasiswa INNER JOIN pendaftaran ON mahasiswa.id_mahasiswa = pendaftaran.id_mahasiswa INNER JOIN tahun_akademik ON pendaftaran.id_tahun = tahun_akademik.id_tahun WHERE tahun_akademik.status = 'Aktif' AND pendaftaran.status_pendaftaran = 'Diverifikasi'");
+        return $this->pdo->resultSet();
     }
 }
