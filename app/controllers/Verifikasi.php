@@ -6,12 +6,15 @@ class Verifikasi extends Controller
         if ($_SESSION['role'] == 'Kaprodi') {
             // Get data
             $mahasiswa = $this->model("VerifikasiModel")->getForKaprodi($_SESSION['id_prodi']);
+            $jmlPending = $this->model("VerifikasiModel")->getPending($_SESSION['id_prodi']);
+            $jmlVerif = $this->model("VerifikasiModel")->getAllVerifMahasiswaProdi($_SESSION['id_prodi']);
+
 
             // Load view
             $this->view('layout/head', ['title' => 'Verifikasi Mahasiswa', 'page' => 'Verifikasi Mahasiswa']);
             $this->view('layout/sidebar', ['page' => 'Verifikasi Mahasiswa']);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-            $this->view('kaprodi/verifikasi', ['mahasiswa' => $mahasiswa]);
+            $this->view('kaprodi/verifikasi', ['mahasiswa' => $mahasiswa, 'jml_pending' => $jmlPending, 'jml_verif' => $jmlVerif]);
             $this->view('layout/footer', ['page' => 'Verifikasi Mahasiswa']);
         } else if ($_SESSION['role'] == 'Admin') {
             // Get data
@@ -91,16 +94,20 @@ class Verifikasi extends Controller
             if (isset($_POST['kelas'])) {
                 // Get data filter
                 $mahasiswa = $this->model('VerifikasiModel')->filterForKaprodi($_SESSION['id_prodi'], $_POST);
+                $jmlPending = $this->model("VerifikasiModel")->filterGetPending($_SESSION['id_prodi'], $_POST);
+                $jmlVerif = $this->model("VerifikasiModel")->filterGetAllVerifMahasiswaProdi($_SESSION['id_prodi'], $_POST);
             } else {
                 // Get data filter
                 $mahasiswa = $this->model("VerifikasiModel")->getForKaprodi($_SESSION['id_prodi']);
+                $jmlPending = $this->model("VerifikasiModel")->getPending($_SESSION['id_prodi']);
+                $jmlVerif = $this->model("VerifikasiModel")->getAllVerifMahasiswaProdi($_SESSION['id_prodi']);
             }
 
             // Load view
             $this->view('layout/head', ['title' => 'Verifikasi Mahasiswa', 'page' => 'Verifikasi Mahasiswa']);
             $this->view('layout/sidebar', ['page' => 'Verifikasi Mahasiswa']);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-            $this->view('kaprodi/verifikasi', ['mahasiswa' => $mahasiswa]);
+            $this->view('kaprodi/verifikasi', ['mahasiswa' => $mahasiswa, 'jml_pending' => $jmlPending, 'jml_verif' => $jmlVerif]);
             $this->view('layout/footer', ['page' => 'Verifikasi Mahasiswa']);
         }
     }

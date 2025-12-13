@@ -17,7 +17,7 @@ class VerifikasiModel
 
     public function getForKaprodi($id)
     {
-        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE mahasiswa.id_prodi = :id_prodi AND {$this->table}.status_pendaftaran = 'Pending' OR {$this->table}.status_pendaftaran = 'Diverifikasi Kaprodi' AND tahun_akademik.status = 'Aktif'");
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE mahasiswa.id_prodi = :id_prodi AND tahun_akademik.status = 'Aktif'");
         $this->pdo->bind(':id_prodi', $id);
         return $this->pdo->resultSet();
     }
@@ -52,7 +52,7 @@ class VerifikasiModel
                   INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa 
                   INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi
                   INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun 
-                  WHERE mahasiswa.id_prodi = :id_prodi AND {$this->table}.status_pendaftaran = 'Pending' AND tahun_akademik.status = 'Aktif'";
+                  WHERE mahasiswa.id_prodi = :id_prodi AND tahun_akademik.status = 'Aktif'";
 
         if (!empty($data['kelas'])) {
             $query .= " AND mahasiswa.kelas = :kelas";
@@ -121,6 +121,59 @@ class VerifikasiModel
         $this->pdo->bind(':id', $id);
         $this->pdo->execute();
         return $this->pdo->resultset();
+    }
+
+    // For pending mahasiswa in kaprodi page
+    public function getPending($id)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Pending' AND prodi.id_prodi = :id AND tahun_akademik.status = 'Aktif'");
+        $this->pdo->bind(':id', $id);
+        $this->pdo->execute();
+        return $this->pdo->resultset();
+    }
+
+    public function getAllVerifMahasiswaProdi($id)
+    {
+        $this->pdo->query("SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Diverifikasi' OR {$this->table}.status_pendaftaran = 'Diverifikasi Kaprodi' AND prodi.id_prodi = :id AND tahun_akademik.status = 'Aktif'");
+        $this->pdo->bind(':id', $id);
+        $this->pdo->execute();
+        return $this->pdo->resultset();
+    }
+
+    public function filterGetPending($id, $data)
+    {
+        $query = "SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE {$this->table}.status_pendaftaran = 'Pending' AND prodi.id_prodi = :id AND tahun_akademik.status = 'Aktif'";
+
+        if (!empty($data['kelas'])) {
+            $query .= " AND mahasiswa.kelas = :kelas";
+        }
+
+        $this->pdo->query($query);
+        $this->pdo->bind(':id', $id);
+
+        if (!empty($data['kelas'])) {
+            $this->pdo->bind(':kelas', $data['kelas']);
+        }
+
+        return $this->pdo->resultSet();
+    }
+
+    public function filterGetAllVerifMahasiswaProdi($id, $data)
+    {
+        $query = "SELECT * FROM {$this->table} INNER JOIN mahasiswa ON {$this->table}.id_mahasiswa = mahasiswa.id_mahasiswa INNER JOIN prodi ON mahasiswa.id_prodi = prodi.id_prodi INNER JOIN tahun_akademik ON {$this->table}.id_tahun = tahun_akademik.id_tahun WHERE ({$this->table}.status_pendaftaran = 'Diverifikasi' OR {$this->table}.status_pendaftaran = 'Diverifikasi Kaprodi') AND prodi.id_prodi = :id AND tahun_akademik.status = 'Aktif'";
+
+        if (!empty($data['kelas'])) {
+            $query .= " AND mahasiswa.kelas = :kelas";
+        }
+
+        $this->pdo->query($query);
+        $this->pdo->bind(':id', $id);
+
+        if (!empty($data['kelas'])) {
+            $this->pdo->bind(':kelas', $data['kelas']);
+        }
+
+        return $this->pdo->resultSet();
     }
 
     // For verifikasi mahasiswa in Admin page
