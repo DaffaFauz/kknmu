@@ -37,6 +37,7 @@ class Dashboard extends Controller
             $this->view("layout/footer", ['page' => 'Dashboard']);
         } else if ($_SESSION['role'] == 'Kaprodi') {
             // Get data
+            $nama_prodi = $this->model("ProdiModel")->getNamaForKaprodi($_SESSION['id_prodi']);
             $mahasiswa = $this->model("VerifikasiModel")->getForKaprodi($_SESSION['id_prodi']);
             $mahasiswaDaftar = $this->model("PendaftaranModel")->getForKaprodi($_SESSION['id_prodi']);
             $mahasiswaVerif = $this->model("VerifikasiModel")->getVerifMahasiswaProdi($_SESSION['id_prodi']);
@@ -45,7 +46,7 @@ class Dashboard extends Controller
             $this->view('layout/head', ['title' => "Dashboard Mahasiswa", "page" => 'Dashboard']);
             $this->view('layout/sidebar', ['page' => 'Dashboard']);
             $this->view('layout/navbar', ['nama' => $_SESSION['nama'], 'role' => $_SESSION['role']]);
-            $this->view('kaprodi/dashboard', ['mahasiswa' => $mahasiswa, 'mahasiswaDaftar' => $mahasiswaDaftar, 'mahasiswaVerif' => $mahasiswaVerif]);
+            $this->view('kaprodi/dashboard', ['mahasiswa' => $mahasiswa, 'mahasiswaDaftar' => $mahasiswaDaftar, 'mahasiswaVerif' => $mahasiswaVerif, 'nama_prodi' => $nama_prodi]);
             $this->view("layout/footer", ['page' => 'Dashboard']);
         } else if ($_SESSION['role'] == 'Pembimbing') {
             // Get data

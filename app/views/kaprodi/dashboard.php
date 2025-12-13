@@ -39,7 +39,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="card-title mb-0">
                         <h5 class="m-0 me-2">Mahasiswa yang belum diverifikasi kaprodi
-                            <?= $data['mahasiswa'][0]['nama_prodi'] ?>
+                            <?= $data['nama_prodi']['nama_prodi'] ?>
                         </h5>
                     </div>
                 </div>

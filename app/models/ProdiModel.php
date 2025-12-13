@@ -50,4 +50,11 @@ class ProdiModel
         $this->pdo->execute();
         return $this->pdo->rowCount();
     }
+
+    public function getNamaForKaprodi($id)
+    {
+        $this->pdo->query("SELECT nama_prodi FROM {$this->table} WHERE id_prodi = :id_prodi");
+        $this->pdo->bind(':id_prodi', $id);
+        return $this->pdo->single();
+    }
 }
